@@ -1,7 +1,11 @@
 # Neighbour Express
 
-官网 Demo（滚动动画版）。
+Website demo (scroll-animated, English).
 
-在线访问：https://neighbourcanada-beep.github.io/Neighbour-Express/
+Live: https://neighbourcanada-beep.github.io/Neighbour-Express/
 
-页面为演示版本，城市业务信息、联系方式与包裹查询结果均为占位数据。
+Vector logo:
+- `logo/neighbour-express-logo.svg` (for light backgrounds)
+- `logo/neighbour-express-logo-reverse.svg` (white "EXPRESS", for dark backgrounds)
+
+Per-city coverage, cutoff times and tracking results are placeholders.
