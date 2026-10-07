@@ -190,10 +190,12 @@ a{color:inherit}
 .svc-card .num{position:absolute;right:20px;top:14px;font:900 italic 84px/1 "Archivo",var(--f-display);font-stretch:118%;color:transparent;-webkit-text-stroke:1.5px var(--line)}
 .svc-icon{width:56px;height:56px;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);transform:skewX(-10deg)}
 .svc-icon svg{transform:skewX(10deg)}
-.svc-icon.brandmark{align-self:flex-start;width:auto;height:56px;padding:6px 14px;background:#fff;border:1px solid var(--line);transform:none}
-.svc-icon.brandmark img{display:block;height:42px;width:auto}
-.pb-chip{display:inline-grid;place-items:center;height:24px;padding:0 6px;margin:-4px 2px -4px -6px;background:#fff;border-radius:4px}
-.pb-chip img{display:block;height:18px;width:auto}
+.svc-icon.brandmark{align-self:flex-start;width:auto;height:56px;padding:0;background:none;border:0;border-radius:0;transform:none}
+.svc-icon.brandmark img{display:block;height:52px;width:auto}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .svc-icon.brandmark img{filter:drop-shadow(0 0 1px rgba(255,255,255,.55)) drop-shadow(0 0 6px rgba(255,255,255,.12))}}
+:root[data-theme="dark"] .svc-icon.brandmark img{filter:drop-shadow(0 0 1px rgba(255,255,255,.55)) drop-shadow(0 0 6px rgba(255,255,255,.12))}
+.pb-chip{display:inline-grid;place-items:center;height:24px;margin:-4px 0 -4px -4px}
+.pb-chip img{display:block;height:24px;width:auto}
 .svc-icon svg *{stroke-dasharray:90;stroke-dashoffset:calc(90 * (1 - var(--f,0)))}
 .svc-card h3{font-family:var(--f-body);font-size:24px;font-weight:900}
 .svc-card>p{margin:0;color:var(--muted)}
