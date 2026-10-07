@@ -150,13 +150,13 @@ a{color:inherit}
 .ab-meta{display:flex;flex-wrap:wrap;gap:8px}
 .ab-meta span{font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:5px 9px;border:1px solid var(--line);border-radius:4px;color:var(--muted)}
 .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0}
-.facts .ft{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:6px;overflow:hidden;will-change:transform,opacity}
+.facts .ft{container-type:inline-size;min-width:0;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:6px;overflow:hidden;will-change:transform,opacity}
 .facts .ft::after{content:"";position:absolute;left:-10%;top:0;height:4px;width:120%;background:var(--brand);transform:skewX(-30deg) scaleX(var(--q,0));transform-origin:left}
 .facts .ft:nth-child(even)::after{background:var(--accent)}
 .facts dt{order:2;font-size:12.5px;line-height:1.35;color:var(--muted)}
-.facts dd{order:1;margin:0;font:900 italic clamp(26px,2.7vw,40px)/1 "Archivo",var(--f-display);font-stretch:112%;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.facts dd small{font:700 12px var(--f-body);font-style:normal;margin-left:4px;color:var(--muted)}
-.facts dd.sm{font-size:clamp(22px,2.1vw,32px)}
+.facts dd{order:1;margin:0;font:900 italic 40px/1 "Archivo",var(--f-display);font-size:clamp(24px,24cqi,46px);font-stretch:108%;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:-.01em}
+.facts dd small{font:800 italic .42em "Archivo",var(--f-display);margin-left:3px;color:var(--muted)}
+.facts dd.sm{font-size:clamp(20px,17.5cqi,36px)}
 .sites{margin-top:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .site{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 14px 13px;display:flex;flex-direction:column;gap:3px;position:relative;overflow:hidden;will-change:transform,opacity}
 .site::before{content:"";position:absolute;right:-18px;top:0;bottom:0;width:36px;background:var(--brand);transform:skewX(-20deg)}
@@ -528,14 +528,14 @@ footer .brand img{height:30px}
       <div class="ab-right">
         <dl class="facts" id="abFacts">
           <div class="ft"><dt>Founded</dt><dd><b data-from="2000" data-to="2021">2021</b></dd></div>
-          <div class="ft"><dt>Peak daily capacity</dt><dd><b data-to="100" data-suf="K">100K</b><small>parcels</small></dd></div>
+          <div class="ft"><dt>Parcels per day at peak</dt><dd><b data-to="100" data-suf="K">100K</b></dd></div>
           <div class="ft"><dt>Return points across Canada</dt><dd><b data-to="300" data-suf="+">300+</b></dd></div>
           <div class="ft"><dt>Employees (LinkedIn)</dt><dd class="sm"><b>201–500</b></dd></div>
           <div class="ft"><dt>Sorting centres · GTA &amp; Greater Vancouver</dt><dd><b data-to="2">2</b></dd></div>
-          <div class="ft"><dt>Weight range handled</dt><dd><b>5–68<small>kg+</small></b></dd></div>
+          <div class="ft"><dt>Weight range handled</dt><dd><b>5–68</b><small>kg+</small></dd></div>
         </dl>
         <div class="sites" id="abSites">
-          <div class="site"><span class="mono">HQ · MARKHAM, ON</span><b>Headquarters</b><span>265 Hood Rd, Unit 1</span></div>
+          <div class="site"><span class="mono">HQ · MARKHAM</span><b>Headquarters</b><span>265 Hood Rd, Unit 1</span></div>
           <div class="site"><span class="mono">RICHMOND, BC</span><b>Greater Vancouver</b><span>Vulcan Way</span></div>
           <div class="site"><span class="mono">TORONTO, ON</span><b>Downtown Toronto</b><span>49 Spadina Ave #1</span></div>
         </div>
