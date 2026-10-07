@@ -839,9 +839,15 @@ function updJourney(p){
 /* ===== scrubbed blocks ===== */
 const scrubs=[...document.querySelectorAll('[data-scrub]')];
 function updScrubs(){scrubs.forEach((e,i)=>{const r=e.getBoundingClientRect();if(r.top>innerHeight+100||r.bottom<-100)return;const q=clamp((innerHeight-r.top)/(innerHeight*.55));e.style.transform=`translate3d(0,${((1-q)*60).toFixed(1)}px,0)`;e.style.opacity=(.3+.7*q).toFixed(3)})}
-function updBand(){const b=$('contact'),r=b.getBoundingClientRect();if(r.top>innerHeight||r.bottom<0)return;const q=clamp((innerHeight-r.top)/(innerHeight*.8));const left=100-q*48;
-  $('bandGreen').style.clipPath=`polygon(${left+10}% 0,100% 0,100% 100%,${left-6}% 100%)`;
-  const W=b.clientWidth,H=b.clientHeight,ang=Math.atan(.16*W/H)*180/Math.PI;$('bandLine').style.transform=`translateX(${((left+2)/100*W-7).toFixed(1)}px) skewX(${(-ang).toFixed(2)}deg)`;$('bandLine').style.transformOrigin='center'}
+function updBand(){const b=$('contact'),r=b.getBoundingClientRect();if(r.top>innerHeight||r.bottom<0)return;
+  const q=ease(clamp((innerHeight-r.top)/(innerHeight*.8))),W=b.clientWidth,H=b.clientHeight,slant=W<1020?Math.min(H*.12,W*.06):Math.min(H*.45,W*.18);
+  const cr=b.querySelector('.contact').getBoundingClientRect(),narrow=W<1020;
+  const minX=narrow?W*.95:Math.min(W*.9,cr.right-r.left+60);   // never cover the contact block
+  const L=W+slant-(W+slant-minX)*q;                            // bottom-left x of the green slab
+  $('bandGreen').style.clipPath=`polygon(${L+slant}px 0,${W+slant}px 0,${W+slant}px 100%,${L}px 100%)`;
+  const ang=Math.atan(slant/H)*180/Math.PI;
+  $('bandLine').style.transformOrigin='center';$('bandLine').style.transform=`translateX(${(L+slant/2-7).toFixed(1)}px) skewX(${(-ang).toFixed(2)}deg)`;
+  $('bandLine').style.opacity=q>.02?1:0}
 
 /* ===== nav ===== */
 const navSecs=['services','network','journey','track','contact'].map($);
@@ -853,7 +859,11 @@ function updNav(){const h=document.documentElement.scrollHeight-innerHeight;$('p
 const CHAPTERS=[['manifesto','01','我们做什么','MANIFESTO'],['services','02','业务板块','SERVICES'],['network','03','六城网络','SIX CITIES'],['journey','04','包裹旅程','THE JOURNEY'],['track','05','包裹查询','TRACKING']].map(([id,n,t,s])=>({el:$(id),n,t,s}));
 const curtain=$('curtain'),cvG=$('cvG'),cvB=$('cvB'),cvL=$('cvL');
 let curCh=null,activeCurtain=null;
-function chBoundary(ch){const stH=innerHeight-(parseFloat(getComputedStyle(curtain).top)||0);return {B:ch.el.getBoundingClientRect().top+scrollY-(parseFloat(getComputedStyle(curtain).top)||0)-stH*.5,w:stH*.62}}
+function chBoundary(ch){const top=parseFloat(getComputedStyle(curtain).top)||0,stH=innerHeight-top;let B=ch.el.getBoundingClientRect().top+scrollY-top-stH*.5,w=stH*.62;
+  // near the page end there may not be enough scroll left to finish the sweep: fit the whole sweep before the bottom
+  const maxS=document.documentElement.scrollHeight-innerHeight;
+  if(B+w>maxS-4){const end=maxS-4;w=Math.min(w,Math.max(60,(end-(B-w))/2));B=end-w}
+  return {B,w}}
 function updCurtain(){
   if(reduce)return;
   let hit=null;
@@ -876,7 +886,7 @@ function updCurtain(){
 let settleT;
 addEventListener('scroll',()=>{clearTimeout(settleT);settleT=setTimeout(()=>{
   if(!activeCurtain||reduce)return;const {ch,q}=activeCurtain;if(q<.12||q>.88)return;
-  const {B,w}=chBoundary(ch);const target=dir>0?B+w+2:B-w-2;
+  const {B,w}=chBoundary(ch);const maxS=document.documentElement.scrollHeight-innerHeight;const target=dir>0?Math.min(maxS,B+w+2):Math.max(0,B-w-2);
   scrollTo({top:target,behavior:'smooth'});
 },160)},{passive:true});
 
