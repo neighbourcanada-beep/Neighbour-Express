@@ -7,7 +7,7 @@
   - Company facts, addresses, hotline and emails come from Neighbour Express.
   - Per-city coverage, cutoff times and service status are placeholders.
   - Tracking results are demo data and are not connected to a live system.
-  - The "PB Platform" buttons are placeholder links.
+  - "PB Platform" buttons link to ParcelBee (https://parcelbee.ca/).
   - Confirm commercial rights for all city photos before going live.
   - Fonts load from Google Fonts; offline viewers get system fonts.
 -->
@@ -469,7 +469,7 @@ footer .brand img{height:30px}
       <a href="#track">Tracking</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a class="btn btn-primary btn-sm" href="#" data-placeholder="pb">PB Platform
+    <a class="btn btn-primary btn-sm" href="https://parcelbee.ca/" target="_blank" rel="noopener">PB Platform
       <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
   </div>
   <div class="progress-bar" id="progress"></div>
@@ -665,7 +665,7 @@ footer .brand img{height:30px}
       <dl><dt>Hotline</dt><dd><a class="mono" href="tel:+18006835708">1-800-683-5708</a></dd><dt>Extension</dt><dd>Toronto <span class="mono">201</span> · Vancouver <span class="mono">202</span></dd><dt>Email</dt><dd><a class="mono" href="mailto:service@neighbourexpress.com">service@neighbourexpress.com</a><br><a class="mono" href="mailto:nbservice@neighbourexpress.com">nbservice@neighbourexpress.com</a></dd><dt>LinkedIn</dt><dd><a href="https://ca.linkedin.com/company/neighbour-express" target="_blank" rel="noopener">Neighbour Express</a></dd></dl>
       <div class="row">
         <a class="btn btn-light" href="mailto:service@neighbourexpress.com?subject=NB%20Express%20account%20enquiry">Email us to get started <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
-        <a class="btn btn-outline-light" href="#track">Track a parcel</a>
+        <a class="btn btn-outline-light" href="https://app.parcelbee.ca/sign-up" target="_blank" rel="noopener">Join ParcelBee free</a>
       </div>
     </div>
   </div>
@@ -713,7 +713,7 @@ const SERVICES=[
   {id:'pb',name:'PB Order Platform',short:'PB',desc:'One place to submit, track and manage orders.',
    icon:'<rect x="3" y="4" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 21h8M7 13h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
    flow:['Submit orders, one by one or in bulk','Track parcels in real time','Manage returns and exceptions','Reconcile and export data'],
-   extra:'<p class="mini"><b>Open</b> to customers in all six cities</p>',cta:true}
+   extra:'<p class="mini"><b>ParcelBee</b> compare rates, create labels and manage e-commerce shipping</p>',cta:true}
 ];
 // tour order: west → east
 const CITIES=[
@@ -801,7 +801,7 @@ SERVICES.map((s,i)=>`<article class="svc-card"><span class="num">0${i+1}</span>
   <span class="svc-icon"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">${s.icon}</svg></span>
   <h3>${s.name}</h3><p>${s.desc}</p>
   <ol class="flow">${s.flow.map(f=>`<li>${f}</li>`).join('')}</ol>${s.extra}
-  <div class="card-actions">${s.cta?'<a class="btn btn-primary btn-sm" href="#" data-placeholder="pb">Open platform →</a>':''}<button class="btn btn-ghost btn-sm" type="button" data-show="${s.id}">See it on the map</button></div>
+  <div class="card-actions">${s.cta?'<a class="btn btn-primary btn-sm" href="https://parcelbee.ca/" target="_blank" rel="noopener">Open ParcelBee →</a>':''}<button class="btn btn-ghost btn-sm" type="button" data-show="${s.id}">See it on the map</button></div>
 </article>`).join('')+'<div class="h-end" aria-hidden="true"></div>';
 const cards=[...track.querySelectorAll('.svc-card')];
 function updServices(p){
@@ -987,7 +987,6 @@ function frame(){
 /* ===== clicks ===== */
 document.addEventListener('click',e=>{
   const sh=e.target.closest('[data-show]');if(sh){setFilter(sh.dataset.show);scrollTo({top:tourScrollTarget(0),behavior:reduce?'auto':'smooth'})}
-  const ph=e.target.closest('[data-placeholder]');if(ph){e.preventDefault();toast('The PB Order Platform link is coming soon. This button is a placeholder.')}
 });
 let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
 
