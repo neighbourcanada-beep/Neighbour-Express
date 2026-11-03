@@ -450,6 +450,23 @@ html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,bo
 /* scroll transition: tinted sections arrive with a slanted top edge that flattens */
 .js .alt{clip-path:polygon(0 var(--tl,0px),100% var(--tr,0px),100% 100%,0 100%)}
 
+
+/* scroll: section stripe sweep + replaying reveals + velocity lean */
+main{overflow-x:clip}
+.sx{position:relative}
+.ssw{position:absolute;left:0;right:0;top:0;height:clamp(120px,22vh,220px);pointer-events:none;overflow:hidden;z-index:2}
+.ssw i{position:absolute;top:-40%;bottom:-40%;left:0;width:22vw;min-width:160px;transform:translateX(-30vw) skewX(-20deg);opacity:0}
+.ssw i.g{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--green) 55%,transparent))}
+.ssw i.b{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--blue) 45%,transparent));width:12vw}
+.ssw i.w{background:#fff;width:10px;min-width:0;box-shadow:0 0 40px 8px rgba(255,255,255,.6)}
+.js .rv{transition:transform .7s var(--ease),opacity .7s var(--ease)}
+.js .rv.out{opacity:.25}
+.js .rv.out.up{transform:translateY(36px)}
+.js .rv.out.dn{transform:translateY(-28px)}
+.js .rv.out.l{transform:translateX(-40px)}
+.js .rv.out.r{transform:translateX(40px)}
+.lean{transform:skewY(var(--lean,0deg));transition:transform .25s ease-out}
+
 /* gentle entrance: elements start visible, only nudge up */
 .js .rise{transform:translateY(14px);transition:transform .6s var(--ease)}
 .js .rise.in{transform:none}
@@ -1157,6 +1174,32 @@ function countUp(el){
     const q=Math.max(0,Math.min(1,(innerHeight-r.top)/(innerHeight*.7))),t=((1-q)*Math.min(90,innerWidth*.07)).toFixed(1)+'px';
     if(i%2){s.style.setProperty('--tl','0px');s.style.setProperty('--tr',t)}else{s.style.setProperty('--tl',t);s.style.setProperty('--tr','0px')}})}
   addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});addEventListener('resize',upd);upd();
+})();
+
+
+/* ===== scroll animations ===== */
+(function(){
+  if(reduce||!('IntersectionObserver' in window))return;
+  // 1) stripe sweep when a section enters
+  const secs=[...document.querySelectorAll('main > section')].filter(s=>s.id!=='top'&&s.id!=='route');
+  secs.forEach(s=>{s.classList.add('sx');const w=document.createElement('div');w.className='ssw';w.setAttribute('aria-hidden','true');w.innerHTML='<i class="g"></i><i class="b"></i><i class="w"></i>';s.prepend(w);s._sw=w});
+  function sweep(s){const [g,b,w]=s._sw.children,o={easing:'cubic-bezier(.6,0,.3,1)',fill:'forwards'};
+    [[g,0,900],[b,90,850],[w,150,800]].forEach(([el,d,dur])=>el.animate([{transform:'translateX(-30vw) skewX(-20deg)',opacity:0},{opacity:1,offset:.25},{opacity:1,offset:.7},{transform:'translateX(115vw) skewX(-20deg)',opacity:0}],{...o,delay:d,duration:dur}))}
+  let lastY=scrollY,dir=1;addEventListener('scroll',()=>{dir=scrollY>=lastY?1:-1;lastY=scrollY},{passive:true});
+  const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)sweep(e.target)}),{rootMargin:'-35% 0px -35% 0px'});
+  secs.forEach(s=>so.observe(s));
+  // 2) replaying reveals: headings slide from the side, cards rise; they reset when they leave
+  const groups=[['.sec-head','l'],['.benefit','up'],['.svc','up'],['.tabs .tab','up'],['.city-card','up'],['.track > *','up'],['.ret-steps li','up'],['.loc-card','r'],['.about-copy','l'],['.facts > div','up'],['.site','r'],['.pbband','up'],['.contact > div:first-child','l'],['.ccard','up']];
+  const items=[];groups.forEach(([sel,k])=>document.querySelectorAll(sel).forEach((el,i)=>{el.classList.add('rv');el.dataset.k=k;el.style.transitionDelay=(i%6)*70+'ms';items.push(el)}));
+  const ro=new IntersectionObserver(es=>es.forEach(e=>{const el=e.target;
+    if(e.isIntersecting){el.classList.remove('out','up','dn','l','r')}
+    else{const k=el.dataset.k;el.classList.add('out',k==='up'?(e.boundingClientRect.top>0?'up':'dn'):k)}}),{threshold:.12});
+  // start visible; only elements below the fold get the "out" state
+  items.forEach(el=>{const r=el.getBoundingClientRect();if(r.top>innerHeight){el.classList.add('out',el.dataset.k==='up'?'up':el.dataset.k)}ro.observe(el)});
+  // 3) cards lean with scroll speed
+  const leaners=[...document.querySelectorAll('.svc,.ccard,.facts > div,.ret-steps li')];leaners.forEach(el=>el.parentElement.classList.add('lean'));
+  const parents=[...new Set(leaners.map(el=>el.parentElement))];
+  let v=0,py=scrollY;(function tick(){const d=scrollY-py;py=scrollY;v=v*.85+d*.15;const a=Math.max(-3,Math.min(3,-v*.12));parents.forEach(p=>p.style.setProperty('--lean',a.toFixed(2)+'deg'));requestAnimationFrame(tick)})();
 })();
 
 /* nav highlight */
