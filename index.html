@@ -462,8 +462,12 @@ main{overflow-x:clip}
 .shuttle .puff{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:color-mix(in srgb,var(--muted) 35%,transparent)}
 .shuttle .box{position:absolute;left:0;top:0;width:24px;height:18px;margin:-9px 0 0 -12px;border-radius:3px;background:#c8955a;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
 .shuttle .box::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:5px;margin-left:-2.5px;background:#ecc890}
-.tagl .tag{position:absolute;left:0;top:0;white-space:nowrap;font:800 12px var(--f-body);padding:5px 10px 5px 8px;border-radius:999px;background:var(--green);color:var(--on-accent);display:flex;align-items:center;gap:6px;box-shadow:0 8px 18px -10px rgba(15,26,51,.6)}
-.tagl .tag svg{display:block}
+.tagl .tag,.shuttle .tag{position:absolute;left:0;top:0;white-space:nowrap;font:800 12px var(--f-body);padding:5px 10px 5px 8px;border-radius:999px;background:var(--green);color:var(--on-accent);display:flex;align-items:center;gap:6px;box-shadow:0 8px 18px -10px rgba(15,26,51,.6)}
+.tagl .tag.ret,.shuttle .tag.ret{background:var(--blue);color:#fff}
+:root[data-theme="dark"] .shuttle .tag.ret{color:#0b1222}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .shuttle .tag.ret{color:#0b1222}}
+.shuttle .box.ret{background:#9fb4e0}.shuttle .box.ret::after{background:#e8eefb}
+.tagl .tag svg,.shuttle .tag svg{display:block}
 
 .js .rv{transition:transform .7s var(--ease),opacity .7s var(--ease)}
 .js .rv.out{opacity:.25}
@@ -1323,10 +1327,8 @@ function countUp(el){
   let lastY=scrollY,dir=1,vel=0,running=false,queued=null,styleN=0;
   addEventListener('scroll',()=>{const d=scrollY-lastY;if(Math.abs(d)>.5)dir=d>0?1:-1;vel=vel*.7+Math.abs(d)*.3;lastY=scrollY},{passive:true});
   const ROUTES=[
-    (W,y,a)=>`M -220 ${y} L ${W*.24} ${y} C ${W*.33} ${y-a*1.5}, ${W*.5} ${y-a*1.5}, ${W*.59} ${y} L ${W+220} ${y}`,            // hop
-    (W,y,a)=>`M -220 ${y+a*.2} C ${W*.15} ${y-a}, ${W*.3} ${y+a}, ${W*.5} ${y} S ${W*.82} ${y-a}, ${W+220} ${y+a*.2}`,             // S-curve
-    (W,y,a)=>`M -220 ${y+a*.7} L ${W*.34} ${y-a*.45} L ${W*.47} ${y+a*.6} L ${W+220} ${y-a}`,                                        // logo zigzag
-    (W,y,a)=>`M -220 ${y} L ${W*.32} ${y} C ${W*.45} ${y}, ${W*.48} ${y-a*1.4}, ${W*.42} ${y-a*1.4} C ${W*.36} ${y-a*1.4}, ${W*.39} ${y}, ${W*.52} ${y} L ${W+220} ${y}` // loop
+    (W,y,a)=>`M -220 ${y} L ${W+220} ${y}`,                                                  // straight
+    (W,y,a)=>`M -220 ${y+a*.25} C ${W*.35} ${y+a*.25}, ${W*.65} ${y-a*.25}, ${W+220} ${y-a*.25}`  // gentle rise
   ];
   function shuttle(sec){
     if(running){queued=sec;return}
@@ -1337,8 +1339,9 @@ function countUp(el){
     const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','trail');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
     const mk=o=>{const p=document.createElementNS(NS,'path');for(const k in o)p.setAttribute(k,o[k]);svg.appendChild(p);return p};
     let d=route(W,y,a);if(back)d=d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g,(m,x,yy)=>`${(W-parseFloat(x)).toFixed(1)} ${yy}`);
-    const glow=mk({d,fill:'none',stroke:'var(--green)','stroke-width':16,'stroke-linecap':'round','stroke-linejoin':'round',opacity:.18});
-    const line=mk({d,fill:'none',stroke:'var(--green)','stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round','stroke-dasharray':'2 10',opacity:.85});
+    const col=back?'var(--blue)':'var(--green)';
+    const glow=mk({d,fill:'none',stroke:col,'stroke-width':16,'stroke-linecap':'round','stroke-linejoin':'round',opacity:.18});
+    const line=mk({d,fill:'none',stroke:col,'stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round','stroke-dasharray':'2 10',opacity:.85});
     L.appendChild(svg);
     const len=line.getTotalLength();[glow,line].forEach(p=>{p.style.strokeDasharray=p===line?'2 10':len;});glow.style.strokeDashoffset=len;
     const mask=document.createElementNS(NS,'mask'),mid='m'+Math.random().toString(36).slice(2,7);mask.id=mid;
@@ -1347,7 +1350,9 @@ function countUp(el){
     const sv=document.createElement('div');sv.className='sv';sv.appendChild(makeVan());L.appendChild(sv);
     const wheels=[...sv.querySelectorAll('g[transform^="translate(70 106)"],g[transform^="translate(236 106)"]')];
     const vw=sv.offsetWidth,vh=sv.offsetHeight;
-    const dur=Math.max(1100,Math.min(1700,1700-vel*14)),t0=performance.now(),ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    const dur=Math.max(1700,Math.min(2300,2300-vel*10)),t0=performance.now(),ease=t=>.6*t+.4*(.5-.5*Math.cos(Math.PI*t));
+    let retBox=null,retP=null;if(back){retP=line.getPointAtLength(len*.5);retBox=document.createElement('i');retBox.className='box ret';L.appendChild(retBox);
+      retBox.animate([{transform:`translate(${retP.x}px,${retP.y-9}px) scale(.2)`,opacity:0},{transform:`translate(${retP.x}px,${retP.y-15}px) scale(1.12)`,opacity:1,offset:.6},{transform:`translate(${retP.x}px,${retP.y-9}px) scale(1)`,opacity:1}],{duration:320,fill:'forwards'})}
     let ang=0,lastPuff=0,tossed=false;
     function frame(now){
       const t=Math.min(1,(now-t0)/dur),e=ease(t),at=len*e,p=line.getPointAtLength(at),q=line.getPointAtLength(Math.min(len,at+2)),p0=line.getPointAtLength(Math.max(0,at-2));
@@ -1360,12 +1365,26 @@ function countUp(el){
       if(now-lastPuff>60&&t>.04&&t<.95){lastPuff=now;const pf=document.createElement('i');pf.className='puff';L.appendChild(pf);
         const c=Math.cos(ang*Math.PI/180),s=Math.sin(ang*Math.PI/180),k=back?-1:1,rx=p.x-k*c*vw*.48,ry=p.y-k*s*vw*.48-8;
         pf.animate([{transform:`translate(${rx}px,${ry}px) scale(.5)`,opacity:.7},{transform:`translate(${rx-k*34}px,${ry-18}px) scale(2.2)`,opacity:0}],{duration:700,easing:'ease-out',fill:'forwards'}).finished.then(()=>pf.remove())}
-      if(!tossed&&t>.45){tossed=true;toss(sec,p)}
+      if(!tossed&&(back?e>.46:t>.45)){tossed=true;if(back){const q2=line.getPointAtLength(len*Math.min(1,e+.07));pickup(sec,retBox,retP,{x:q2.x,y:q2.y-vh*.5})}else toss(sec,p)}
       if(t<1)requestAnimationFrame(frame);
       else{sv.remove();svg.animate([{opacity:1},{opacity:0}],{duration:600,delay:150,fill:'forwards'}).finished.then(()=>svg.remove());
         setTimeout(()=>{running=false;if(queued){const q=queued;queued=null;const r=q.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)shuttle(q)}},200)}
     }
     requestAnimationFrame(frame);
+  }
+  function headPos(sec){const head=sec.querySelector('.sec-head .eyebrow')||sec.querySelector('.eyebrow')||sec.querySelector('h2');if(!head)return null;
+    const lr=L.getBoundingClientRect(),hr=head.getBoundingClientRect();return {head,x:hr.left-lr.left+Math.min(hr.width,140)/2,y:hr.top-lr.top-10,ok:hr.top-lr.top>20&&hr.top-lr.top<lr.height-20}}
+  function showTag(sec,head,html,cls){const T=sec._tl,tr=T.getBoundingClientRect(),hr=head.getBoundingClientRect(),tg=document.createElement('span');tg.className='tag'+(cls?' '+cls:'');tg.innerHTML=html;T.appendChild(tg);
+    const w=tg.offsetWidth,x=Math.max(8,Math.min(T.clientWidth-w-8,hr.left-tr.left+Math.min(hr.width,140)/2-w/2)),y=hr.top-tr.top-34;
+    tg.animate([{transform:`translate(${x}px,${y+10}px) scale(.3)`,opacity:0},{transform:`translate(${x}px,${y}px) scale(1.08)`,opacity:1,offset:.2},{transform:`translate(${x}px,${y+2}px) scale(1)`,opacity:1,offset:.8},{transform:`translate(${x}px,${y-12}px) scale(.95)`,opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove())}
+  function tagAt(x,y,html,cls){const tg=document.createElement('span');tg.className='tag'+(cls?' '+cls:'');tg.style.position='absolute';tg.innerHTML=html;L.appendChild(tg);
+    const w=tg.offsetWidth;x=Math.max(8,Math.min(L.clientWidth-w-8,x-w/2));
+    tg.animate([{transform:`translate(${x}px,${y+10}px) scale(.3)`,opacity:0},{transform:`translate(${x}px,${y}px) scale(1.08)`,opacity:1,offset:.2},{transform:`translate(${x}px,${y+2}px) scale(1)`,opacity:1,offset:.8},{transform:`translate(${x}px,${y-14}px) scale(.95)`,opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove())}
+  // driving left: a return waits on the road and the van scoops it up on the way past
+  function pickup(sec,b,from,van){
+    if(!b)return;const name=NAMES[sec.id];
+    b.animate([{transform:`translate(${from.x}px,${from.y-9}px) rotate(0) scale(1)`},{transform:`translate(${(from.x+van.x)/2}px,${Math.min(from.y,van.y)-60}px) rotate(-160deg) scale(1)`,offset:.55},{transform:`translate(${van.x}px,${van.y}px) rotate(-300deg) scale(.35)`,opacity:.1}],{duration:340,easing:'cubic-bezier(.4,0,.6,1)',fill:'forwards'}).finished
+    .then(()=>{b.remove();tagAt(from.x,from.y-86,`<svg width="12" height="12" viewBox="0 0 12 12"><path d="M4 2.5L1.8 4.7 4 6.9M2 4.7h5a3 3 0 0 1 0 6H5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Return collected${name?' · '+name:''}`,'ret')});
   }
   function toss(sec,from){
     const head=sec.querySelector('.sec-head .eyebrow')||sec.querySelector('.eyebrow')||sec.querySelector('h2');if(!head)return;
