@@ -454,11 +454,17 @@ html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,bo
 /* scroll: section stripe sweep + replaying reveals + velocity lean */
 main{overflow-x:clip}
 .sx{position:relative}
-.ssw{position:absolute;left:0;right:0;top:0;height:clamp(120px,22vh,220px);pointer-events:none;overflow:hidden;z-index:2}
-.ssw i{position:absolute;top:-40%;bottom:-40%;left:0;width:22vw;min-width:160px;transform:translateX(-30vw) skewX(-20deg);opacity:0}
-.ssw i.g{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--green) 55%,transparent))}
-.ssw i.b{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--blue) 45%,transparent));width:12vw}
-.ssw i.w{background:#fff;width:10px;min-width:0;box-shadow:0 0 40px 8px rgba(255,255,255,.6)}
+.shuttle{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--nav));bottom:0;pointer-events:none;z-index:34;overflow:hidden}
+.tagl{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none;z-index:3}
+.shuttle svg.trail{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.shuttle .sv{position:absolute;left:0;top:0;width:clamp(92px,12vw,170px);will-change:transform;filter:drop-shadow(0 8px 10px rgba(15,26,51,.25))}
+.shuttle .sv svg{display:block;width:100%;height:auto;overflow:visible}
+.shuttle .puff{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:color-mix(in srgb,var(--muted) 35%,transparent)}
+.shuttle .box{position:absolute;left:0;top:0;width:24px;height:18px;margin:-9px 0 0 -12px;border-radius:3px;background:#c8955a;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.shuttle .box::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:5px;margin-left:-2.5px;background:#ecc890}
+.tagl .tag{position:absolute;left:0;top:0;white-space:nowrap;font:800 12px var(--f-body);padding:5px 10px 5px 8px;border-radius:999px;background:var(--green);color:var(--on-accent);display:flex;align-items:center;gap:6px;box-shadow:0 8px 18px -10px rgba(15,26,51,.6)}
+.tagl .tag svg{display:block}
+
 .js .rv{transition:transform .7s var(--ease),opacity .7s var(--ease)}
 .js .rv.out{opacity:.25}
 .js .rv.out.up{transform:translateY(36px)}
@@ -1305,13 +1311,80 @@ function countUp(el){
 /* ===== scroll animations ===== */
 (function(){
   if(reduce||!('IntersectionObserver' in window))return;
-  // 1) stripe sweep when a section enters
-  const secs=[...document.querySelectorAll('main > section')].filter(s=>s.id!=='top'&&s.id!=='route');
-  secs.forEach(s=>{s.classList.add('sx');const w=document.createElement('div');w.className='ssw';w.setAttribute('aria-hidden','true');w.innerHTML='<i class="g"></i><i class="b"></i><i class="w"></i>';s.prepend(w);s._sw=w});
-  function sweep(s){const [g,b,w]=s._sw.children,o={easing:'cubic-bezier(.6,0,.3,1)',fill:'forwards'};
-    [[g,0,900],[b,90,850],[w,150,800]].forEach(([el,d,dur])=>el.animate([{transform:'translateX(-30vw) skewX(-20deg)',opacity:0},{opacity:1,offset:.25},{opacity:1,offset:.7},{transform:'translateX(115vw) skewX(-20deg)',opacity:0}],{...o,delay:d,duration:dur}))}
-  let lastY=scrollY,dir=1;addEventListener('scroll',()=>{dir=scrollY>=lastY?1:-1;lastY=scrollY},{passive:true});
-  const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)sweep(e.target)}),{rootMargin:'-35% 0px -35% 0px'});
+  // 1) a van shuttles across the screen as each section scrolls in: new route each time, follows your scroll direction
+  const secs=[...document.querySelectorAll('main > section')].filter(s=>s.id&&s.id!=='top'&&s.id!=='route');
+  const NAMES={services:'Services',cities:'Cities',track:'Tracking',locations:'Locations',about:'About',contact:'Contact'};
+  const NS='http://www.w3.org/2000/svg',vanSrc=document.querySelector('#van svg');
+  const L=document.createElement('div');L.className='shuttle';L.setAttribute('aria-hidden','true');document.body.appendChild(L);
+  function makeVan(){const v=vanSrc.cloneNode(true);v.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+    const uid='sc'+Math.random().toString(36).slice(2,7);v.querySelectorAll('clipPath').forEach(c=>{c.id=uid});v.querySelectorAll('[clip-path]').forEach(e=>e.setAttribute('clip-path','url(#'+uid+')'));
+    const sp=v.querySelector('.speed');if(sp)sp.setAttribute('opacity','.9');return v}
+  secs.forEach(s=>{s.classList.add('sx');const t=document.createElement('div');t.className='tagl';t.setAttribute('aria-hidden','true');s.prepend(t);s._tl=t});
+  let lastY=scrollY,dir=1,vel=0,running=false,queued=null,styleN=0;
+  addEventListener('scroll',()=>{const d=scrollY-lastY;if(Math.abs(d)>.5)dir=d>0?1:-1;vel=vel*.7+Math.abs(d)*.3;lastY=scrollY},{passive:true});
+  const ROUTES=[
+    (W,y,a)=>`M -220 ${y} L ${W*.24} ${y} C ${W*.33} ${y-a*1.5}, ${W*.5} ${y-a*1.5}, ${W*.59} ${y} L ${W+220} ${y}`,            // hop
+    (W,y,a)=>`M -220 ${y+a*.2} C ${W*.15} ${y-a}, ${W*.3} ${y+a}, ${W*.5} ${y} S ${W*.82} ${y-a}, ${W+220} ${y+a*.2}`,             // S-curve
+    (W,y,a)=>`M -220 ${y+a*.7} L ${W*.34} ${y-a*.45} L ${W*.47} ${y+a*.6} L ${W+220} ${y-a}`,                                        // logo zigzag
+    (W,y,a)=>`M -220 ${y} L ${W*.32} ${y} C ${W*.45} ${y}, ${W*.48} ${y-a*1.4}, ${W*.42} ${y-a*1.4} C ${W*.36} ${y-a*1.4}, ${W*.39} ${y}, ${W*.52} ${y} L ${W+220} ${y}` // loop
+  ];
+  function shuttle(sec){
+    if(running){queued=sec;return}
+    const rp=$('routePin').getBoundingClientRect();if(rp.bottom>innerHeight*.25&&rp.top<innerHeight){const r=sec.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)setTimeout(()=>shuttle(sec),350);return}
+    const pt=$('pt');if(pt&&pt.classList.contains('show')){setTimeout(()=>shuttle(sec),700);return}
+    running=true;const W=L.clientWidth,H=L.clientHeight,y=H*.5,a=Math.min(110,H*.14),back=dir<0;
+    const route=ROUTES[styleN++%ROUTES.length];
+    const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','trail');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    const mk=o=>{const p=document.createElementNS(NS,'path');for(const k in o)p.setAttribute(k,o[k]);svg.appendChild(p);return p};
+    let d=route(W,y,a);if(back)d=d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g,(m,x,yy)=>`${(W-parseFloat(x)).toFixed(1)} ${yy}`);
+    const glow=mk({d,fill:'none',stroke:'var(--green)','stroke-width':16,'stroke-linecap':'round','stroke-linejoin':'round',opacity:.18});
+    const line=mk({d,fill:'none',stroke:'var(--green)','stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round','stroke-dasharray':'2 10',opacity:.85});
+    L.appendChild(svg);
+    const len=line.getTotalLength();[glow,line].forEach(p=>{p.style.strokeDasharray=p===line?'2 10':len;});glow.style.strokeDashoffset=len;
+    const mask=document.createElementNS(NS,'mask'),mid='m'+Math.random().toString(36).slice(2,7);mask.id=mid;
+    const mp=document.createElementNS(NS,'path');mp.setAttribute('d',d);mp.setAttribute('fill','none');mp.setAttribute('stroke','#fff');mp.setAttribute('stroke-width','30');mp.style.strokeDasharray=len;mp.style.strokeDashoffset=len;
+    mask.appendChild(mp);svg.prepend(mask);line.setAttribute('mask','url(#'+mid+')');
+    const sv=document.createElement('div');sv.className='sv';sv.appendChild(makeVan());L.appendChild(sv);
+    const wheels=[...sv.querySelectorAll('g[transform^="translate(70 106)"],g[transform^="translate(236 106)"]')];
+    const vw=sv.offsetWidth,vh=sv.offsetHeight;
+    const dur=Math.max(1100,Math.min(1700,1700-vel*14)),t0=performance.now(),ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    let ang=0,lastPuff=0,tossed=false;
+    function frame(now){
+      const t=Math.min(1,(now-t0)/dur),e=ease(t),at=len*e,p=line.getPointAtLength(at),q=line.getPointAtLength(Math.min(len,at+2)),p0=line.getPointAtLength(Math.max(0,at-2));
+      let ta=Math.atan2(q.y-p0.y,q.x-p0.x)*180/Math.PI;if(back)ta-=180;
+      ang+=(((ta-ang+540)%360)-180)*.3;
+      sv.style.transformOrigin='50% 86%';
+      sv.style.transform=`translate(${(p.x-vw/2).toFixed(1)}px,${(p.y-vh*.86).toFixed(1)}px) rotate(${ang.toFixed(1)}deg) scaleX(${back?-1:1})`;
+      const rot=(at/(2*Math.PI*16*(vw/300)))*360;wheels.forEach((w,k)=>w.setAttribute('transform',`translate(${k?236:70} 106) rotate(${rot.toFixed(0)})`));
+      glow.style.strokeDashoffset=(len-at).toFixed(1);mp.style.strokeDashoffset=(len-at).toFixed(1);
+      if(now-lastPuff>60&&t>.04&&t<.95){lastPuff=now;const pf=document.createElement('i');pf.className='puff';L.appendChild(pf);
+        const c=Math.cos(ang*Math.PI/180),s=Math.sin(ang*Math.PI/180),k=back?-1:1,rx=p.x-k*c*vw*.48,ry=p.y-k*s*vw*.48-8;
+        pf.animate([{transform:`translate(${rx}px,${ry}px) scale(.5)`,opacity:.7},{transform:`translate(${rx-k*34}px,${ry-18}px) scale(2.2)`,opacity:0}],{duration:700,easing:'ease-out',fill:'forwards'}).finished.then(()=>pf.remove())}
+      if(!tossed&&t>.45){tossed=true;toss(sec,p)}
+      if(t<1)requestAnimationFrame(frame);
+      else{sv.remove();svg.animate([{opacity:1},{opacity:0}],{duration:600,delay:150,fill:'forwards'}).finished.then(()=>svg.remove());
+        setTimeout(()=>{running=false;if(queued){const q=queued;queued=null;const r=q.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)shuttle(q)}},200)}
+    }
+    requestAnimationFrame(frame);
+  }
+  function toss(sec,from){
+    const head=sec.querySelector('.sec-head .eyebrow')||sec.querySelector('.eyebrow')||sec.querySelector('h2');if(!head)return;
+    const lr=L.getBoundingClientRect(),hr=head.getBoundingClientRect();
+    const to={x:hr.left-lr.left+Math.min(hr.width,140)/2,y:hr.top-lr.top-10};
+    const onScreen=to.y>20&&to.y<lr.height-20;
+    const b=document.createElement('i');b.className='box';L.appendChild(b);
+    const end=onScreen?to:{x:from.x+(dir<0?-120:120),y:lr.height+40};
+    const mx=(from.x+end.x)/2,my=Math.min(from.y,end.y)-130;
+    b.animate([{transform:`translate(${from.x}px,${from.y-40}px) rotate(0)`},{transform:`translate(${mx}px,${my}px) rotate(280deg)`,offset:.5},{transform:`translate(${end.x}px,${end.y}px) rotate(560deg)`}],{duration:720,easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'}).finished.then(()=>{
+      b.remove();const name=NAMES[sec.id];if(!name||!onScreen)return;
+      const T=sec._tl,tr=T.getBoundingClientRect(),hr2=head.getBoundingClientRect();
+      const tg=document.createElement('span');tg.className='tag';
+      tg.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.5l2.3 2.3L9.5 3.8" fill="none" stroke="currentColor" stroke-width="2"/></svg>Delivered · ${name}`;T.appendChild(tg);
+      const w=tg.offsetWidth,x=Math.max(8,Math.min(T.clientWidth-w-8,hr2.left-tr.left+Math.min(hr2.width,140)/2-w/2)),y=hr2.top-tr.top-34;
+      tg.animate([{transform:`translate(${x}px,${y+10}px) scale(.3)`,opacity:0},{transform:`translate(${x}px,${y}px) scale(1.08)`,opacity:1,offset:.2},{transform:`translate(${x}px,${y+2}px) scale(1)`,opacity:1,offset:.8},{transform:`translate(${x}px,${y-12}px) scale(.95)`,opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove());
+    });
+  }
+  const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)shuttle(e.target)}),{rootMargin:'-42% 0px -42% 0px'});
   secs.forEach(s=>so.observe(s));
   // 2) replaying reveals: headings slide from the side, cards rise; they reset when they leave
   const groups=[['.sec-head','l'],['.benefit','up'],['.svc','up'],['.tabs .tab','up'],['.city-card','up'],['.track > *','up'],['.ret-steps li','up'],['.loc-card','r'],['.about-copy','l'],['.facts > div','up'],['.site','r'],['.pbband','up'],['.contact > div:first-child','l'],['.ccard','up']];
