@@ -436,6 +436,20 @@ html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,bo
 .ccard,.site,.facts div{transition:transform .2s,border-color .2s}
 .ccard:hover,.site:hover,.facts div:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--green) 45%,var(--line))}
 
+
+/* page transition: brand bands sweep across when jumping to a section */
+.pt{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--nav));bottom:0;z-index:38;pointer-events:none;overflow:hidden;visibility:hidden}
+.pt.show{visibility:visible}
+.pt .band{position:absolute;top:-30%;bottom:-30%;left:0;width:170vw;transform:translateX(130vw) skewX(-20deg);will-change:transform}
+.pt .g{background:linear-gradient(135deg,var(--hg1),var(--hg2))}
+.pt .b{background:linear-gradient(135deg,var(--hb1),var(--hb2));box-shadow:-24px 0 60px rgba(0,0,0,.2)}
+.pt .b::before{content:"";position:absolute;left:0;top:0;bottom:0;width:18px;background:#fff;box-shadow:0 0 50px 6px rgba(255,255,255,.45)}
+.pt .label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;opacity:0;text-align:center;padding-inline:16px}
+.pt .label b{font:900 italic clamp(64px,11vw,150px)/.85 var(--f-display);font-stretch:115%}
+.pt .label span{font:900 clamp(22px,3vw,36px)/1.2 var(--f-display)}
+/* scroll transition: tinted sections arrive with a slanted top edge that flattens */
+.js .alt{clip-path:polygon(0 var(--tl,0px),100% var(--tr,0px),100% 100%,0 100%)}
+
 /* gentle entrance: elements start visible, only nudge up */
 .js .rise{transform:translateY(14px);transition:transform .6s var(--ease)}
 .js .rise.in{transform:none}
@@ -843,6 +857,7 @@ html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,bo
     <span class="mono">YVR · YYC · YEG · YYZ · YOW · YUL</span>
   </div>
 </footer>
+<div class="pt" id="pt" aria-hidden="true"><div class="band g" id="ptG"></div><div class="band b" id="ptB"></div><div class="label" id="ptL"><b id="ptN">01</b><span id="ptT">Services</span></div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -920,7 +935,7 @@ function renderCity(){
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{cur=byId[t.dataset.c];renderCity()}));
 function setFilter(f){filter=f;document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.filter===f));if(!serves(cur,f))cur=CITIES.find(c=>serves(c,f))||cur;renderCity()}
 document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>setFilter(b.dataset.filter)));
-document.addEventListener('click',e=>{const s=e.target.closest('[data-show]');if(s){setFilter(s.dataset.show);$('cities').scrollIntoView({behavior:reduce?'auto':'smooth'})}});
+document.addEventListener('click',e=>{const s=e.target.closest('[data-show]');if(s){setFilter(s.dataset.show);if(window.__ptGo)window.__ptGo('cities');else $('cities').scrollIntoView({behavior:reduce?'auto':'smooth'})}});
 renderCity();
 
 /* tracking */
@@ -956,7 +971,7 @@ document.querySelectorAll('[data-sample]').forEach(b=>b.addEventListener('click'
   inp.value=v;if(t)$('t-'+t).checked=true;submit()}));
 // hero quick track → fills the tracking section and jumps there
 $('heroForm').addEventListener('submit',e=>{e.preventDefault();const no=$('heroNo').value.trim().toUpperCase().replace(/\s+/g,''),m=check(no);$('heroErr').textContent=m;if(m){$('heroNo').focus();return}
-  const t=$('heroForm').querySelector('input[name="htype"]:checked').value;inp.value=no;$('t-'+t).checked=true;submit();$('track').scrollIntoView({behavior:reduce?'auto':'smooth'})});
+  const t=$('heroForm').querySelector('input[name="htype"]:checked').value;inp.value=no;$('t-'+t).checked=true;submit();if(window.__ptGo)window.__ptGo('track');else $('track').scrollIntoView({behavior:reduce?'auto':'smooth'})});
 submit();
 
 /* locations */
@@ -1105,6 +1120,44 @@ function countUp(el){
   const to=+el.dataset.count,from=+(el.dataset.from||0),suf=el.dataset.suf||'',final=el.textContent,t0=performance.now(),d=1100;
   (function step(t){const q=Math.min(1,(t-t0)/d),e=1-Math.pow(1-q,3);el.textContent=Math.round(from+(to-from)*e)+suf;if(q<1)requestAnimationFrame(step);else el.textContent=final})(t0);
 }
+
+
+/* ===== page transitions ===== */
+(function(){
+  if(reduce||!document.body.animate)return;
+  const NAMES={top:'Home',services:'Services',route:'On the road',cities:'Six cities',track:'Tracking',locations:'Locations',about:'About us',contact:'Contact'};
+  const order=Object.keys(NAMES);
+  const pt=$('pt'),G=$('ptG'),B=$('ptB'),L=$('ptL');let busy=false;
+  const ease='cubic-bezier(.7,0,.3,1)';
+  function sweep(el,from,to,dur,delay){return el.animate([{transform:`translateX(${from}vw) skewX(-20deg)`},{transform:`translateX(${to}vw) skewX(-20deg)`}],{duration:dur,delay,easing:ease,fill:'forwards'}).finished}
+  async function go(id){
+    if(busy)return;busy=true;const target=$(id);
+    $('ptN').textContent=String(order.indexOf(id)).padStart(2,'0');$('ptT').textContent=NAMES[id];if(id==='top')$('ptN').textContent='00';
+    pt.classList.add('show');
+    await Promise.all([sweep(G,130,-20,420,0),sweep(B,130,-20,420,70)]);
+    L.animate([{opacity:0,transform:'translateX(30px)'},{opacity:1,transform:'none'}],{duration:220,fill:'forwards'});
+    target.scrollIntoView({behavior:'instant',block:'start'});
+    await new Promise(r=>setTimeout(r,260));
+    L.animate([{opacity:1},{opacity:0,transform:'translateX(-30px)'}],{duration:200,fill:'forwards'});
+    await Promise.all([sweep(B,-20,-175,480,60),sweep(G,-20,-175,480,120)]);
+    pt.classList.remove('show');G.style.transform=B.style.transform='';busy=false;
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);
+    if(!NAMES[id]||!$(id))return;e.preventDefault();go(id);
+  });
+  // hero quick-track jumps to the tracking section with the same transition
+  window.__ptGo=go;
+})();
+
+/* slanted section edges that flatten as each tinted section scrolls in */
+(function(){
+  if(reduce)return;const alts=[...document.querySelectorAll('.alt')];
+  function upd(){alts.forEach((s,i)=>{const r=s.getBoundingClientRect();if(r.top>innerHeight||r.bottom<0)return;
+    const q=Math.max(0,Math.min(1,(innerHeight-r.top)/(innerHeight*.7))),t=((1-q)*Math.min(90,innerWidth*.07)).toFixed(1)+'px';
+    if(i%2){s.style.setProperty('--tl','0px');s.style.setProperty('--tr',t)}else{s.style.setProperty('--tl',t);s.style.setProperty('--tr','0px')}})}
+  addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});addEventListener('resize',upd);upd();
+})();
 
 /* nav highlight */
 const secs=['services','route','cities','track','locations','about','contact'].map($);
