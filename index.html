@@ -459,6 +459,8 @@ main{overflow-x:clip}
 .shuttle svg.trail{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .shuttle .sv{position:absolute;left:0;top:0;width:clamp(92px,12vw,170px);will-change:transform;filter:drop-shadow(0 8px 10px rgba(15,26,51,.25))}
 .shuttle .sv svg{display:block;width:100%;height:auto;overflow:visible}
+.shuttle .house{position:absolute;left:0;top:0;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(15,26,51,.18))}
+.shuttle .house svg{display:block;width:100%;height:auto;overflow:visible}
 .shuttle .puff{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:color-mix(in srgb,var(--muted) 35%,transparent)}
 .shuttle .box{position:absolute;left:0;top:0;width:24px;height:18px;margin:-9px 0 0 -12px;border-radius:3px;background:#c8955a;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
 .shuttle .box::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:5px;margin-left:-2.5px;background:#ecc890}
@@ -1354,6 +1356,7 @@ function countUp(el){
     if(running){queued=sec;return}
     const rp=$('routePin').getBoundingClientRect();if(rp.bottom>innerHeight*.25&&rp.top<innerHeight){const r=sec.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)setTimeout(()=>shuttle(sec),350);return}
     const pt=$('pt');if(pt&&pt.classList.contains('show')){setTimeout(()=>shuttle(sec),700);return}
+    L.querySelectorAll('.house:not(.leaving),.tag:not(.leaving)').forEach(el=>{el.classList.add('leaving');el.animate([{opacity:getComputedStyle(el).opacity},{opacity:0}],{duration:220,fill:'forwards'}).finished.then(()=>el.remove())});
     running=true;const W=L.clientWidth,H=L.clientHeight,y=H*.5,a=Math.min(110,H*.14),back=dir<0;
     const route=ROUTES[styleN++%ROUTES.length];
     const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','trail');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
@@ -1370,24 +1373,36 @@ function countUp(el){
     const sv=document.createElement('div');sv.className='sv';sv.appendChild(makeVan());L.appendChild(sv);
     const wheels=[...sv.querySelectorAll('g[transform^="translate(70 106)"],g[transform^="translate(236 106)"]')];
     const vw=sv.offsetWidth,vh=sv.offsetHeight;
-    const dur=Math.max(1700,Math.min(2300,2300-vel*10)),t0=performance.now(),ease=t=>.6*t+.4*(.5-.5*Math.cos(Math.PI*t));
-    let retBox=null,retP=null;if(back){retP=line.getPointAtLength(len*.5);retBox=document.createElement('i');retBox.className='box ret';L.appendChild(retBox);
-      retBox.animate([{transform:`translate(${retP.x}px,${retP.y-9}px) scale(.2)`,opacity:0},{transform:`translate(${retP.x}px,${retP.y-15}px) scale(1.12)`,opacity:1,offset:.6},{transform:`translate(${retP.x}px,${retP.y-9}px) scale(1)`,opacity:1}],{duration:320,fill:'forwards'})}
-    let ang=0,lastPuff=0,tossed=false;
+    // the house sits beside the road a little past the middle
+    const hw=Math.round(vw*.62),houseS=len*.56,hp=line.getPointAtLength(houseS);
+    const house=document.createElement('div');house.className='house'+(back?' ret':'');house.style.width=hw+'px';
+    house.innerHTML='<svg viewBox="0 0 64 60" aria-hidden="true"><rect x="44" y="6" width="7" height="14" fill="var(--blue-2)"/><path d="M2 29 L32 5 L62 29 Z" fill="var(--blue)"/><rect x="8" y="27" width="48" height="31" rx="2" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/><rect x="13" y="33" width="10" height="9" rx="1.5" fill="var(--bg-2)" stroke="var(--line)"/><rect x="26" y="36" width="15" height="22" rx="1.5" fill="#1d2a3f"/><g class="hdoor"><rect x="26" y="36" width="15" height="22" rx="1.5" fill="var(--green)"/><circle cx="38" cy="47" r="1.3" fill="#fff"/></g><rect x="44" y="40" width="8" height="2.5" rx="1" fill="var(--muted)"/></svg>';
+    L.appendChild(house);const hh=house.offsetHeight,hx=hp.x,hBase=hp.y-6;
+    house.style.transform=`translate(${(hx-hw/2).toFixed(1)}px,${(hBase-hh).toFixed(1)}px)`;
+    house.animate([{transform:`translate(${hx-hw/2}px,${hBase-hh}px) scaleY(0)`,opacity:0},{transform:`translate(${hx-hw/2}px,${hBase-hh}px) scaleY(1.06)`,opacity:1,offset:.7},{transform:`translate(${hx-hw/2}px,${hBase-hh}px) scaleY(1)`,opacity:1}],{duration:360,easing:'ease-out',fill:'forwards'});
+    const door=house.querySelector('.hdoor');
+    const sStop=Math.max(len*.2,houseS-(vw*.5+hw*.5+10));
+    const sp=Math.max(.7,Math.min(1,1-vel*.006)),TA=1000*sp,TB=900,TC=950*sp,t0=performance.now();
+    const outC=t=>1-Math.pow(1-t,3),inC=t=>t*t*t;
+    let ang=0,lastPuff=0,handed=false;
     function frame(now){
-      const t=Math.min(1,(now-t0)/dur),e=ease(t),at=len*e,p=line.getPointAtLength(at),q=line.getPointAtLength(Math.min(len,at+2)),p0=line.getPointAtLength(Math.max(0,at-2));
+      const el=now-t0;let at,moving=true;
+      if(el<TA)at=sStop*outC(el/TA);
+      else if(el<TA+TB){at=sStop;moving=false;if(!handed){handed=true;handover(sec,back,{x:0,y:0},house,door,hx,hBase,hh,hw,sv,vw,vh,line,sStop)}}
+      else at=sStop+(len-sStop)*inC(Math.min(1,(el-TA-TB)/TC));
+      const p=line.getPointAtLength(at),q=line.getPointAtLength(Math.min(len,at+2)),p0=line.getPointAtLength(Math.max(0,at-2));
       let ta=Math.atan2(q.y-p0.y,q.x-p0.x)*180/Math.PI;if(back)ta-=180;
       ang+=(((ta-ang+540)%360)-180)*.3;
       sv.style.transformOrigin='50% 86%';
       sv.style.transform=`translate(${(p.x-vw/2).toFixed(1)}px,${(p.y-vh*.86).toFixed(1)}px) rotate(${ang.toFixed(1)}deg) scaleX(${back?-1:1})`;
       const rot=(at/(2*Math.PI*16*(vw/300)))*360;wheels.forEach((w,k)=>w.setAttribute('transform',`translate(${k?236:70} 106) rotate(${rot.toFixed(0)})`));
       glow.style.strokeDashoffset=(len-at).toFixed(1);mp.style.strokeDashoffset=(len-at).toFixed(1);
-      if(now-lastPuff>60&&t>.04&&t<.95){lastPuff=now;const pf=document.createElement('i');pf.className='puff';L.appendChild(pf);
+      if(moving&&now-lastPuff>70&&at>8&&at<len-30){lastPuff=now;const pf=document.createElement('i');pf.className='puff';L.appendChild(pf);
         const c=Math.cos(ang*Math.PI/180),s=Math.sin(ang*Math.PI/180),k=back?-1:1,rx=p.x-k*c*vw*.48,ry=p.y-k*s*vw*.48-8;
-        pf.animate([{transform:`translate(${rx}px,${ry}px) scale(.5)`,opacity:.7},{transform:`translate(${rx-k*34}px,${ry-18}px) scale(2.2)`,opacity:0}],{duration:700,easing:'ease-out',fill:'forwards'}).finished.then(()=>pf.remove())}
-      if(!tossed&&(back?e>.46:t>.45)){tossed=true;if(back){const q2=line.getPointAtLength(len*Math.min(1,e+.07));pickup(sec,retBox,retP,{x:q2.x,y:q2.y-vh*.5})}else toss(sec,p)}
-      if(t<1)requestAnimationFrame(frame);
+        pf.animate([{transform:`translate(${rx}px,${ry}px) scale(.5)`,opacity:.6},{transform:`translate(${rx-k*30}px,${ry-14}px) scale(2)`,opacity:0}],{duration:650,easing:'ease-out',fill:'forwards'}).finished.then(()=>pf.remove())}
+      if(el<TA+TB+TC)requestAnimationFrame(frame);
       else{sv.remove();svg.animate([{opacity:1},{opacity:0}],{duration:600,delay:150,fill:'forwards'}).finished.then(()=>svg.remove());
+        house.animate([{opacity:1},{opacity:0}],{duration:500,delay:2600,fill:'forwards'}).finished.then(()=>house.remove());
         setTimeout(()=>{running=false;if(queued){const q=queued;queued=null;const r=q.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)shuttle(q)}},200)}
     }
     requestAnimationFrame(frame);
@@ -1415,27 +1430,23 @@ function countUp(el){
   function tagAt(x,y,html,cls){const tg=document.createElement('span');tg.className='tag'+(cls?' '+cls:'');tg.style.position='absolute';tg.innerHTML=html;L.appendChild(tg);
     const w=tg.offsetWidth;x=Math.max(8,Math.min(L.clientWidth-w-8,x-w/2));
     tg.animate([{transform:`translate(${x}px,${y+10}px) scale(.3)`,opacity:0},{transform:`translate(${x}px,${y}px) scale(1.08)`,opacity:1,offset:.2},{transform:`translate(${x}px,${y+2}px) scale(1)`,opacity:1,offset:.8},{transform:`translate(${x}px,${y-14}px) scale(.95)`,opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove())}
-  // driving left: a return waits on the road and the van scoops it up on the way past
-  function pickup(sec,b,from,van){
-    if(!b)return;const name=NAMES[sec.id];
-    b.animate([{transform:`translate(${from.x}px,${from.y-9}px) rotate(0) scale(1)`},{transform:`translate(${(from.x+van.x)/2}px,${Math.min(from.y,van.y)-60}px) rotate(-160deg) scale(1)`,offset:.55},{transform:`translate(${van.x}px,${van.y}px) rotate(-300deg) scale(.35)`,opacity:.1}],{duration:340,easing:'cubic-bezier(.4,0,.6,1)',fill:'forwards'}).finished
-    .then(()=>{b.remove();const tg=actionTag('Return collected · Send yours',()=>{if(window.__ptGo)window.__ptGo('locations');setTimeout(()=>$('locQ').focus(),1400)},'ret');tg.style.position='absolute';L.appendChild(tg);
-      const w=tg.offsetWidth,x=Math.max(8,Math.min(L.clientWidth-w-8,from.x-w/2));popTag(tg,x,from.y-86)});
-  }
-  function toss(sec,from){
-    const head=sec.querySelector('.sec-head .eyebrow')||sec.querySelector('.eyebrow')||sec.querySelector('h2');if(!head)return;
-    const lr=L.getBoundingClientRect(),hr=head.getBoundingClientRect();
-    const to={x:hr.left-lr.left+Math.min(hr.width,140)/2,y:hr.top-lr.top-10};
-    const onScreen=to.y>20&&to.y<lr.height-20;
-    const b=document.createElement('i');b.className='box';L.appendChild(b);
-    const end=onScreen?to:{x:from.x+(dir<0?-120:120),y:lr.height+40};
-    const mx=(from.x+end.x)/2,my=Math.min(from.y,end.y)-130;
-    b.animate([{transform:`translate(${from.x}px,${from.y-40}px) rotate(0)`},{transform:`translate(${mx}px,${my}px) rotate(280deg)`,offset:.5},{transform:`translate(${end.x}px,${end.y}px) rotate(560deg)`}],{duration:720,easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'}).finished.then(()=>{
-      b.remove();const name=NAMES[sec.id];if(!name||!onScreen)return;
-      const T=sec._tl,tr=T.getBoundingClientRect(),hr2=head.getBoundingClientRect();
-      const a=ACT[sec.id];if(!a)return;const tg=actionTag(a[0],a[1]);T.appendChild(tg);
-      const w=tg.offsetWidth,x=Math.max(8,Math.min(T.clientWidth-w-8,hr2.left-tr.left+Math.min(hr2.width,140)/2-w/2)),y=hr2.top-tr.top-34;
-      popTag(tg,x,y);
+  // the van is parked beside the house: a short hop through the door, then a shortcut above the roof
+  function handover(sec,back,_,house,door,hx,hBase,hh,hw,sv,vw,vh,line,sStop){
+    const vp=line.getPointAtLength(sStop),vanTop={x:vp.x,y:vp.y-vh*.95},doorPt={x:hx+hw*.05,y:hBase-hh*.32};
+    const b=document.createElement('i');b.className='box'+(back?' ret':'');L.appendChild(b);
+    const open=()=>door.animate([{transform:'scaleX(1)'},{transform:'scaleX(.12)'}],{duration:180,fill:'forwards'});
+    const shut=()=>door.animate([{transform:'scaleX(.12)'},{transform:'scaleX(1)'}],{duration:200,fill:'forwards'});
+    const bump=()=>house.animate([{transform:house.style.transform+' scaleY(1)'},{transform:house.style.transform+' scaleY(.94)'},{transform:house.style.transform+' scaleY(1)'}],{duration:240});
+    const from=back?doorPt:vanTop,to=back?vanTop:doorPt,mx=(from.x+to.x)/2,my=Math.min(from.y,to.y)-38;
+    door.style.transformBox='fill-box';door.style.transformOrigin='0 50%';
+    open();
+    b.animate([{transform:`translate(${from.x}px,${from.y}px) scale(${back?.6:1})`,opacity:back?0:1},{transform:`translate(${mx}px,${my}px) scale(.9)`,opacity:1,offset:.5},{transform:`translate(${to.x}px,${to.y}px) scale(${back?.8:.55})`,opacity:back?1:.0}],{duration:460,delay:140,easing:'cubic-bezier(.4,0,.5,1)',fill:'forwards'}).finished.then(()=>{
+      b.remove();shut();bump();
+      let tg;
+      if(back)tg=actionTag('Return collected · Send yours',()=>{if(window.__ptGo)window.__ptGo('locations');setTimeout(()=>$('locQ').focus(),1400)},'ret');
+      else{const a=ACT[sec.id];if(!a)return;tg=actionTag(a[0],a[1])}
+      tg.style.position='absolute';L.appendChild(tg);
+      const w=tg.offsetWidth,x=Math.max(8,Math.min(L.clientWidth-w-8,hx-w/2));popTag(tg,x,hBase-hh-38);
     });
   }
   const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)shuttle(e.target)}),{rootMargin:'-42% 0px -42% 0px'});
