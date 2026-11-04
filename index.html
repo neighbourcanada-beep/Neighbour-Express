@@ -457,7 +457,7 @@ main{overflow-x:clip}
 .shuttle{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--nav));bottom:0;pointer-events:none;z-index:34;overflow:hidden}
 .tagl{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none;z-index:3}
 .shuttle svg.trail{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.shuttle .sv{position:absolute;left:0;top:0;width:clamp(92px,12vw,170px);will-change:transform;filter:drop-shadow(0 8px 10px rgba(15,26,51,.25))}
+.shuttle .sv{position:absolute;left:0;top:0;backface-visibility:hidden;width:clamp(92px,12vw,170px);will-change:transform}
 .shuttle .sv svg{display:block;width:100%;height:auto;overflow:visible}
 .shuttle .house{position:absolute;left:0;top:0;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(15,26,51,.18))}
 .shuttle .house svg{display:block;width:100%;height:auto;overflow:visible}
@@ -1189,7 +1189,7 @@ $('locForm').addEventListener('submit',e=>{e.preventDefault();const q=$('locQ').
   // entrance: wait for the arrow to draw, then drive up the first climb and park
   onReady(()=>setTimeout(()=>{hv.classList.add('go');const t0=performance.now(),d=2400;
     (function step(t){const q=Math.min(1,(t-t0)/d),e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;drive=parked*e;place();if(q<1)requestAnimationFrame(step)})(t0)},1300));
-  addEventListener('scroll',()=>requestAnimationFrame(place),{passive:true});
+  let hq=false;addEventListener('scroll',()=>{if(!hq){hq=true;requestAnimationFrame(()=>{hq=false;place()})}},{passive:true});
 })();
 
 /* ===== route: van drives through cities and services ===== */
@@ -1271,7 +1271,8 @@ $('locForm').addEventListener('submit',e=>{e.preventDefault();const q=$('locQ').
   if('ResizeObserver' in window)new ResizeObserver(()=>layout()).observe(scene);
   document.fonts&&document.fonts.ready.then(layout);
   if(reduce){render(0);return}
-  (function loop(){const r=pin.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)render(pinP());else vel=0;requestAnimationFrame(loop)})();
+  let onS=false,looping=false;function loop(){if(!onS){looping=false;vel=0;return}render(pinP());requestAnimationFrame(loop)}
+  new IntersectionObserver(es=>{onS=es[0].isIntersecting;if(onS&&!looping){looping=true;requestAnimationFrame(loop)}}).observe(pin);
 })();
 
 
@@ -1328,9 +1329,9 @@ function countUp(el){
 (function(){
   if(reduce)return;const alts=[...document.querySelectorAll('.alt')];
   function upd(){alts.forEach((s,i)=>{const r=s.getBoundingClientRect();if(r.top>innerHeight||r.bottom<0)return;
-    const q=Math.max(0,Math.min(1,(innerHeight-r.top)/(innerHeight*.7))),t=((1-q)*Math.min(90,innerWidth*.07)).toFixed(1)+'px';
+    const q=Math.max(0,Math.min(1,(innerHeight-r.top)/(innerHeight*.7))),t=Math.round((1-q)*Math.min(90,innerWidth*.07))+'px';if(s._t===t)return;s._t=t;
     if(i%2){s.style.setProperty('--tl','0px');s.style.setProperty('--tr',t)}else{s.style.setProperty('--tl',t);s.style.setProperty('--tr','0px')}})}
-  addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});addEventListener('resize',upd);upd();
+  let qd=false;addEventListener('scroll',()=>{if(!qd){qd=true;requestAnimationFrame(()=>{qd=false;upd()})}},{passive:true});addEventListener('resize',upd);upd();
 })();
 
 
@@ -1367,10 +1368,10 @@ function countUp(el){
     const line=mk({d,fill:'none',stroke:col,'stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round','stroke-dasharray':'2 10',opacity:.85});
     L.appendChild(svg);
     const len=line.getTotalLength();[glow,line].forEach(p=>{p.style.strokeDasharray=p===line?'2 10':len;});glow.style.strokeDashoffset=len;
-    const mask=document.createElementNS(NS,'mask'),mid='m'+Math.random().toString(36).slice(2,7);mask.id=mid;
-    const mp=document.createElementNS(NS,'path');mp.setAttribute('d',d);mp.setAttribute('fill','none');mp.setAttribute('stroke','#fff');mp.setAttribute('stroke-width','30');mp.style.strokeDasharray=len;mp.style.strokeDashoffset=len;
-    mask.appendChild(mp);svg.prepend(mask);line.setAttribute('mask','url(#'+mid+')');
-    const sv=document.createElement('div');sv.className='sv';sv.appendChild(makeVan());L.appendChild(sv);
+    line.style.opacity=0;line.animate([{opacity:0},{opacity:.85}],{duration:900,fill:'forwards'});
+    const N=Math.max(120,Math.round(len/4)),LUT=new Float32Array((N+1)*2);for(let i=0;i<=N;i++){const q=line.getPointAtLength(len*i/N);LUT[i*2]=q.x;LUT[i*2+1]=q.y}
+    const ptAt=s=>{const f=Math.max(0,Math.min(N,s/len*N)),i=Math.min(N-1,Math.floor(f)),r=f-i;return {x:LUT[i*2]+(LUT[i*2+2]-LUT[i*2])*r,y:LUT[i*2+1]+(LUT[i*2+3]-LUT[i*2+1])*r}};
+    const sv=document.createElement('div');sv.className='sv';sv.style.transformOrigin='50% 86%';sv.appendChild(makeVan());L.appendChild(sv);
     const wheels=[...sv.querySelectorAll('g[transform^="translate(70 106)"],g[transform^="translate(236 106)"]')];
     const vw=sv.offsetWidth,vh=sv.offsetHeight;
     // the house sits beside the road a little past the middle
@@ -1390,14 +1391,13 @@ function countUp(el){
       if(el<TA)at=sStop*outC(el/TA);
       else if(el<TA+TB){at=sStop;moving=false;if(!handed){handed=true;handover(sec,back,{x:0,y:0},house,door,hx,hBase,hh,hw,sv,vw,vh,line,sStop)}}
       else at=sStop+(len-sStop)*inC(Math.min(1,(el-TA-TB)/TC));
-      const p=line.getPointAtLength(at),q=line.getPointAtLength(Math.min(len,at+2)),p0=line.getPointAtLength(Math.max(0,at-2));
+      const p=ptAt(at),q=ptAt(at+3),p0=ptAt(at-3);
       let ta=Math.atan2(q.y-p0.y,q.x-p0.x)*180/Math.PI;if(back)ta-=180;
       ang+=(((ta-ang+540)%360)-180)*.3;
-      sv.style.transformOrigin='50% 86%';
       sv.style.transform=`translate(${(p.x-vw/2).toFixed(1)}px,${(p.y-vh*.86).toFixed(1)}px) rotate(${ang.toFixed(1)}deg) scaleX(${back?-1:1})`;
-      const rot=(at/(2*Math.PI*16*(vw/300)))*360;wheels.forEach((w,k)=>w.setAttribute('transform',`translate(${k?236:70} 106) rotate(${rot.toFixed(0)})`));
-      glow.style.strokeDashoffset=(len-at).toFixed(1);mp.style.strokeDashoffset=(len-at).toFixed(1);
-      if(moving&&now-lastPuff>70&&at>8&&at<len-30){lastPuff=now;const pf=document.createElement('i');pf.className='puff';L.appendChild(pf);
+      if(moving){const rot=(at/(2*Math.PI*16*(vw/300)))*360;wheels.forEach((w,k)=>w.setAttribute('transform',`translate(${k?236:70} 106) rotate(${rot.toFixed(0)})`))}
+      glow.style.strokeDashoffset=(len-at).toFixed(0);
+      if(moving&&now-lastPuff>110&&at>8&&at<len-30){lastPuff=now;const pf=document.createElement('i');pf.className='puff';L.appendChild(pf);
         const c=Math.cos(ang*Math.PI/180),s=Math.sin(ang*Math.PI/180),k=back?-1:1,rx=p.x-k*c*vw*.48,ry=p.y-k*s*vw*.48-8;
         pf.animate([{transform:`translate(${rx}px,${ry}px) scale(.5)`,opacity:.6},{transform:`translate(${rx-k*30}px,${ry-14}px) scale(2)`,opacity:0}],{duration:650,easing:'ease-out',fill:'forwards'}).finished.then(()=>pf.remove())}
       if(el<TA+TB+TC)requestAnimationFrame(frame);
@@ -1498,9 +1498,9 @@ function countUp(el){
     guide.classList.toggle('show',heroOut&&!inRoute);
   }
   measure();upd();
-  addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});
+  let gq=false;addEventListener('scroll',()=>{if(!gq){gq=true;requestAnimationFrame(()=>{gq=false;upd()})}},{passive:true});
   addEventListener('resize',()=>{measure();upd()});
-  if('ResizeObserver' in window)new ResizeObserver(()=>{measure();upd()}).observe(document.body);
+  let rt;if('ResizeObserver' in window)new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(()=>{measure();upd()},150)}).observe(document.body);
   onReady(()=>{measure();upd()});
 })();
 
