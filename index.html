@@ -538,13 +538,20 @@ body{padding-bottom:var(--gh)}
 }
 @media (max-width:480px){.nav .wrap{gap:8px}.nav .wrap .brand{margin-right:auto}.menu-btn{margin-left:0}.nav .theme{margin-left:0}.nav .theme button{width:28px}}
 /* prev / next pages */
-.pager{padding-block:8px 72px}
-.pager .wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.pager a{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 22px;font-weight:800;font-size:19px;transition:border-color .2s,transform .2s}
-.pager a small{font:700 11.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.pager a:hover{border-color:var(--green);transform:translateY(-2px)}
-.pager #pgNext{text-align:right;grid-column:2}
+.pager{padding-block:16px 80px}
+.pager .wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pager a{position:relative;display:flex;flex-direction:column;gap:4px;text-decoration:none;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:22px 28px 22px 84px;font:900 clamp(22px,2.6vw,30px)/1.1 var(--f-display);transition:border-color .2s,transform .2s,box-shadow .2s}
+.pager a small{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.pager a::before{content:'←';position:absolute;left:22px;top:50%;width:44px;height:44px;margin-top:-22px;border-radius:50%;display:grid;place-items:center;font:800 22px var(--f-body);background:var(--bg-2);color:var(--ink);transition:transform .2s}
+.pager a:hover{border-color:var(--ink);transform:translateY(-2px)}
+.pager a:hover::before{transform:translateX(-4px)}
+.pager #pgNext{grid-column:2;text-align:right;padding:22px 84px 22px 28px;background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 18px 36px -22px rgba(47,122,51,.8)}
+.pager #pgNext small{color:rgba(255,255,255,.85)}
+.pager #pgNext::before{content:'→';left:auto;right:22px;background:#fff;color:var(--green)}
+.pager #pgNext:hover{border-color:var(--green);filter:brightness(1.06)}
+.pager #pgNext:hover::before{transform:translateX(4px)}
 .pager a[hidden]{display:none}
+@media (max-width:600px){.pager .wrap{grid-template-columns:minmax(0,1fr)}.pager #pgNext{grid-column:1;grid-row:1}}
 
 /* pages */
 main > [data-view][hidden]{display:none!important}
@@ -1438,23 +1445,25 @@ function countUp(el){
 /* ===== page transitions ===== */
 (function(){
   if(reduce||!document.body.animate)return;
-  const NAMES={top:'Home',services:'Services',route:'On the road',cities:'Six cities',track:'Tracking',locations:'Locations',about:'About us',contact:'Contact'};
+  const NAMES={home:'Home',services:'Services',cities:'Six cities',track:'Tracking',locations:'Locations',about:'About us',contact:'Contact'};
   const order=Object.keys(NAMES);
   const pt=$('pt'),G=$('ptG'),B=$('ptB'),L=$('ptL');let busy=false;
   const ease='cubic-bezier(.7,0,.3,1)';
   function sweep(el,from,to,dur,delay){return el.animate([{transform:`translateX(${from}vw) skewX(-20deg)`},{transform:`translateX(${to}vw) skewX(-20deg)`}],{duration:dur,delay,easing:ease,fill:'forwards'}).finished}
-  async function go(id){
-    if(busy)return;busy=true;const target=$(id);
-    $('ptN').textContent=String(order.indexOf(id)).padStart(2,'0');$('ptT').textContent=NAMES[id];if(id==='top')$('ptN').textContent='00';
+  async function go(id,swap){
+    if(busy)return;busy=true;
+    $('ptN').textContent=String(order.indexOf(id)).padStart(2,'0');$('ptT').textContent=NAMES[id];
     pt.classList.add('show');
     await Promise.all([sweep(G,130,-20,420,0),sweep(B,130,-20,420,70)]);
     L.animate([{opacity:0,transform:'translateX(30px)'},{opacity:1,transform:'none'}],{duration:220,fill:'forwards'});
-    target.scrollIntoView({behavior:'instant',block:'start'});
+    swap();
     await new Promise(r=>setTimeout(r,260));
     L.animate([{opacity:1},{opacity:0,transform:'translateX(-30px)'}],{duration:200,fill:'forwards'});
     await Promise.all([sweep(B,-20,-175,480,60),sweep(G,-20,-175,480,120)]);
     pt.classList.remove('show');G.style.transform=B.style.transform='';busy=false;
+    if(window.__ptDone)window.__ptDone();
   }
+  window.__ptSweep=go;
 
 })();
 
@@ -1632,17 +1641,23 @@ const viewOf=x=>{x=(x||'').replace(/^#/,'');x=ALIAS[x]||x;return VIEWS.includes(
 let curView=null;
 function showView(v){
   const prev=curView;if(v===prev)return;curView=v;
+  if(prev!==null&&window.__ptSweep){window.__ptSweep(v,()=>applyView(curView));return}
+  applyView(v);
+}
+let shownView=null;
+window.__ptDone=()=>{if(shownView!==curView)applyView(curView)};
+function applyView(v){
+  const prev=shownView;if(v===prev)return;shownView=v;
   document.querySelectorAll('main > [data-view]').forEach(s=>{s.hidden=s.dataset.view!==v});
   document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('on',viewOf(a.getAttribute('href'))===v));
   document.title=v==='home'?'Neighbour Express':VNAME[v]+' · Neighbour Express';
   window.scrollTo({top:0,behavior:'instant'});
-  const m=document.querySelector('main');if(prev!==null&&!reduce){m.classList.remove('swap');void m.offsetWidth;m.classList.add('swap')}
   dispatchEvent(new Event('resize'));
   {const i=VIEWS.indexOf(v),pv=$('pgPrev'),nx=$('pgNext');pv.hidden=i===0;nx.hidden=i===VIEWS.length-1;
-   if(i>0){pv.href='#'+VIEWS[i-1];pv.innerHTML='<small>← Previous</small>'+VNAME[VIEWS[i-1]]}
-   if(i<VIEWS.length-1){nx.href='#'+VIEWS[i+1];nx.innerHTML='<small>Next →</small>'+VNAME[VIEWS[i+1]]}}
+   if(i>0){pv.href='#'+VIEWS[i-1];pv.innerHTML='<small>Previous page</small>'+VNAME[VIEWS[i-1]]}
+   if(i<VIEWS.length-1){nx.href='#'+VIEWS[i+1];nx.innerHTML='<small>Next page</small>'+VNAME[VIEWS[i+1]]}}
   if(window.__guideTo)window.__guideTo(v,prev===null);
-  if(prev!==null&&v!=='home'&&window.__shuttle){const sec=$(v);setTimeout(()=>window.__shuttle(sec,VIEWS.indexOf(v)>=VIEWS.indexOf(prev)?1:-1),380)}
+  if(prev!==null&&v!=='home'&&window.__shuttle){const sec=$(v),d=VIEWS.indexOf(v)>=VIEWS.indexOf(prev)?1:-1;setTimeout(()=>window.__shuttle(sec,d),900)}
 }
 
 // mobile menu
