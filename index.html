@@ -553,6 +553,9 @@ body{padding-bottom:var(--gh)}
 .pager a[hidden]{display:none}
 @media (max-width:600px){.pager .wrap{grid-template-columns:minmax(0,1fr)}.pager #pgNext{grid-column:1;grid-row:1}}
 
+
+/* card entrance on each page */
+.js .ent-wait{opacity:0}
 /* pages */
 main > [data-view][hidden]{display:none!important}
 main.swap{animation:pageIn .45s var(--ease) both}
@@ -1437,7 +1440,7 @@ $('locForm').addEventListener('submit',e=>{e.preventDefault();const q=$('locQ').
 /* count-up numbers (final value is in the HTML; animation only replays it) */
 function countUp(el){
   if(reduce||el.dataset.done)return;el.dataset.done=1;
-  const to=+el.dataset.count,from=+(el.dataset.from||0),suf=el.dataset.suf||'',final=el.textContent,t0=performance.now(),d=1100;
+  const to=+el.dataset.count,from=+(el.dataset.from||0),suf=el.dataset.suf||'',final=el.dataset.final||el.textContent,t0=performance.now(),d=1100;
   (function step(t){const q=Math.min(1,(t-t0)/d),e=1-Math.pow(1-q,3);el.textContent=Math.round(from+(to-from)*e)+suf;if(q<1)requestAnimationFrame(step);else el.textContent=final})(t0);
 }
 
@@ -1545,7 +1548,7 @@ function countUp(el){
         pf.animate([{transform:`translate(${rx}px,${ry}px) scale(.5)`,opacity:.6},{transform:`translate(${rx-k*30}px,${ry-14}px) scale(2)`,opacity:0}],{duration:650,easing:'ease-out',fill:'forwards'}).finished.then(()=>pf.remove())}
       if(el<TA+TB+TC)requestAnimationFrame(frame);
       else{sv.remove();svg.animate([{opacity:1},{opacity:0}],{duration:600,delay:150,fill:'forwards'}).finished.then(()=>svg.remove());
-        house.animate([{opacity:1},{opacity:0}],{duration:500,delay:2600,fill:'forwards'}).finished.then(()=>house.remove());
+        house.animate([{opacity:1,transform:house.style.transform},{opacity:0,transform:house.style.transform+' translateY(6px) scale(.96)'}],{duration:280,delay:450,easing:'ease-in',fill:'forwards'}).finished.then(()=>house.remove());
         setTimeout(()=>{running=false;if(queued){const q=queued;queued=null;const r=q.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)shuttle(q)}},200)}
     }
     requestAnimationFrame(frame);
@@ -1594,7 +1597,7 @@ function countUp(el){
   }
   window.__shuttle=(sec,d)=>{dir=d;vel=0;shuttle(sec)};
   // 2) replaying reveals: headings slide from the side, cards rise; they reset when they leave
-  const groups=[['.sec-head','l'],['.benefit','up'],['.svc','up'],['.tabs .tab','up'],['.city-card','up'],['.track > *','up'],['.ret-steps li','up'],['.loc-card','r'],['.about-copy','l'],['.facts > div','up'],['.site','r'],['.pbband','up'],['.contact > div:first-child','l'],['.ccard','up']];
+  const groups=[['.sec-head','l']];
   const items=[];groups.forEach(([sel,k])=>document.querySelectorAll(sel).forEach((el,i)=>{el.classList.add('rv');el.dataset.k=k;el.style.transitionDelay=(i%6)*70+'ms';items.push(el)}));
   const ro=new IntersectionObserver(es=>es.forEach(e=>{const el=e.target;
     if(e.isIntersecting){el.classList.remove('out','up','dn','l','r')}
@@ -1638,6 +1641,20 @@ const VIEWS=['home','services','cities','track','locations','about','contact'];
 const VNAME={home:'Home',services:'Services',cities:'Cities',track:'Tracking',locations:'Locations',about:'About',contact:'Contact'};
 const ALIAS={top:'home',route:'services',explore:'home'};
 const viewOf=x=>{x=(x||'').replace(/^#/,'');x=ALIAS[x]||x;return VIEWS.includes(x)?x:'home'};
+
+/* ===== each page: cards rise in one after another, numbers count up ===== */
+const ENT='.benefit,.ex,.svc,.tabs .tab,.city-card,.track > *,.ret-steps li,.loc-card,.about-copy,.facts > div,.site,.pbband,.team,.ct-form,.of,.pager a,.stats li';
+let entQ=[],entT=0;
+const entIO='IntersectionObserver' in window&&!reduce?new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){entIO.unobserve(e.target);entQ.push(e.target)}});
+  if(entQ.length&&!entT)entT=requestAnimationFrame(()=>{entT=0;entQ.sort((a,b)=>{const r=a.getBoundingClientRect(),s=b.getBoundingClientRect();return (r.top-s.top)||(r.left-s.left)});
+    entQ.forEach((el,i)=>{el.classList.remove('ent-wait');el.animate([{opacity:0,transform:'translateY(34px) scale(.96)'},{opacity:1,transform:'translateY(-3px) scale(1.005)',offset:.7},{opacity:1,transform:'none'}],{duration:620,delay:Math.min(i,8)*85,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'})});entQ=[]})},{threshold:.15}):null;
+const cntIO='IntersectionObserver' in window&&!reduce?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){cntIO.unobserve(e.target);setTimeout(()=>countUp(e.target),250)}}),{threshold:.5}):null;
+function enterView(v,wait){
+  if(!entIO)return;const later=[];const secs=[...document.querySelectorAll(`main > [data-view="${v}"]`),$('pager')];
+  secs.forEach(s=>{s.querySelectorAll(ENT).forEach(el=>{el.getAnimations().forEach(a=>a.cancel());el.classList.add('ent-wait');later.push(()=>entIO.observe(el))});
+    s.querySelectorAll('[data-count]').forEach(el=>{delete el.dataset.done;if(!el.dataset.final)el.dataset.final=el.textContent;el.textContent=(el.dataset.from||0)+(el.dataset.suf||'');later.push(()=>cntIO.observe(el))})});
+  setTimeout(()=>later.forEach(f=>f()),wait||0);
+}
 let curView=null;
 function showView(v){
   const prev=curView;if(v===prev)return;curView=v;
@@ -1656,6 +1673,8 @@ function applyView(v){
   {const i=VIEWS.indexOf(v),pv=$('pgPrev'),nx=$('pgNext');pv.hidden=i===0;nx.hidden=i===VIEWS.length-1;
    if(i>0){pv.href='#'+VIEWS[i-1];pv.innerHTML='<small>Previous page</small>'+VNAME[VIEWS[i-1]]}
    if(i<VIEWS.length-1){nx.href='#'+VIEWS[i+1];nx.innerHTML='<small>Next page</small>'+VNAME[VIEWS[i+1]]}}
+  document.querySelectorAll('.shuttle .house,.shuttle .tag').forEach(e=>e.remove());
+  enterView(v,prev!==null&&window.__ptSweep?720:0);
   if(window.__guideTo)window.__guideTo(v,prev===null);
   if(prev!==null&&v!=='home'&&window.__shuttle){const sec=$(v),d=VIEWS.indexOf(v)>=VIEWS.indexOf(prev)?1:-1;setTimeout(()=>window.__shuttle(sec,d),900)}
 }
