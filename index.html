@@ -517,6 +517,25 @@ body{padding-bottom:var(--gh)}
 @media (max-width:700px){.g-stop span{display:none}.g-stop.on span{display:block}.g-road{left:16px;right:16px}}
 @media (prefers-reduced-motion:reduce){.intro{display:none}.g-van .flip{transition:none}}
 
+
+/* tracking road: the van parks at the parcel's current status */
+.troad{position:relative;height:74px;margin:6px 34px 26px}
+.tr-line{position:absolute;left:0;right:0;top:44px;height:4px;border-radius:4px;background:var(--line)}
+.tr-fill{position:absolute;left:0;top:44px;height:4px;border-radius:4px;background:var(--green);width:0;transition:width 1.2s var(--ease)}
+.tr-dot{position:absolute;top:40px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--surface);border:2px solid var(--line)}
+.tr-dot.done{background:var(--green);border-color:var(--green)}
+.tr-dot em{position:absolute;top:18px;left:50%;transform:translateX(-50%);font-style:normal;font-size:11.5px;color:var(--muted);white-space:nowrap}
+.tr-dot.done em{color:var(--ink);font-weight:600}
+.tr-van{position:absolute;top:6px;left:0;width:78px;margin-left:-39px;transition:left 1.2s var(--ease)}
+.tr-van svg{display:block;width:100%;height:auto;overflow:visible}
+.tr-van.moving svg{animation:bob .22s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(-1.5px)}}
+@media (max-width:600px){.tr-dot em{display:none}.troad{height:58px;margin:4px 26px 12px}}
+/* shortcut tags dropped by the section van */
+.tagl .tag,.shuttle .tag{pointer-events:auto;cursor:pointer;text-decoration:none;border:0;font-family:var(--f-body)}
+.tagl .tag:hover,.shuttle .tag:hover{filter:brightness(1.08)}
+.tagl .tag .ar,.shuttle .tag .ar{margin-left:2px}
+
 /* gentle entrance: elements start visible, only nudge up */
 .js .rise{transform:translateY(14px);transition:transform .6s var(--ease)}
 .js .rise.in{transform:none}
@@ -1108,9 +1127,10 @@ function trackIt(no,type){
     return `<li class="${done?'done':''}${now?' now':''}"><span class="node">${done?'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.5l2.3 2.3L9.5 3.8" fill="none" stroke="currentColor" stroke-width="2"/></svg>':`<span class="mono" style="font-size:11px">${i+1}</span>`}</span>
       <div><div class="t">${title}</div><div class="d">${done?fill(desc):'Pending'}</div></div><span class="time">${done?fmt(times[i]):'—'}</span></li>`}).join('');
   $('result').innerHTML=`<div class="result-head"><div><div class="no">${no}</div><div class="sub">${f.label} · ${city.name} ${city.apt}${type==='airport'?' Airport':''} · Demo data</div></div>
-    <span class="pill ${reached===f.steps.length?'on':'part'}"><i></i>${f.steps[reached-1][0]}</span></div><div class="progress"><span style="width:0%"></span></div><ol class="tl">${items}</ol>`;
-  const bar=document.querySelector('.progress span'),w=(reached/f.steps.length*100)+'%';
-  if(reduce)bar.style.width=w;else requestAnimationFrame(()=>requestAnimationFrame(()=>bar.style.width=w));
+    <span class="pill ${reached===f.steps.length?'on':'part'}"><i></i>${f.steps[reached-1][0]}</span></div><div class="troad" aria-label="${f.steps[reached-1][0]}, step ${reached} of ${f.steps.length}"><div class="tr-line"></div><div class="tr-fill"></div>${f.steps.map((s,i)=>`<span class="tr-dot${i<reached?' done':''}" style="left:${(i/(f.steps.length-1)*100).toFixed(2)}%"><em>${s[0]}</em></span>`).join('')}<div class="tr-van"></div></div><ol class="tl">${items}</ol>`;
+  const road=document.querySelector('#result .troad'),tv=road.querySelector('.tr-van'),fl=road.querySelector('.tr-fill'),pct=((reached-1)/(f.steps.length-1)*100).toFixed(2)+'%';
+  const src=document.querySelector('#van svg');if(src){const v=src.cloneNode(true);v.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));const uid='tv'+Math.random().toString(36).slice(2,7);v.querySelectorAll('clipPath').forEach(c=>c.id=uid);v.querySelectorAll('[clip-path]').forEach(e=>e.setAttribute('clip-path','url(#'+uid+')'));const sp=v.querySelector('.speed');if(sp)sp.remove();tv.appendChild(v)}
+  if(reduce){tv.style.left=pct;fl.style.width=pct}else{tv.classList.add('moving');requestAnimationFrame(()=>requestAnimationFrame(()=>{tv.style.left=pct;fl.style.width=pct}));setTimeout(()=>tv.classList.remove('moving'),1300)}
 }
 
 const form=$('trackForm'),inp=$('trackNo'),err=$('trackErr');
@@ -1377,6 +1397,21 @@ function countUp(el){
   function showTag(sec,head,html,cls){const T=sec._tl,tr=T.getBoundingClientRect(),hr=head.getBoundingClientRect(),tg=document.createElement('span');tg.className='tag'+(cls?' '+cls:'');tg.innerHTML=html;T.appendChild(tg);
     const w=tg.offsetWidth,x=Math.max(8,Math.min(T.clientWidth-w-8,hr.left-tr.left+Math.min(hr.width,140)/2-w/2)),y=hr.top-tr.top-34;
     tg.animate([{transform:`translate(${x}px,${y+10}px) scale(.3)`,opacity:0},{transform:`translate(${x}px,${y}px) scale(1.08)`,opacity:1,offset:.2},{transform:`translate(${x}px,${y+2}px) scale(1)`,opacity:1,offset:.8},{transform:`translate(${x}px,${y-12}px) scale(.95)`,opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove())}
+  const ACT={
+    services:['Ship with ParcelBee','https://parcelbee.ca/'],
+    cities:['Check your city',()=>{const t=document.querySelector('.tab[aria-selected="true"]')||document.querySelector('.tab');t&&t.focus()}],
+    track:['Track a parcel',()=>{const i=$('trackNo');i.focus();i.select()}],
+    locations:['Find a return point',()=>$('locQ').focus()],
+    about:['Call 1-800-683-5708','tel:+18006835708'],
+    contact:['Email us','mailto:service@neighbourexpress.com']
+  };
+  function actionTag(label,go,cls){
+    const ext=typeof go==='string',tg=document.createElement(ext?'a':'button');tg.className='tag'+(cls?' '+cls:'');
+    if(ext){tg.href=go;if(go.startsWith('http')){tg.target='_blank';tg.rel='noopener'}}else{tg.type='button';tg.addEventListener('click',go)}
+    tg.innerHTML=`${cls==='ret'?'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5L1.8 4.7 4 6.9M2 4.7h5a3 3 0 0 1 0 6H5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>':'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.5l2.3 2.3L9.5 3.8" fill="none" stroke="currentColor" stroke-width="2"/></svg>'}${label}<span class="ar">→</span>`;
+    return tg}
+  const SHOW=[{offset:0,opacity:0,s:.3,dy:10},{offset:.06,opacity:1,s:1.08,dy:0},{offset:.1,opacity:1,s:1,dy:0},{offset:.92,opacity:1,s:1,dy:0},{offset:1,opacity:0,s:.95,dy:-12}];
+  function popTag(tg,x,y){return tg.animate(SHOW.map(k=>({offset:k.offset,opacity:k.opacity,transform:`translate(${x}px,${y+k.dy}px) scale(${k.s})`})),{duration:4800,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove())}
   function tagAt(x,y,html,cls){const tg=document.createElement('span');tg.className='tag'+(cls?' '+cls:'');tg.style.position='absolute';tg.innerHTML=html;L.appendChild(tg);
     const w=tg.offsetWidth;x=Math.max(8,Math.min(L.clientWidth-w-8,x-w/2));
     tg.animate([{transform:`translate(${x}px,${y+10}px) scale(.3)`,opacity:0},{transform:`translate(${x}px,${y}px) scale(1.08)`,opacity:1,offset:.2},{transform:`translate(${x}px,${y+2}px) scale(1)`,opacity:1,offset:.8},{transform:`translate(${x}px,${y-14}px) scale(.95)`,opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove())}
@@ -1384,7 +1419,8 @@ function countUp(el){
   function pickup(sec,b,from,van){
     if(!b)return;const name=NAMES[sec.id];
     b.animate([{transform:`translate(${from.x}px,${from.y-9}px) rotate(0) scale(1)`},{transform:`translate(${(from.x+van.x)/2}px,${Math.min(from.y,van.y)-60}px) rotate(-160deg) scale(1)`,offset:.55},{transform:`translate(${van.x}px,${van.y}px) rotate(-300deg) scale(.35)`,opacity:.1}],{duration:340,easing:'cubic-bezier(.4,0,.6,1)',fill:'forwards'}).finished
-    .then(()=>{b.remove();tagAt(from.x,from.y-86,`<svg width="12" height="12" viewBox="0 0 12 12"><path d="M4 2.5L1.8 4.7 4 6.9M2 4.7h5a3 3 0 0 1 0 6H5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Return collected${name?' · '+name:''}`,'ret')});
+    .then(()=>{b.remove();const tg=actionTag('Return collected · Send yours',()=>{if(window.__ptGo)window.__ptGo('locations');setTimeout(()=>$('locQ').focus(),1400)},'ret');tg.style.position='absolute';L.appendChild(tg);
+      const w=tg.offsetWidth,x=Math.max(8,Math.min(L.clientWidth-w-8,from.x-w/2));popTag(tg,x,from.y-86)});
   }
   function toss(sec,from){
     const head=sec.querySelector('.sec-head .eyebrow')||sec.querySelector('.eyebrow')||sec.querySelector('h2');if(!head)return;
@@ -1397,10 +1433,9 @@ function countUp(el){
     b.animate([{transform:`translate(${from.x}px,${from.y-40}px) rotate(0)`},{transform:`translate(${mx}px,${my}px) rotate(280deg)`,offset:.5},{transform:`translate(${end.x}px,${end.y}px) rotate(560deg)`}],{duration:720,easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'}).finished.then(()=>{
       b.remove();const name=NAMES[sec.id];if(!name||!onScreen)return;
       const T=sec._tl,tr=T.getBoundingClientRect(),hr2=head.getBoundingClientRect();
-      const tg=document.createElement('span');tg.className='tag';
-      tg.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.5l2.3 2.3L9.5 3.8" fill="none" stroke="currentColor" stroke-width="2"/></svg>Delivered · ${name}`;T.appendChild(tg);
+      const a=ACT[sec.id];if(!a)return;const tg=actionTag(a[0],a[1]);T.appendChild(tg);
       const w=tg.offsetWidth,x=Math.max(8,Math.min(T.clientWidth-w-8,hr2.left-tr.left+Math.min(hr2.width,140)/2-w/2)),y=hr2.top-tr.top-34;
-      tg.animate([{transform:`translate(${x}px,${y+10}px) scale(.3)`,opacity:0},{transform:`translate(${x}px,${y}px) scale(1.08)`,opacity:1,offset:.2},{transform:`translate(${x}px,${y+2}px) scale(1)`,opacity:1,offset:.8},{transform:`translate(${x}px,${y-12}px) scale(.95)`,opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'}).finished.then(()=>tg.remove());
+      popTag(tg,x,y);
     });
   }
   const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)shuttle(e.target)}),{rootMargin:'-42% 0px -42% 0px'});
@@ -1413,10 +1448,6 @@ function countUp(el){
     else{const k=el.dataset.k;el.classList.add('out',k==='up'?(e.boundingClientRect.top>0?'up':'dn'):k)}}),{threshold:.12});
   // start visible; only elements below the fold get the "out" state
   items.forEach(el=>{const r=el.getBoundingClientRect();if(r.top>innerHeight){el.classList.add('out',el.dataset.k==='up'?'up':el.dataset.k)}ro.observe(el)});
-  // 3) cards lean with scroll speed
-  const leaners=[...document.querySelectorAll('.svc,.ccard,.facts > div,.ret-steps li')];leaners.forEach(el=>el.parentElement.classList.add('lean'));
-  const parents=[...new Set(leaners.map(el=>el.parentElement))];
-  let v=0,py=scrollY;(function tick(){const d=scrollY-py;py=scrollY;v=v*.85+d*.15;const a=Math.max(-3,Math.min(3,-v*.12));parents.forEach(p=>p.style.setProperty('--lean',a.toFixed(2)+'deg'));requestAnimationFrame(tick)})();
 })();
 
 
