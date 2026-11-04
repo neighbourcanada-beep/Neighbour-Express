@@ -1164,7 +1164,7 @@ function markReady(){if(document.documentElement.classList.contains('ready'))ret
   if(reduce||seen||!ov.animate){ov.remove();markReady();return}
   try{sessionStorage.setItem('ne-intro','1')}catch(e){}
   document.documentElement.style.overflow='hidden';
-  const anims=[],A=(el,k,o)=>{const a=el.animate(k,{fill:'forwards',...o});anims.push(a);return a};
+  const anims=[],A=(el,k,o)=>{const a=el.animate(k,{fill:'both',...o});anims.push(a);return a};
   let done=false;
   function finish(){if(done)return;done=true;anims.forEach(a=>{try{a.finish()}catch(e){}});
     document.documentElement.style.overflow='';markReady();
@@ -1647,7 +1647,7 @@ const ENT='.benefit,.ex,.svc,.tabs .tab,.city-card,.track > *,.ret-steps li,.loc
 let entQ=[],entT=0;
 const entIO='IntersectionObserver' in window&&!reduce?new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){entIO.unobserve(e.target);entQ.push(e.target)}});
   if(entQ.length&&!entT)entT=requestAnimationFrame(()=>{entT=0;entQ.sort((a,b)=>{const r=a.getBoundingClientRect(),s=b.getBoundingClientRect();return (r.top-s.top)||(r.left-s.left)});
-    entQ.forEach((el,i)=>{el.classList.remove('ent-wait');el.animate([{opacity:0,transform:'translateY(34px) scale(.96)'},{opacity:1,transform:'translateY(-3px) scale(1.005)',offset:.7},{opacity:1,transform:'none'}],{duration:620,delay:Math.min(i,8)*85,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'})});entQ=[]})},{threshold:.15}):null;
+    entQ.forEach((el,i)=>{el.classList.remove('ent-wait');el.animate([{opacity:0,transform:'translateY(34px) scale(.96)'},{opacity:1,transform:'translateY(-3px) scale(1.005)',offset:.7},{opacity:1,transform:'none'}],{duration:1050,delay:Math.min(i,8)*150,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'})});entQ=[]})},{threshold:.15}):null;
 const cntIO='IntersectionObserver' in window&&!reduce?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){cntIO.unobserve(e.target);setTimeout(()=>countUp(e.target),250)}}),{threshold:.5}):null;
 function enterView(v,wait){
   if(!entIO)return;const later=[];const secs=[...document.querySelectorAll(`main > [data-view="${v}"]`),$('pager')];
