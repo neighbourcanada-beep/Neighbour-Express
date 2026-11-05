@@ -647,6 +647,8 @@ body{padding-bottom:var(--gh)}
 .ill .cx-t{font-size:11px}
 
 /* ===== interactive bits ===== */
+.ph-ill,.ph-strip,.lk3d,.ill,.ill-ctl,.ctl,.tk-msg{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+.lk3d *::selection,.ill *::selection{background:transparent}
 .ill-ctl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-top:12px}
 .ctl{font:700 14px var(--f-body);padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none;transition:border-color .2s,transform .15s,background .2s}
 .ctl:hover{border-color:var(--green)}.ctl:active{transform:scale(.96)}
