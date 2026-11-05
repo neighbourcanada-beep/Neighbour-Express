@@ -1908,9 +1908,11 @@ function countUp(el){
       hp.classList.add('open');await wait(450);
       const p=document.createElement('div');p.className='hp-parcel';hp.appendChild(p);
       await p.animate([{transform:'translate3d(0,-150px,34px) rotateZ(-10deg)',opacity:0},{opacity:1,offset:.2},{transform:'translate3d(0,8px,26px) rotateZ(0)',offset:.8},{transform:'translate3d(0,4px,26px)'}],{duration:650,easing:'cubic-bezier(.5,0,.75,0)',fill:'forwards'}).finished;
-      await wait(260);hp.classList.remove('open');
-      p.animate([{transform:'translate3d(0,4px,26px)',opacity:1},{transform:'translate3d(0,22px,-14px) scale(.85)',opacity:1,offset:.7},{transform:'translate3d(0,26px,-24px) scale(.8)',opacity:0}],{duration:520,easing:'ease-in',fill:'forwards'}).finished.then(()=>p.remove());
-      await wait(420);delete hp.dataset.busy;
+      await wait(180);
+      // slide down the tray and into the cabinet before the door shuts
+      await p.animate([{transform:'translate3d(0,4px,26px)'},{transform:'translate3d(0,22px,4px) scale(.95)',offset:.55},{transform:'translate3d(0,30px,-40px) scale(.9)'}],{duration:420,easing:'ease-in',fill:'forwards'}).finished;
+      p.remove();hp.classList.remove('open');
+      await wait(450);delete hp.dataset.busy;
       busy++;setTimeout(()=>{n++;$('lkN').textContent=n;msg.textContent='Parcel received · receipt sent';
         ok.animate([{opacity:0,scale:.4},{opacity:1,scale:1.15,offset:.2},{opacity:1,scale:1,offset:.3},{opacity:1,scale:1,offset:.85},{opacity:0}],{duration:1800,fill:'none'});
         idle.animate([{opacity:0},{opacity:0,offset:.9},{opacity:1}],{duration:1800});led.animate([{opacity:1},{opacity:0}],{duration:900});
