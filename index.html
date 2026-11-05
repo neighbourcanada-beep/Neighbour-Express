@@ -618,6 +618,32 @@ body{padding-bottom:var(--gh)}
 .ill .tj-st.on text{fill:var(--ink)}
 .tk-msg{text-align:center;font-weight:700;margin-top:6px;min-height:1.6em}
 .tk-msg b{color:var(--green)}
+
+/* tracking v3: card, shading, road */
+.tk-card{position:relative;border-radius:22px;padding:18px 16px 16px;background:radial-gradient(120% 90% at 30% 0%,var(--surface) 0%,var(--bg-2) 100%);border:1px solid var(--line);box-shadow:0 30px 60px -44px rgba(15,26,51,.55);overflow:hidden}
+.tk-card::before{content:'';position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1.2px);background-size:16px 16px;opacity:.55;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 50%,transparent 80%);mask-image:linear-gradient(180deg,#000 0,#000 50%,transparent 80%);pointer-events:none}
+.tk-card .ill{position:relative}
+.ill .tk-brand{font:800 5.4px var(--f-body);fill:#fff;letter-spacing:.08em}
+.tk-scr{fill:#6be36a;opacity:.85}
+.tk2.aim .tk-scr{fill:#ff8a8d}
+.tk-tip{fill:#e5484d;filter:drop-shadow(0 0 4px #e5484d)}
+.tk-bob{animation:tkBob 3s ease-in-out infinite}
+@keyframes tkBob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.tk2.aim .tk-bob{animation:none}
+.tk-ring{stroke-width:3.5}
+.tj-line{stroke:var(--line);stroke-width:8;stroke-linecap:round}
+.tj-fill{stroke-width:8}
+.tj-c{fill:var(--surface);stroke:var(--line);stroke-width:2}
+.tj-st.on .tj-c{fill:var(--green);stroke:var(--green)}
+.tj-st.cur .tj-c{stroke:var(--green-2,#2e7a31);stroke-width:2.5}
+.tj-pulse{fill:var(--green);opacity:0;transform-box:fill-box;transform-origin:center}
+.tj-st.cur .tj-pulse{animation:tjPulse 1.8s ease-out infinite}
+@keyframes tjPulse{0%{opacity:.35;scale:1}100%{opacity:0;scale:1.9}}
+.ill .tj-st .tj-n{font:700 9px var(--f-mono);fill:var(--muted);letter-spacing:.1em}
+.ill .tj-st.on .tj-n{fill:var(--green)}
+.ill .tj-st text{font-size:11px}
+.tk-msg{display:block;text-align:center;width:fit-content;max-width:100%;margin:4px auto 0;padding:9px 16px;border-radius:99px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:15px;box-shadow:0 10px 24px -18px rgba(15,26,51,.5)}
+.tk-msg::before{content:'';display:inline-block;vertical-align:middle;margin:-2px 10px 0 0;width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(59,138,62,.5);animation:lkDot 1.8s ease-out infinite}
 /* about conveyor */
 .cv-wh{fill:var(--surface);stroke:var(--line);stroke-width:2}
 .ill .cv-t{font-size:12px;fill:var(--muted)}
@@ -1089,26 +1115,60 @@ footer.ft .wrap{display:block}
       <div class="eyebrow">Tracking</div>
       <h2>Follow every step</h2>
       <p>Each service has its own milestones, so choose the service first.</p>
-    </div><div class="ph-ill"><svg class="ill tk tk2" id="tkSvg" viewBox="0 0 520 250" aria-hidden="true">
+    </div><div class="ph-ill"><div class="tk-card">
+<svg class="ill tk tk2" id="tkSvg" viewBox="0 0 520 268" aria-hidden="true">
+  <defs>
+    <linearGradient id="tkTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6b884"/><stop offset="1" stop-color="#d9a56c"/></linearGradient>
+    <linearGradient id="tkL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cf9860"/><stop offset="1" stop-color="#bf8750"/></linearGradient>
+    <linearGradient id="tkR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b47e48"/><stop offset="1" stop-color="#9f6c3c"/></linearGradient>
+    <linearGradient id="tkGunG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b4756"/><stop offset="1" stop-color="#1c232c"/></linearGradient>
+    <radialGradient id="tkShadow"><stop offset="0" stop-color="#0f1a33" stop-opacity=".28"/><stop offset="1" stop-color="#0f1a33" stop-opacity="0"/></radialGradient>
+  </defs>
   <g class="tk-stage">
-    <g class="tk-box"><path d="M150 70 L260 42 L370 70 L370 150 L260 178 L150 150 Z" fill="#c8915a"/><path d="M150 70 L260 98 L370 70" fill="none" stroke="#a87443" stroke-width="2"/><path d="M260 98 V178" stroke="#a87443" stroke-width="2"/>
+    <ellipse class="tk-sh" cx="262" cy="176" rx="132" ry="18" fill="url(#tkShadow)"/>
+    <g class="tk-box">
+      <path d="M150 70 L260 98 L260 178 L150 150 Z" fill="url(#tkL)"/>
+      <path d="M260 98 L370 70 L370 150 L260 178 Z" fill="url(#tkR)"/>
+      <path d="M150 70 L260 42 L370 70 L260 98 Z" fill="url(#tkTop)"/>
+      <path d="M198 57.7 L211.8 54.3 L321.8 82.3 L308 85.7 Z" fill="#efd3a4" opacity=".9"/>
+      <path d="M308 85.7 L321.8 82.3 L321.8 162.3 L308 165.7 Z" fill="#dcb57f" opacity=".9"/>
+      <path d="M150 70 L260 98 L370 70" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+      <path d="M260 98 V178" stroke="#8a5a2e" stroke-opacity=".35" stroke-width="1.5"/>
       <rect class="tk-lbl" x="160" y="84" width="92" height="48" rx="3" fill="#fff" transform="skewY(14) translate(0 -52)"/>
-      <g transform="skewY(14) translate(0 -52)"><rect x="172" y="92" width="2" height="30" fill="#1b232c"/><rect x="176" y="92" width="1" height="30" fill="#1b232c"/><rect x="179" y="92" width="3" height="30" fill="#1b232c"/><rect x="184" y="92" width="1" height="30" fill="#1b232c"/><rect x="187" y="92" width="2" height="30" fill="#1b232c"/><rect x="191" y="92" width="1" height="30" fill="#1b232c"/><rect x="194" y="92" width="3" height="30" fill="#1b232c"/><rect x="199" y="92" width="2" height="30" fill="#1b232c"/><rect x="203" y="92" width="1" height="30" fill="#1b232c"/><rect x="206" y="92" width="3" height="30" fill="#1b232c"/><rect x="211" y="92" width="1" height="30" fill="#1b232c"/><rect x="214" y="92" width="2" height="30" fill="#1b232c"/><rect x="218" y="92" width="1" height="30" fill="#1b232c"/><rect x="221" y="92" width="3" height="30" fill="#1b232c"/><rect x="226" y="92" width="2" height="30" fill="#1b232c"/><rect x="230" y="92" width="1" height="30" fill="#1b232c"/><rect x="233" y="92" width="2" height="30" fill="#1b232c"/><text x="206" y="130" text-anchor="middle" class="tk-no">NB2610060188</text>
+      <g transform="skewY(14) translate(0 -52)">
+        <path d="M160 87 a3 3 0 0 1 3 -3 h86 a3 3 0 0 1 3 3 v5 h-92 z" fill="#3b8a3e"/>
+        <text x="164" y="90.6" class="tk-brand">NEIGHBOUR EXPRESS</text>
+        <g transform="translate(0 3) scale(1 .86) translate(0 15)"><rect x="172" y="92" width="2" height="30" fill="#1b232c"/><rect x="176" y="92" width="1" height="30" fill="#1b232c"/><rect x="179" y="92" width="3" height="30" fill="#1b232c"/><rect x="184" y="92" width="1" height="30" fill="#1b232c"/><rect x="187" y="92" width="2" height="30" fill="#1b232c"/><rect x="191" y="92" width="1" height="30" fill="#1b232c"/><rect x="194" y="92" width="3" height="30" fill="#1b232c"/><rect x="199" y="92" width="2" height="30" fill="#1b232c"/><rect x="203" y="92" width="1" height="30" fill="#1b232c"/><rect x="206" y="92" width="3" height="30" fill="#1b232c"/><rect x="211" y="92" width="1" height="30" fill="#1b232c"/><rect x="214" y="92" width="2" height="30" fill="#1b232c"/><rect x="218" y="92" width="1" height="30" fill="#1b232c"/><rect x="221" y="92" width="3" height="30" fill="#1b232c"/><rect x="226" y="92" width="2" height="30" fill="#1b232c"/><rect x="230" y="92" width="1" height="30" fill="#1b232c"/><rect x="233" y="92" width="2" height="30" fill="#1b232c"/></g>
+        <text x="206" y="130" text-anchor="middle" class="tk-no">NB2610060188</text>
         <rect class="tk-ring" x="160" y="84" width="92" height="48" rx="3" pathLength="100"/>
         <rect class="tk-code" x="156" y="80" width="100" height="56" fill="transparent"/></g></g>
-    <text class="tk-beep" x="206" y="40" text-anchor="middle">BEEP!</text>
+    <text class="tk-beep" x="206" y="34" text-anchor="middle">BEEP!</text>
   </g>
   <line class="tk-ray" id="tkRay" x1="0" y1="0" x2="0" y2="0"/>
   <circle class="tk-dot" id="tkDot" r="5"/>
-  <g class="tk-gun" id="tkGun" transform="translate(452 64)"><g class="tk-gr" id="tkGr"><path d="M-40 -14 h52 a10 10 0 0 1 10 10 v12 a10 10 0 0 1 -10 10 h-24 l-8 30 h-14 l5 -30 h-11 a10 10 0 0 1 -10 -10 v-12 a10 10 0 0 1 10 -10 z" fill="#2a3440"/><rect x="-48" y="-7" width="8" height="12" rx="2" class="tk-tip"/><rect x="-26" y="-9" width="22" height="7" rx="2" fill="#4a5663"/></g></g>
+  <g class="tk-gun" id="tkGun" transform="translate(452 64)"><g class="tk-bob"><g class="tk-gr" id="tkGr">
+    <path d="M-12 8 l-7 32 a5 5 0 0 0 5 6 h9 a5 5 0 0 0 5 -4 l6 -34 z" fill="#1c232c"/>
+    <path d="M-6 10 q-6 8 -2 14" fill="none" stroke="#e5484d" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-42 -16 h56 a12 12 0 0 1 12 12 v10 a12 12 0 0 1 -12 12 h-56 a8 8 0 0 1 -8 -8 v-18 a8 8 0 0 1 8 -8 z" fill="url(#tkGunG)"/>
+    <path d="M-40 -13 h52" stroke="#fff" stroke-opacity=".22" stroke-width="2" stroke-linecap="round"/>
+    <rect x="-22" y="-9" width="26" height="11" rx="2.5" fill="#0c1218"/><rect class="tk-scr" x="-20" y="-7" width="22" height="7" rx="1.5"/>
+    <rect x="-52" y="-9" width="6" height="16" rx="2" class="tk-tip"/>
+  </g></g></g>
   <g class="tj">
-    <path class="tj-line" d="M60 206 H450"/><path class="tj-fill" id="tjFill" d="M60 206 H450" pathLength="100"/>
-    <g class="tj-st" data-st="1" transform="translate(60 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-9 4 V-3 L0 -9 L9 -3 V4 Z M-3 4 V-1 H3 V4"/></g><text y="32" text-anchor="middle">Pickup</text></g><g class="tj-st" data-st="2" transform="translate(190 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-9 -4 H5 M1 -8 L5 -4 L1 0 M9 4 H-5 M-1 0 L-5 4 L-1 8"/></g><text y="32" text-anchor="middle">Sorting</text></g><g class="tj-st" data-st="3" transform="translate(320 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-10 3 V-5 H3 V3 M3 -2 H7 L10 1 V3 H-10"/><circle cx="-5" cy="5" r="2"/><circle cx="6" cy="5" r="2"/></g><text y="32" text-anchor="middle">On the road</text></g><g class="tj-st" data-st="4" transform="translate(450 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-6 0 L-1 5 L8 -5"/></g><text y="32" text-anchor="middle">Delivered</text></g>
-    <g class="tj-tok" id="tjTok" transform="translate(60 178)"><rect x="-9" y="-8" width="18" height="15" rx="2" fill="#c8915a"/><rect x="-2" y="-8" width="4" height="15" fill="#e2c08f"/></g>
+    <path class="tj-line" d="M60 210 H450"/><path class="tj-fill" id="tjFill" d="M60 210 H450" pathLength="100"/>
+    <g class="tj-st" data-st="1" transform="translate(60 210)"><circle class="tj-hit" r="24"/><circle class="tj-pulse" r="17"/><rect class="tj-c" x="-17" y="-17" width="34" height="34" rx="11"/><g class="tj-i"><path d="M-9 5 V-3 L0 -9 L9 -3 V5 Z M-3 5 V0 H3 V5"/></g><text class="tj-n" y="31" text-anchor="middle">01</text><text y="44" text-anchor="middle">Pickup</text></g><g class="tj-st" data-st="2" transform="translate(190 210)"><circle class="tj-hit" r="24"/><circle class="tj-pulse" r="17"/><rect class="tj-c" x="-17" y="-17" width="34" height="34" rx="11"/><g class="tj-i"><path d="M-9 -4 H5 M1 -8 L5 -4 L1 0 M9 4 H-5 M-1 0 L-5 4 L-1 8"/></g><text class="tj-n" y="31" text-anchor="middle">02</text><text y="44" text-anchor="middle">Sorting</text></g><g class="tj-st" data-st="3" transform="translate(320 210)"><circle class="tj-hit" r="24"/><circle class="tj-pulse" r="17"/><rect class="tj-c" x="-17" y="-17" width="34" height="34" rx="11"/><g class="tj-i"><path d="M-10 3 V-5 H3 V3 M3 -2 H7 L10 1 V3 H-10"/><circle cx="-5" cy="5" r="2"/><circle cx="6" cy="5" r="2"/></g><text class="tj-n" y="31" text-anchor="middle">03</text><text y="44" text-anchor="middle">On the road</text></g><g class="tj-st" data-st="4" transform="translate(450 210)"><circle class="tj-hit" r="24"/><circle class="tj-pulse" r="17"/><rect class="tj-c" x="-17" y="-17" width="34" height="34" rx="11"/><g class="tj-i"><path d="M-6 0 L-1 5 L8 -5"/></g><text class="tj-n" y="31" text-anchor="middle">04</text><text y="44" text-anchor="middle">Delivered</text></g>
+    <g class="tj-tok" id="tjTok" transform="translate(60 174)"><g transform="translate(-14 -2)">
+      <ellipse cx="14" cy="15.5" rx="13" ry="2" fill="#0f1a33" opacity=".18"/>
+      <path d="M1 2.5 a1.5 1.5 0 0 1 1.5 -1.5 H18 V13 H1 Z" fill="#fff" stroke="#2f4f93" stroke-width="1.3"/>
+      <path d="M18 4 H22 L26 8.5 V13 H18 Z" fill="#fff" stroke="#2f4f93" stroke-width="1.3"/>
+      <path d="M19.5 5.3 H21.6 L24.2 8.4 H19.5 Z" fill="#2a3440"/>
+      <path d="M1.6 9 L9 5.5 L18 8.4 V11.2 L1.6 11.2 Z" fill="#3b8a3e"/>
+      <circle cx="5.5" cy="13.5" r="2.4" fill="#1b232c"/><circle cx="21.5" cy="13.5" r="2.4" fill="#1b232c"/></g></g>
   </g>
   <g class="tk-conf" id="tkConf"></g>
 </svg>
 <p class="tk-msg" id="tkMsg" aria-live="polite">Label created · waiting for pickup</p>
+</div>
 <div class="ill-ctl"><button type="button" class="ctl" id="tkScan">Scan the label</button><button type="button" class="ctl" id="tkReset">Start over</button><button type="button" class="ctl ctl-g" id="tkTry">Track NB2610060188</button></div>
 <p class="ill-tip">Point the scanner at the barcode, or tap a stop on the route.</p></div></div>
     <div class="track">
@@ -1984,11 +2044,11 @@ function countUp(el){
     const toSvg=e=>{const p=tsv.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(tsv.getScreenCTM().inverse())};
     const aim=(x,y)=>{let r=Math.atan2(y-64,x-452)*180/Math.PI-180;if(r<-180)r+=360;r=Math.max(-75,Math.min(75,r));gr.setAttribute('transform',`rotate(${r.toFixed(1)} 0 0)`);
       const rad=r*Math.PI/180,tx=452-Math.cos(rad)*48,ty=64-Math.sin(rad)*48;ray.setAttribute('x1',tx.toFixed(1));ray.setAttribute('y1',ty.toFixed(1));ray.setAttribute('x2',x.toFixed(1));ray.setAttribute('y2',y.toFixed(1));dot.setAttribute('cx',x.toFixed(1));dot.setAttribute('cy',y.toFixed(1))};
-    function moveTok(to){const from=tokX;tokX=X[to];tok.animate([{transform:`translate(${from}px,178px)`},{transform:`translate(${(from+tokX)/2}px,${from===tokX?172:150}px)`,offset:.5},{transform:`translate(${tokX}px,178px)`}],{duration:from===tokX?250:Math.min(1200,400+Math.abs(tokX-from)*2),easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'})}
+    function moveTok(to){const from=tokX;tokX=X[to];tok.animate([{transform:`translate(${from}px,174px)`},{transform:`translate(${(from+tokX)/2}px,${from===tokX?168:160}px)`,offset:.5},{transform:`translate(${tokX}px,174px)`}],{duration:from===tokX?250:Math.min(1200,400+Math.abs(tokX-from)*2),easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'})}
     function setStage(k,quiet){stage=k;sts.forEach((s,i)=>{s.classList.toggle('on',i<k);s.classList.toggle('cur',i===k-1)});fill.style.strokeDashoffset=k<=1?100:100-(k-1)/3*100;$('tkMsg').innerHTML=MSG[k];moveTok(k);
       if(k===4&&!quiet&&!reduce)confetti()}
     function confetti(){const g=$('tkConf'),C=['#3b8a3e','#2f4f93','#c8915a','#e5484d','#f2c94c'];for(let i=0;i<18;i++){const r=document.createElementNS('http://www.w3.org/2000/svg','rect');r.setAttribute('width',5);r.setAttribute('height',8);r.setAttribute('fill',C[i%5]);g.appendChild(r);
-      const a=-Math.PI/2+(Math.random()-.5)*2.2,d=50+Math.random()*60;r.animate([{transform:`translate(450px,200px) rotate(0)`,opacity:1},{transform:`translate(${450+Math.cos(a)*d}px,${200+Math.sin(a)*d}px) rotate(${Math.random()*720}deg)`,opacity:1,offset:.6},{transform:`translate(${450+Math.cos(a)*d*1.1}px,${200+Math.sin(a)*d+40}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:1100,easing:'cubic-bezier(.2,.7,.3,1)'}).finished.then(()=>r.remove())}}
+      const a=-Math.PI/2+(Math.random()-.5)*2.2,d=50+Math.random()*60;r.animate([{transform:`translate(450px,205px) rotate(0)`,opacity:1},{transform:`translate(${450+Math.cos(a)*d}px,${205+Math.sin(a)*d}px) rotate(${Math.random()*720}deg)`,opacity:1,offset:.6},{transform:`translate(${450+Math.cos(a)*d*1.1}px,${205+Math.sin(a)*d+40}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:1100,easing:'cubic-bezier(.2,.7,.3,1)'}).finished.then(()=>r.remove())}}
     function beep(){if(performance.now()<cool)return;cool=performance.now()+700;
       beepT.animate([{opacity:0,transform:'translateY(8px) scale(.6)'},{opacity:1,transform:'translateY(0) scale(1.1)',offset:.3},{opacity:1,transform:'translateY(-4px) scale(1)',offset:.7},{opacity:0,transform:'translateY(-14px)'}],{duration:800,easing:'ease-out'});
       box.animate([{transform:'translateY(0)'},{transform:'translateY(-10px) rotate(-2deg)'},{transform:'translateY(2px)'},{transform:'translateY(0)'}],{duration:420,easing:'ease-out'});
