@@ -284,6 +284,7 @@ section{padding-block:96px}
 /* tracking */
 .track{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:22px;align-items:start}
 .track .qt{box-shadow:none}
+.tr-left .trh,.tr-left .qt{min-width:0}
 .result{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px}
 .result-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:18px}
 .result-head .no{font:700 20px var(--f-mono);letter-spacing:.03em}
@@ -593,6 +594,24 @@ body{padding-bottom:var(--gh)}
 @keyframes tkDot{to{fill:var(--green)}}
 @keyframes tkCk{to{stroke-dashoffset:0}}
 
+
+/* tracking page: fuller left column */
+.tr-left{display:grid;gap:16px}
+.qt-h{font-size:22px;font-weight:800}
+.qt-sub{color:var(--muted);font-size:15px;margin:4px 0 16px}
+.tr-help{display:grid;gap:12px}
+.trh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.trh b{display:block;font-size:16px;margin-bottom:3px}
+.trh span{color:var(--muted);font-size:14.5px;line-height:1.55}
+.trh code{font-family:var(--f-mono);font-weight:700;color:var(--ink);background:var(--bg-2);padding:1px 5px;border-radius:5px}
+.trh a{color:var(--blue);font-weight:700;text-decoration:none}.trh a:hover{text-decoration:underline}
+.trh-ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--green-soft);color:var(--green)}
+.trh-call .trh-ic{background:var(--blue-soft);color:var(--blue)}
+.trh-steps{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.trh-steps li{display:grid;grid-template-columns:auto 1fr;column-gap:8px;font-weight:700;font-size:14px;align-items:center}
+.trh-steps i{grid-row:span 2;font:700 11px var(--f-mono);font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff}
+.trh-steps em{font-style:normal;font-weight:500;color:var(--muted);font-size:12.5px}
+@media (max-width:420px){.trh-steps{grid-template-columns:1fr}}
 /* tracking v2 */
 .tk2{touch-action:none}
 .tk2 .tk-box{transform-box:fill-box;transform-origin:50% 100%;cursor:crosshair}
@@ -1185,7 +1204,10 @@ footer.ft .wrap{display:block}
 <div class="ill-ctl"><button type="button" class="ctl" id="tkScan">Scan the label</button><button type="button" class="ctl" id="tkReset">Start over</button><button type="button" class="ctl ctl-g" id="tkTry">Track NB2610060188</button></div>
 <p class="ill-tip">Point the scanner at the barcode, or tap a stop on the route.</p></div></div>
     <div class="track">
+      <div class="tr-left">
       <form class="qt" id="trackForm" novalidate>
+        <h3 class="qt-h">Track your parcel</h3>
+        <p class="qt-sub">Enter the number from your shipping label or order confirmation.</p>
         <input type="radio" name="ttype" id="t-delivery" value="delivery" checked hidden>
         <div class="field">
           <label for="trackNo">Tracking number</label>
@@ -1195,7 +1217,19 @@ footer.ft .wrap{display:block}
         <button class="btn btn-blue" type="submit">Track</button>
         <p class="samples" style="margin-top:12px">Demo data only. Try <button type="button" data-sample="NB2610060188">NB2610060188</button></p>
       </form>
-      <div class="result" id="result" aria-live="polite"></div>
+      <div class="tr-help">
+        <div class="trh">
+          <span class="trh-ic"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 9v6M10 9v6M13 9v6M16 9v6" stroke="currentColor" stroke-width="2"/></svg></span>
+          <div><b>Where is my number?</b><span>On the shipping label and in the confirmation from the store. Neighbour Express numbers start with <code>NB</code> followed by 10 digits.</span></div>
+        </div>
+      </div>
+      </div>
+      <div class="tr-right"><div class="result" id="result" aria-live="polite"></div>
+        <div class="trh trh-call" style="margin-top:16px">
+          <span class="trh-ic"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+          <div><b>Need a hand?</b><span><a href="tel:+18006835708">1-800-683-5708</a> · Toronto ext. 201 · Vancouver ext. 202<br><a href="mailto:service@neighbourexpress.com">service@neighbourexpress.com</a></span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
