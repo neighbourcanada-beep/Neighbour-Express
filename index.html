@@ -2299,24 +2299,25 @@ function countUp(el){
     // chassis rail + fuel tank + steps
     cube(truck,-150,-2,-20,22,10,18,'#2a3340','#323c4a','#3a4656');
     cube(truck,-118,-100,14,24,6,16,'#1f2733','#2a3340','#3a4656');
-    // cab (behind the hood), white, with door, window and mirror
+    // cab: white, big side window, door line, small mirror at the A-pillar
     cube(truck,-128,-98,-25,25,16,64,'#e3e8ef','#ffffff','#f1f4f7','#c6ced8');
-    poly(truck,[[-126,25.1,42],[-104,25.1,42],[-102,25.1,60],[-118,25.1,60],[-126,25.1,52]],'#2a3a52');
-    poly(truck,[[-124,25.2,44],[-110,25.2,44],[-109,25.2,52],[-124,25.2,50]],'rgba(255,255,255,.2)');
-    el('polyline',{points:pt([[-100,25.2,20],[-100,25.2,60],[-126,25.2,60]]),stroke:'#c6ced8','stroke-width':.8,fill:'none'},truck);
-    poly(truck,[[-108,25.2,36],[-104,25.2,36],[-104,25.2,38],[-108,25.2,38]],'#2a3340');
-    cube(truck,-131,-129,25,33,40,44,'#2a3340','#2a3340','#3a4656');cube(truck,-131,-129,32,34,34,48,'#1f2733','#2a3340','#3a4656');
-    // amber cab lights
-    [-122,-116,-110,-104].forEach(x=>poly(truck,[[x,-6,64.1],[x+3,-6,64.1],[x+3,6,64.1],[x,6,64.1]],'#f2a43a',{opacity:.0}));
-    poly(truck,[[-126,-14,64.1],[-100,-14,64.1],[-100,14,64.1],[-126,14,64.1]],'#e9edf2');
-    [-120,-114,-108].forEach(x=>cube(truck,x,x+3,-2,2,64,66,'#d98a2b','#f2a43a','#f6b85a'));
-    // hood: sloped top, fender over the front wheel
-    cube(truck,-160,-155,-22,22,12,21,'#8e99a7','#a9b3bf','#b9c3d0');
-    poly(truck,[[-156,22,16],[-128,22,16],[-128,22,46],[-156,22,40]],'#ffffff',{stroke:'#c6ced8','stroke-width':.8});
-    poly(truck,[[-156,-22,40],[-128,-22,46],[-128,22,46],[-156,22,40]],'#f1f4f7',{stroke:'#c6ced8','stroke-width':.8});
-    {const [fx,fy]=P(-146,22.2,16);el('path',{d:`M${(fx-12).toFixed(1)},${(fy+3).toFixed(1)} a12,12 0 0 1 24,-8`,fill:'#2a3340',transform:`rotate(${(Math.atan2(S,C)*180/Math.PI).toFixed(1)} ${fx} ${fy})`},truck)}
-    poly(truck,[[-154,22.2,30],[-150,22.2,30],[-150,22.2,33],[-154,22.2,33]],'#f2a43a');
-    wheel(-142,12);
+    poly(truck,[[-125,25.1,40],[-101,25.1,40],[-101,25.1,59],[-120,25.1,59],[-125,25.1,52]],'#26354d');
+    poly(truck,[[-121,25.2,42],[-117,25.2,42],[-110,25.2,57],[-114,25.2,57]],'rgba(255,255,255,.14)');
+    el('polyline',{points:pt([[-101,25.2,18],[-101,25.2,40]]),stroke:'#c6ced8','stroke-width':.9,fill:'none'},truck);
+    el('polyline',{points:pt([[-126,25.2,18],[-126,25.2,40]]),stroke:'#c6ced8','stroke-width':.9,fill:'none'},truck);
+    poly(truck,[[-106,25.2,34],[-103,25.2,34],[-103,25.2,36],[-106,25.2,36]],'#2a3340');
+    poly(truck,[[-128,25.15,24],[-98,25.15,24],[-98,25.15,27],[-128,25.15,27]],'#6aa65a');
+    poly(truck,[[-128.5,25.6,40],[-126.5,25.6,40],[-126.5,25.6,52],[-128.5,25.6,52]],'#1f2733');
+    [-120,-114,-108].forEach(x=>cube(truck,x,x+3,-2,2,64,65.5,'#d98a2b','#f2a43a','#f6b85a'));
+    // hood: lower than the cab, gently sloped, with bumper and lights on the side
+    poly(truck,[[-161,22.4,12],[-153,22.4,12],[-153,22.4,21],[-161,22.4,21]],'#a9b3bf');
+    poly(truck,[[-157,22,18],[-128,22,18],[-128,22,46],[-131,22,47],[-157,22,41],[-158,22,38]],'#ffffff',{stroke:'#c6ced8','stroke-width':.8});
+    poly(truck,[[-158,-22,38],[-157,-22,41],[-131,-22,47],[-128,-22,46],[-128,22,46],[-131,22,47],[-157,22,41],[-158,22,38]],'#f3f6f9',{stroke:'#c6ced8','stroke-width':.8});
+    el('polyline',{points:pt([[-131,22.2,46.5],[-131,22.2,20]]),stroke:'#d8dee7','stroke-width':.9,fill:'none'},truck);
+    poly(truck,[[-156,22.2,30],[-151,22.2,30],[-151,22.2,34],[-156,22.2,34]],'#f2a43a');
+    poly(truck,[[-158,22.2,35],[-153,22.2,35],[-153,22.2,38],[-158,22.2,38]],'#e9eef3',{stroke:'#c6ced8','stroke-width':.6});
+    {const [fx,fy]=P(-143,22.3,16);el('path',{d:`M${(fx-13).toFixed(1)},${(fy+2).toFixed(1)} a13,13 0 0 1 26,0`,fill:'none',stroke:'#2a3340','stroke-width':2.4,transform:`rotate(${(Math.atan2(S,C)*180/Math.PI).toFixed(1)} ${fx} ${fy})`},truck)}
+    wheel(-143,12);
     // box body
     cube(truck,T.x0,T.x1,T.y0,T.y1,T.z0,T.z1,'#e3e8ef','#fbfcfd','#f1f4f7','#c6ced8');
     poly(truck,[[T.x0,T.y1+.1,T.z0],[T.x1,T.y1+.1,T.z0],[T.x1,T.y1+.1,T.z0+3],[T.x0,T.y1+.1,T.z0+3]],'#9aa5b2');
