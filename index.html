@@ -86,7 +86,7 @@ section{padding-block:96px}
 #heroBg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 #heroBg .green{animation:greenRise 1.1s var(--ease) both}
 #zig,#zigGlow,#zigGlow2,#zigEdge{fill:none;stroke:#fff;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.5s .35s var(--ease) forwards}
-#zig{stroke:url(#gRoad)}#zigGlow{opacity:.14}#zigGlow2{opacity:.05}
+#zig{stroke:url(#heroRoadG)}#zigGlow{opacity:.14}#zigGlow2{opacity:.05}
 #zigEdge{stroke:rgba(15,26,51,.22);filter:blur(3px)}
 #zigLane{fill:none;stroke:var(--hb2,#2f4f93);stroke-opacity:.32;stroke-linecap:round;stroke-dasharray:16 14;opacity:0;animation:fadeIn .5s 1.6s forwards,laneFlow 1.4s linear infinite}
 @keyframes laneFlow{to{stroke-dashoffset:-30}}
@@ -753,7 +753,6 @@ body{padding-bottom:var(--gh)}
 /* ===== site-wide tech layer ===== */
 .nav::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--green) 25%,var(--blue) 75%,transparent);opacity:.55;pointer-events:none}
 .hero::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(70% 70% at 70% 30%,#000,transparent 75%);mask-image:radial-gradient(70% 70% at 70% 30%,#000,transparent 75%)}
-.alt{background-image:radial-gradient(color-mix(in srgb,var(--blue) 14%,transparent) 1px,transparent 1.3px);background-size:22px 22px}
 .eyebrow{font-family:var(--f-mono);letter-spacing:.16em}
 .sec-head h2{background:linear-gradient(90deg,var(--ink) 55%,color-mix(in srgb,var(--blue) 70%,var(--ink)));-webkit-background-clip:text;background-clip:text}
 .btn-primary{box-shadow:0 8px 24px -10px color-mix(in srgb,var(--green) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.25)}
@@ -1017,8 +1016,8 @@ footer.ft .wrap{display:block}
 footer.ft{background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px)!important;background-size:32px 32px!important}
 
 /* ===== tech details: Services, Tracking, Contact ===== */
-#services,#track,#contact{position:relative;isolation:isolate}
-#services::before,#track::before,#contact::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+main > section[data-view]:not(.hero):not(#route){position:relative;isolation:isolate}
+main > section[data-view]:not(.hero):not(#route)::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
   background-image:radial-gradient(40% 35% at 85% 8%,color-mix(in srgb,var(--blue) 16%,transparent),transparent 70%),radial-gradient(30% 30% at 8% 40%,color-mix(in srgb,var(--green) 12%,transparent),transparent 70%),linear-gradient(color-mix(in srgb,var(--blue) 9%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--blue) 9%,transparent) 1px,transparent 1px);
   background-size:auto,auto,36px 36px,36px 36px;-webkit-mask-image:linear-gradient(180deg,#000,#000 45%,transparent 90%);mask-image:linear-gradient(180deg,#000,#000 45%,transparent 90%)}
 .svc-icon:not(.brandmark){box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 35%,transparent),0 8px 22px -10px color-mix(in srgb,var(--green) 80%,transparent)}
@@ -1066,7 +1065,7 @@ footer.ft{background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparen
   <div class="hero-layer" id="heroLayer" aria-hidden="true">
     <svg id="heroBg" preserveAspectRatio="none">
       <defs><linearGradient id="gGreen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--hg1)"/><stop offset="1" stop-color="var(--hg2)"/></linearGradient>
-        <linearGradient id="gRoad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".78"/><stop offset=".55" stop-color="#ffffff"/><stop offset="1" stop-color="#f1fbef"/></linearGradient>
+        <linearGradient id="heroRoadG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".78"/><stop offset=".55" stop-color="#ffffff"/><stop offset="1" stop-color="#f1fbef"/></linearGradient>
         <linearGradient id="gHead" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d7f0d1"/></linearGradient>
         <filter id="fGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter></defs>
       <g class="green"><path id="greenPath" fill="url(#gGreen)" d=""/></g>
@@ -1876,7 +1875,7 @@ $('locForm').addEventListener('submit',e=>{e.preventDefault();const q=$('locQ').
   const hero=$('top'),bg=$('heroBg'),hv=$('heroVan'),inner=$('heroInner'),copy=$('heroCopy'),trust=hero.querySelector('.trust');
   let segs=[],total=1,parked=0,drive=0,start=null;
   function layout(){
-    const W=hero.clientWidth,H=hero.clientHeight,narrow=W<900;
+    const W=hero.clientWidth,H=hero.clientHeight,narrow=W<900;if(!W||!H)return;
     const A=inner.offsetTop+copy.offsetTop+copy.offsetHeight+22,B=inner.offsetTop+trust.offsetTop-26,s=Math.max(60,B-A);
     const pts=narrow?[[0,A+s*.75],[W*.36,A+s*.12],[W*.52,A+s*.88],[W,A+s*.2]]
                     :[[0,A+s*.82],[W*.33,A+s*.12],[W*.45,B],[W*.955,Math.max(46,A-Math.min(330,H*.42))]];
@@ -1899,6 +1898,7 @@ $('locForm').addEventListener('submit',e=>{e.preventDefault();const q=$('locQ').
   }
   function at(dist){const s=segs.find(s=>dist<=s.s+s.l)||segs[segs.length-1],t=Math.max(0,Math.min(1,(dist-s.s)/s.l));return {x:s.a[0]+(s.b[0]-s.a[0])*t,y:s.a[1]+(s.b[1]-s.a[1])*t,ang:Math.atan2(s.b[1]-s.a[1],s.b[0]-s.a[0])*180/Math.PI}}
   function place(){
+    if(!segs.length||!hero.offsetHeight||!hv.offsetWidth)return;
     const p=Math.max(0,Math.min(1,scrollY/Math.max(1,hero.offsetHeight*.8)));
     const dist=Math.min(total+260,drive+p*(total+260-parked));
     const w=hv.offsetWidth,hh=hv.offsetHeight,o=at(Math.min(total,dist)),extra=Math.max(0,dist-total);
