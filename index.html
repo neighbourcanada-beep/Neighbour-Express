@@ -1055,7 +1055,9 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 .ill .cv-scr3{font:700 6px var(--f-mono);letter-spacing:.06em}
 .cv-laser3{stroke:#e5484d;stroke-width:1.6;fill:none;filter:drop-shadow(0 0 3px #e5484d)}
 .ill .cv-nb3{font:900 italic 7px var(--f-display);fill:#fff}
-.cv-card{max-width:980px!important}</style>
+.cv-card{max-width:980px!important}.ill .cv-tk3{font:900 italic 9.5px var(--f-display)!important;fill:#6aa65a!important;letter-spacing:0!important}
+.ill .cv-tk3s{font:800 italic 5px var(--f-display);fill:#6aa65a}
+.ill .cv-nbb{font:900 italic 6.5px var(--f-display);fill:#fff}</style>
 
 <header class="nav">
   <div class="wrap">
@@ -2290,24 +2292,41 @@ function countUp(el){
     // shadow
     poly(ST,[[-110,-34,0],[345,-34,0],[345,50,0],[-110,50,0]],'rgba(15,26,51,.06)');
     // truck (back-left): rear faces +x toward the belt, open
-    const T={x0:-100,x1:-2,y0:-26,y1:26,z0:12,z1:76},TO={y0:-19,y1:19,z0:BZ,z1:68};
+    const T={x0:-96,x1:-2,y0:-27,y1:27,z0:18,z1:80},TO={y0:-20,y1:20,z0:BZ,z1:72};
+    const WR={"g": [[-2.0, 80.0], [-58.6, 80.0], [-58.6, 80.0], [-55.1, 76.8], [-51.7, 73.2], [-48.4, 69.5], [-45.2, 65.5], [-42.1, 61.3], [-39.1, 57.0], [-36.2, 52.5], [-33.4, 47.8], [-30.8, 43.0], [-28.2, 38.1], [-25.8, 33.2], [-23.5, 28.1], [-21.4, 23.1], [-19.3, 18.0], [-2.0, 18.0]], "n": [[-2.0, 45.7], [-2.0, 45.7], [-6.7, 48.9], [-11.6, 51.5], [-16.5, 53.7], [-21.6, 55.5], [-26.7, 56.8], [-31.9, 57.6], [-37.1, 58.1], [-42.4, 58.1], [-47.8, 57.7], [-53.2, 56.8], [-58.6, 55.6], [-64.1, 54.0], [-69.5, 52.0], [-75.0, 49.7], [-75.0, 49.7], [-71.3, 49.0], [-67.5, 48.0], [-63.7, 46.7], [-59.9, 45.2], [-56.2, 43.5], [-52.5, 41.5], [-48.9, 39.3], [-45.4, 36.8], [-42.0, 34.2], [-38.7, 31.3], [-35.6, 28.3], [-32.7, 25.0], [-30.0, 21.6], [-27.6, 18.0], [-2.0, 18.0]], "s": [[-4.7, 27.2], [-9.1, 33.4], [-13.7, 38.7], [-18.5, 43.4], [-23.4, 47.3], [-28.4, 50.6], [-33.6, 53.2], [-38.8, 55.1], [-44.2, 56.4], [-49.7, 57.1], [-55.2, 57.3], [-60.8, 56.8], [-66.4, 55.8], [-72.1, 54.3], [-77.7, 52.3]], "t": [[-63.1, 18.0], [-88.7, 29.9], [-104.2, 18.0]]};
     const truck=el('g',{class:'cv-truck3'},ST);
-    [[-134],[-82],[-30]].forEach(([x])=>{const [wx,wy]=P(x,T.y1,12);el('ellipse',{cx:wx,cy:wy,rx:11,ry:12,fill:'#1b232c'},truck);el('ellipse',{cx:wx,cy:wy,rx:4.5,ry:5,fill:'#c9d1dc'},truck)});
-    // cab
-    cube(truck,-146,T.x0,-24,24,14,58,'#e3e8ef','#ffffff','#eef2f6','#c6ced8');
-    poly(truck,[[-146,24.1,14],[T.x0,24.1,14],[T.x0,24.1,16.5],[-146,24.1,16.5]],'#7d8896');
-    poly(truck,[[-140,24.1,38],[-122,24.1,38],[-118,24.1,54],[-140,24.1,54]],'#2a3a52');
-    poly(truck,[[-139,24.2,39],[-124,24.2,39],[-121,24.2,46],[-139,24.2,46]],'rgba(255,255,255,.18)');
-    el('polyline',{points:pt([[-116,24.2,20],[-116,24.2,56]]),stroke:'#c6ced8','stroke-width':.8,fill:'none'},truck);
-    poly(truck,[[-146,24.2,26],[T.x0,24.2,26],[T.x0,24.2,31],[-146,24.2,31]],'#3b8a3e');
-    
-    cube(truck,-112,-108,22,26,46,50,'#2a3340','#2a3340','#3a4656');
-    poly(truck,[[-146,-24,16],[-146,24,16],[-146,24,22],[-146,-24,22]],'#2a3340');
-    cube(truck,T.x0,T.x1,T.y0,T.y1,T.z0,T.z1,'#e3e8ef','#fbfcfd','#eef2f6','#c6ced8');
-    // side livery on +y face
-    poly(truck,[[T.x0,T.y1,T.z0],[T.x1,T.y1,T.z0],[T.x1,T.y1,30],[-40,T.y1,44],[T.x0,T.y1,38]],'#3b8a3e');
-    poly(truck,[[T.x0,T.y1,38],[-40,T.y1,44],[T.x1,T.y1,30],[T.x1,T.y1,24],[-40,T.y1,36],[T.x0,T.y1,30]],'#2f4f93');
-    faceText(truck,'NEIGHBOUR EXPRESS',-50,T.y1,60,'y','cv-tk3');
+    const wheel=(x,r=11)=>{const [wx,wy]=P(x,T.y1-2,r);el('ellipse',{cx:wx,cy:wy,rx:r*.95,ry:r*1.02,fill:'#1b232c'},truck);el('ellipse',{cx:wx,cy:wy,rx:r*.5,ry:r*.54,fill:'#eef1f4'},truck);el('ellipse',{cx:wx,cy:wy,rx:r*.18,ry:r*.2,fill:'#5a6675'},truck)};
+    // chassis rail + fuel tank + steps
+    cube(truck,-150,-2,-20,22,10,18,'#2a3340','#323c4a','#3a4656');
+    cube(truck,-118,-100,14,24,6,16,'#1f2733','#2a3340','#3a4656');
+    // cab (behind the hood), white, with door, window and mirror
+    cube(truck,-128,-98,-25,25,16,64,'#e3e8ef','#ffffff','#f1f4f7','#c6ced8');
+    poly(truck,[[-126,25.1,42],[-104,25.1,42],[-102,25.1,60],[-118,25.1,60],[-126,25.1,52]],'#2a3a52');
+    poly(truck,[[-124,25.2,44],[-110,25.2,44],[-109,25.2,52],[-124,25.2,50]],'rgba(255,255,255,.2)');
+    el('polyline',{points:pt([[-100,25.2,20],[-100,25.2,60],[-126,25.2,60]]),stroke:'#c6ced8','stroke-width':.8,fill:'none'},truck);
+    poly(truck,[[-108,25.2,36],[-104,25.2,36],[-104,25.2,38],[-108,25.2,38]],'#2a3340');
+    cube(truck,-131,-129,25,33,40,44,'#2a3340','#2a3340','#3a4656');cube(truck,-131,-129,32,34,34,48,'#1f2733','#2a3340','#3a4656');
+    // amber cab lights
+    [-122,-116,-110,-104].forEach(x=>poly(truck,[[x,-6,64.1],[x+3,-6,64.1],[x+3,6,64.1],[x,6,64.1]],'#f2a43a',{opacity:.0}));
+    poly(truck,[[-126,-14,64.1],[-100,-14,64.1],[-100,14,64.1],[-126,14,64.1]],'#e9edf2');
+    [-120,-114,-108].forEach(x=>cube(truck,x,x+3,-2,2,64,66,'#d98a2b','#f2a43a','#f6b85a'));
+    // hood: sloped top, fender over the front wheel
+    cube(truck,-160,-155,-22,22,12,21,'#8e99a7','#a9b3bf','#b9c3d0');
+    poly(truck,[[-156,22,16],[-128,22,16],[-128,22,46],[-156,22,40]],'#ffffff',{stroke:'#c6ced8','stroke-width':.8});
+    poly(truck,[[-156,-22,40],[-128,-22,46],[-128,22,46],[-156,22,40]],'#f1f4f7',{stroke:'#c6ced8','stroke-width':.8});
+    {const [fx,fy]=P(-146,22.2,16);el('path',{d:`M${(fx-12).toFixed(1)},${(fy+3).toFixed(1)} a12,12 0 0 1 24,-8`,fill:'#2a3340',transform:`rotate(${(Math.atan2(S,C)*180/Math.PI).toFixed(1)} ${fx} ${fy})`},truck)}
+    poly(truck,[[-154,22.2,30],[-150,22.2,30],[-150,22.2,33],[-154,22.2,33]],'#f2a43a');
+    wheel(-142,12);
+    // box body
+    cube(truck,T.x0,T.x1,T.y0,T.y1,T.z0,T.z1,'#e3e8ef','#fbfcfd','#f1f4f7','#c6ced8');
+    poly(truck,[[T.x0,T.y1+.1,T.z0],[T.x1,T.y1+.1,T.z0],[T.x1,T.y1+.1,T.z0+3],[T.x0,T.y1+.1,T.z0+3]],'#9aa5b2');
+    // wrap, mirrored from the NB van livery
+    const wp=(arr,fill,extra)=>poly(truck,arr.map(([x,z])=>[x,T.y1+.2,z]),fill,extra);
+    wp(WR.g,'#6aa65a');wp(WR.n,'#34418f');wp(WR.t,'#6aa65a');
+    el('polyline',{points:pt(WR.s.map(([x,z])=>[x,T.y1+.3,z])),stroke:'#fff','stroke-width':3.2,'stroke-linecap':'round',fill:'none'},truck);
+    faceText(truck,'NEIGHBOUR',-62,T.y1+.4,29,'y','cv-tk3');faceText(truck,'EXPRESS',-48,T.y1+.4,36.5,'y','cv-tk3s');
+    {const [nx,ny]=P(-88,T.y1+.4,72);const g=el('g',{transform:`matrix(${C},${S},0,${K},${nx},${ny})`},truck);el('rect',{x:0,y:-7,width:16,height:8,rx:1.5,fill:'#34418f',transform:'skewX(-14)'},g);const t=el('text',{x:3.4,y:-.6,class:'cv-nbb'},g);t.textContent='NB'}
+    wheel(-50,11);wheel(-30,11);
     // opening in the rear face
     poly(truck,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1,TO.y1,TO.z1],[T.x1,TO.y0,TO.z1]],'url(#cvInG)');
     poly(truck,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1-28,TO.y1,TO.z0],[T.x1-28,TO.y0,TO.z0]],'#3a4656',{opacity:.0});
