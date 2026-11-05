@@ -592,6 +592,32 @@ body{padding-bottom:var(--gh)}
 @keyframes tkOn{to{stroke:var(--green)}}
 @keyframes tkDot{to{fill:var(--green)}}
 @keyframes tkCk{to{stroke-dashoffset:0}}
+
+/* tracking v2 */
+.tk2{touch-action:none}
+.tk2 .tk-box{transform-box:fill-box;transform-origin:50% 100%;cursor:crosshair}
+.tk-ring{fill:none;stroke:var(--green);stroke-width:4;stroke-dasharray:100;stroke-dashoffset:100}
+.tk-code{cursor:crosshair}
+.ill .tk-beep{font:900 22px var(--f-display);fill:var(--green);opacity:0;letter-spacing:.04em}
+.tk-ray{stroke:#e5484d;stroke-width:2.5;stroke-linecap:round;opacity:0;filter:drop-shadow(0 0 3px #e5484d);pointer-events:none}
+.tk-dot{fill:#e5484d;opacity:0;pointer-events:none;filter:drop-shadow(0 0 5px #e5484d)}
+.tk2.aim .tk-ray,.tk2.aim .tk-dot{opacity:.9}
+.tk-tip{fill:#e5484d}
+.tk-gr{transition:transform .12s linear}
+.tk-gun{animation:none}
+.tj-line{stroke:var(--line);stroke-width:4;stroke-linecap:round;fill:none}
+.tj-fill{stroke:var(--green);stroke-width:4;stroke-linecap:round;fill:none;stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset .7s cubic-bezier(.4,0,.2,1)}
+.tj-st{cursor:pointer}.tj-hit{fill:transparent}
+.tj-c{fill:var(--surface);stroke:var(--line);stroke-width:2.5;transition:fill .3s,stroke .3s}
+.tj-i{fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
+.tj-i circle{fill:var(--muted);stroke:none}
+.tj-st.on .tj-c{fill:var(--green);stroke:var(--green)}.tj-st.on .tj-i{stroke:#fff}.tj-st.on .tj-i circle{fill:#fff}
+.tj-st.cur .tj-c{stroke-width:4;stroke:var(--green-2)}
+.tj-st:hover .tj-c{stroke:var(--green)}
+.ill .tj-st text{font-size:10.5px;font-family:var(--f-body);font-weight:700}
+.ill .tj-st.on text{fill:var(--ink)}
+.tk-msg{text-align:center;font-weight:700;margin-top:6px;min-height:1.6em}
+.tk-msg b{color:var(--green)}
 /* about conveyor */
 .cv-wh{fill:var(--surface);stroke:var(--line);stroke-width:2}
 .ill .cv-t{font-size:12px;fill:var(--muted)}
@@ -1052,16 +1078,28 @@ footer.ft .wrap{display:block}
       <div class="eyebrow">Tracking</div>
       <h2>Follow every step</h2>
       <p>Each service has its own milestones, so choose the service first.</p>
-    </div><div class="ph-ill"><svg class="ill tk" viewBox="0 0 520 210" aria-hidden="true">
-  <g class="tk-box"><path d="M150 70 L260 42 L370 70 L370 150 L260 178 L150 150 Z" fill="#c8915a"/><path d="M150 70 L260 98 L370 70" fill="none" stroke="#a87443" stroke-width="2"/><path d="M260 98 V178" stroke="#a87443" stroke-width="2"/>
-    <rect x="160" y="84" width="92" height="48" rx="3" fill="#fff" transform="skewY(14) translate(0 -52)"/>
-  <g transform="skewY(14) translate(0 -52)"><rect x="172" y="92" width="2" height="30" fill="#1b232c"/><rect x="176" y="92" width="1" height="30" fill="#1b232c"/><rect x="179" y="92" width="3" height="30" fill="#1b232c"/><rect x="184" y="92" width="1" height="30" fill="#1b232c"/><rect x="187" y="92" width="2" height="30" fill="#1b232c"/><rect x="191" y="92" width="1" height="30" fill="#1b232c"/><rect x="194" y="92" width="3" height="30" fill="#1b232c"/><rect x="199" y="92" width="2" height="30" fill="#1b232c"/><rect x="203" y="92" width="1" height="30" fill="#1b232c"/><rect x="206" y="92" width="3" height="30" fill="#1b232c"/><rect x="211" y="92" width="1" height="30" fill="#1b232c"/><rect x="214" y="92" width="2" height="30" fill="#1b232c"/><rect x="218" y="92" width="1" height="30" fill="#1b232c"/><rect x="221" y="92" width="3" height="30" fill="#1b232c"/><rect x="226" y="92" width="2" height="30" fill="#1b232c"/><rect x="230" y="92" width="1" height="30" fill="#1b232c"/><rect x="233" y="92" width="2" height="30" fill="#1b232c"/><text x="206" y="130" text-anchor="middle" class="tk-no">NB2610060188</text>
-    <rect class="tk-laser" x="164" y="88" width="84" height="3" rx="1.5"/></g></g>
-  <g class="tk-gun"><path d="M402 34 h70 a10 10 0 0 1 10 10 v14 a10 10 0 0 1 -10 10 h-30 l-10 34 h-16 l6 -34 h-20 a10 10 0 0 1 -10 -10 v-14 a10 10 0 0 1 10 -10 z" fill="#2a3440"/><rect x="394" y="46" width="8" height="10" fill="#e5484d"/>
-    <path class="tk-beam" d="M394 51 L252 120 L252 150 Z" fill="#e5484d" opacity=".18"/></g>
-  <g class="tk-s" data-tk="0" transform="translate(18 168)"><rect width="104" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Picked up</text></g><g class="tk-s" data-tk="1" transform="translate(132 168)"><rect width="84" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Sorted</text></g><g class="tk-s" data-tk="2" transform="translate(226 168)"><rect width="146" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Out for delivery</text></g><g class="tk-s" data-tk="3" transform="translate(382 168)"><rect width="100" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Delivered</text></g>
+    </div><div class="ph-ill"><svg class="ill tk tk2" id="tkSvg" viewBox="0 0 520 250" aria-hidden="true">
+  <g class="tk-stage">
+    <g class="tk-box"><path d="M150 70 L260 42 L370 70 L370 150 L260 178 L150 150 Z" fill="#c8915a"/><path d="M150 70 L260 98 L370 70" fill="none" stroke="#a87443" stroke-width="2"/><path d="M260 98 V178" stroke="#a87443" stroke-width="2"/>
+      <rect class="tk-lbl" x="160" y="84" width="92" height="48" rx="3" fill="#fff" transform="skewY(14) translate(0 -52)"/>
+      <g transform="skewY(14) translate(0 -52)"><rect x="172" y="92" width="2" height="30" fill="#1b232c"/><rect x="176" y="92" width="1" height="30" fill="#1b232c"/><rect x="179" y="92" width="3" height="30" fill="#1b232c"/><rect x="184" y="92" width="1" height="30" fill="#1b232c"/><rect x="187" y="92" width="2" height="30" fill="#1b232c"/><rect x="191" y="92" width="1" height="30" fill="#1b232c"/><rect x="194" y="92" width="3" height="30" fill="#1b232c"/><rect x="199" y="92" width="2" height="30" fill="#1b232c"/><rect x="203" y="92" width="1" height="30" fill="#1b232c"/><rect x="206" y="92" width="3" height="30" fill="#1b232c"/><rect x="211" y="92" width="1" height="30" fill="#1b232c"/><rect x="214" y="92" width="2" height="30" fill="#1b232c"/><rect x="218" y="92" width="1" height="30" fill="#1b232c"/><rect x="221" y="92" width="3" height="30" fill="#1b232c"/><rect x="226" y="92" width="2" height="30" fill="#1b232c"/><rect x="230" y="92" width="1" height="30" fill="#1b232c"/><rect x="233" y="92" width="2" height="30" fill="#1b232c"/><text x="206" y="130" text-anchor="middle" class="tk-no">NB2610060188</text>
+        <rect class="tk-ring" x="160" y="84" width="92" height="48" rx="3" pathLength="100"/>
+        <rect class="tk-code" x="156" y="80" width="100" height="56" fill="transparent"/></g></g>
+    <text class="tk-beep" x="206" y="40" text-anchor="middle">BEEP!</text>
+  </g>
+  <line class="tk-ray" id="tkRay" x1="0" y1="0" x2="0" y2="0"/>
+  <circle class="tk-dot" id="tkDot" r="5"/>
+  <g class="tk-gun" id="tkGun" transform="translate(452 64)"><g class="tk-gr" id="tkGr"><path d="M-40 -14 h52 a10 10 0 0 1 10 10 v12 a10 10 0 0 1 -10 10 h-24 l-8 30 h-14 l5 -30 h-11 a10 10 0 0 1 -10 -10 v-12 a10 10 0 0 1 10 -10 z" fill="#2a3440"/><rect x="-48" y="-7" width="8" height="12" rx="2" class="tk-tip"/><rect x="-26" y="-9" width="22" height="7" rx="2" fill="#4a5663"/></g></g>
+  <g class="tj">
+    <path class="tj-line" d="M60 206 H450"/><path class="tj-fill" id="tjFill" d="M60 206 H450" pathLength="100"/>
+    <g class="tj-st" data-st="1" transform="translate(60 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-9 4 V-3 L0 -9 L9 -3 V4 Z M-3 4 V-1 H3 V4"/></g><text y="32" text-anchor="middle">Pickup</text></g><g class="tj-st" data-st="2" transform="translate(190 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-9 -4 H5 M1 -8 L5 -4 L1 0 M9 4 H-5 M-1 0 L-5 4 L-1 8"/></g><text y="32" text-anchor="middle">Sorting</text></g><g class="tj-st" data-st="3" transform="translate(320 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-10 3 V-5 H3 V3 M3 -2 H7 L10 1 V3 H-10"/><circle cx="-5" cy="5" r="2"/><circle cx="6" cy="5" r="2"/></g><text y="32" text-anchor="middle">On the road</text></g><g class="tj-st" data-st="4" transform="translate(450 206)"><circle class="tj-hit" r="22"/><circle class="tj-c" r="14"/><g class="tj-i"><path d="M-6 0 L-1 5 L8 -5"/></g><text y="32" text-anchor="middle">Delivered</text></g>
+    <g class="tj-tok" id="tjTok" transform="translate(60 178)"><rect x="-9" y="-8" width="18" height="15" rx="2" fill="#c8915a"/><rect x="-2" y="-8" width="4" height="15" fill="#e2c08f"/></g>
+  </g>
+  <g class="tk-conf" id="tkConf"></g>
 </svg>
-<div class="ill-ctl"><button type="button" class="ctl" id="tkScan">Scan the parcel</button><button type="button" class="ctl ctl-g" id="tkTry">Track NB2610060188</button></div></div></div>
+<p class="tk-msg" id="tkMsg" aria-live="polite">Label created · waiting for pickup</p>
+<div class="ill-ctl"><button type="button" class="ctl" id="tkScan">Scan the label</button><button type="button" class="ctl" id="tkReset">Start over</button><button type="button" class="ctl ctl-g" id="tkTry">Track NB2610060188</button></div>
+<p class="ill-tip">Point the scanner at the barcode, or tap a stop on the route.</p></div></div>
     <div class="track">
       <form class="qt" id="trackForm" novalidate>
         <div class="seg" role="radiogroup" aria-label="Service">
@@ -1925,17 +1963,43 @@ function countUp(el){
   const mark=()=>{const c=document.querySelector('.tab[aria-selected="true"]');document.querySelectorAll('.nw-n').forEach(n=>n.classList.toggle('sel',!!c&&n.dataset.city===c.dataset.c))};
   document.addEventListener('click',e=>{if(e.target.closest('.nw-n')){setTimeout(mark,0);const cc=document.querySelector('.city-card');if(cc)setTimeout(()=>cc.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}),120)}else if(e.target.closest('.tab'))setTimeout(mark,0)});
   mark();
-  // tracking: each scan moves the parcel one step on
-  const pills=[...document.querySelectorAll('.tk-s')];let stage=0;
-  const setStage=k=>{stage=k;pills.forEach((p,i)=>p.classList.toggle('on',i<k))};
-  const scan=()=>{const l=document.querySelector('.tk-laser');l&&l.animate([{fill:'#fff'},{fill:'#e5484d'}],{duration:300,iterations:2});
-    const b=document.querySelector('.tk-box');b&&b.animate([{transform:'translateY(0)'},{transform:'translateY(-10px) rotate(-2deg)'},{transform:'translateY(2px)'},{transform:'translateY(0)'}],{duration:420,easing:'ease-out'});setStage(stage>=pills.length?1:stage+1)};
   window.__lkIn=()=>{const bx=$('lkBox');if(!bx||reduce)return;const st=$('lk3d');st.classList.add('lk-fade');bx.classList.remove('lk-enter');bx.classList.add('lk-pre');void bx.offsetWidth;
     requestAnimationFrame(()=>requestAnimationFrame(()=>{st.classList.remove('lk-fade');bx.classList.add('lk-enter');bx.classList.remove('lk-pre');setTimeout(()=>bx.classList.remove('lk-enter'),1400)}))};
-  window.__tkAuto=()=>{setStage(0);[1,2,3,4].forEach(k=>setTimeout(()=>{if(stage===k-1)setStage(k)},600+k*800))};
-  if($('tkScan')){$('tkScan').addEventListener('click',scan);document.querySelector('.tk-box').addEventListener('click',scan);
-    pills.forEach((p,i)=>p.addEventListener('click',()=>setStage(i+1)));
-    $('tkTry').addEventListener('click',()=>{$('t-delivery').checked=true;$('trackNo').value='NB2610060188';$('trackForm').requestSubmit();setTimeout(()=>{const r=document.querySelector('.troad,#trackOut,.tres');(r||$('trackForm')).scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})},150)})}
+  // tracking: aim the scanner at the barcode; each scan moves the parcel along the route
+  const tsv=$('tkSvg');
+  if(tsv){const MSG=['Label created · waiting for pickup','<b>Picked up</b> · Richmond, BC · 09:12','<b>Sorted</b> · Markham hub · 14:40','<b>Out for delivery</b> · Toronto · 08:05','<b>Delivered</b> · front door · photo proof saved'];
+    const X=[60,60,190,320,450],sts=[...tsv.querySelectorAll('.tj-st')],tok=$('tjTok'),fill=$('tjFill'),gr=$('tkGr'),ray=$('tkRay'),dot=$('tkDot'),ring=tsv.querySelector('.tk-ring'),beepT=tsv.querySelector('.tk-beep'),box=tsv.querySelector('.tk-box');
+    let stage=0,tokX=60,hold=null,cool=0;
+    const toSvg=e=>{const p=tsv.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(tsv.getScreenCTM().inverse())};
+    const aim=(x,y)=>{let r=Math.atan2(y-64,x-452)*180/Math.PI-180;if(r<-180)r+=360;r=Math.max(-75,Math.min(75,r));gr.setAttribute('transform',`rotate(${r.toFixed(1)} 0 0)`);
+      const rad=r*Math.PI/180,tx=452-Math.cos(rad)*48,ty=64-Math.sin(rad)*48;ray.setAttribute('x1',tx.toFixed(1));ray.setAttribute('y1',ty.toFixed(1));ray.setAttribute('x2',x.toFixed(1));ray.setAttribute('y2',y.toFixed(1));dot.setAttribute('cx',x.toFixed(1));dot.setAttribute('cy',y.toFixed(1))};
+    function moveTok(to){const from=tokX;tokX=X[to];tok.animate([{transform:`translate(${from}px,178px)`},{transform:`translate(${(from+tokX)/2}px,${from===tokX?172:150}px)`,offset:.5},{transform:`translate(${tokX}px,178px)`}],{duration:from===tokX?250:Math.min(1200,400+Math.abs(tokX-from)*2),easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'})}
+    function setStage(k,quiet){stage=k;sts.forEach((s,i)=>{s.classList.toggle('on',i<k);s.classList.toggle('cur',i===k-1)});fill.style.strokeDashoffset=k<=1?100:100-(k-1)/3*100;$('tkMsg').innerHTML=MSG[k];moveTok(k);
+      if(k===4&&!quiet&&!reduce)confetti()}
+    function confetti(){const g=$('tkConf'),C=['#3b8a3e','#2f4f93','#c8915a','#e5484d','#f2c94c'];for(let i=0;i<18;i++){const r=document.createElementNS('http://www.w3.org/2000/svg','rect');r.setAttribute('width',5);r.setAttribute('height',8);r.setAttribute('fill',C[i%5]);g.appendChild(r);
+      const a=-Math.PI/2+(Math.random()-.5)*2.2,d=50+Math.random()*60;r.animate([{transform:`translate(450px,200px) rotate(0)`,opacity:1},{transform:`translate(${450+Math.cos(a)*d}px,${200+Math.sin(a)*d}px) rotate(${Math.random()*720}deg)`,opacity:1,offset:.6},{transform:`translate(${450+Math.cos(a)*d*1.1}px,${200+Math.sin(a)*d+40}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:1100,easing:'cubic-bezier(.2,.7,.3,1)'}).finished.then(()=>r.remove())}}
+    function beep(){if(performance.now()<cool)return;cool=performance.now()+700;
+      beepT.animate([{opacity:0,transform:'translateY(8px) scale(.6)'},{opacity:1,transform:'translateY(0) scale(1.1)',offset:.3},{opacity:1,transform:'translateY(-4px) scale(1)',offset:.7},{opacity:0,transform:'translateY(-14px)'}],{duration:800,easing:'ease-out'});
+      box.animate([{transform:'translateY(0)'},{transform:'translateY(-10px) rotate(-2deg)'},{transform:'translateY(2px)'},{transform:'translateY(0)'}],{duration:420,easing:'ease-out'});
+      tsv.querySelector('.tk-lbl').animate([{fill:'#dff3dc'},{fill:'#fff'}],{duration:600});
+      try{const ac=window.__ac||(window.__ac=new (window.AudioContext||window.webkitAudioContext)()),o=ac.createOscillator(),gn=ac.createGain();o.frequency.value=1650;gn.gain.value=.04;o.connect(gn);gn.connect(ac.destination);o.start();o.stop(ac.currentTime+.09)}catch(_){}
+      setStage(stage>=4?1:stage+1)}
+    const stopHold=()=>{if(hold){hold.cancel();hold=null}ring.style.strokeDashoffset=100};
+    tsv.addEventListener('pointermove',e=>{const p=toSvg(e);tsv.classList.add('aim');aim(p.x,p.y);
+      const on=!!e.target.closest('.tk-code');
+      if(on&&!hold&&performance.now()>=cool){hold=ring.animate([{strokeDashoffset:100},{strokeDashoffset:0}],{duration:450,fill:'forwards'});hold.finished.then(()=>{if(hold){hold=null;beep();setTimeout(()=>ring.style.strokeDashoffset=100,150)}}).catch(()=>{})}
+      else if(!on&&hold)stopHold()});
+    tsv.addEventListener('pointerleave',()=>{tsv.classList.remove('aim');stopHold();gr.setAttribute('transform','rotate(-20 0 0)')});
+    tsv.addEventListener('click',e=>{const st=e.target.closest('.tj-st');if(st){setStage(+st.dataset.st);return}if(e.target.closest('.tk-box')){const p=toSvg(e);aim(p.x,p.y);beep()}});
+    $('tkScan').addEventListener('click',()=>{aim(206,108);tsv.classList.add('aim');setTimeout(()=>tsv.classList.remove('aim'),500);beep()});
+    $('tkReset').addEventListener('click',()=>setStage(0));
+    $('tkTry').addEventListener('click',()=>{$('t-delivery').checked=true;$('trackNo').value='NB2610060188';$('trackForm').requestSubmit();setTimeout(()=>{const r=document.querySelector('.troad,#trackOut,.tres');(r||$('trackForm')).scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})},150)});
+    gr.setAttribute('transform','rotate(-20 0 0)');
+    // on open: the scanner sweeps over to the label once and scans it, so people see how it works
+    window.__tkAuto=()=>{setStage(0,true);if(reduce)return;let t0=null;const P=[[330,60],[206,108]];
+      setTimeout(()=>{tsv.classList.add('aim');const go=t=>{if(t0===null)t0=t;const q=Math.min(1,(t-t0)/900),e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;aim(P[0][0]+(P[1][0]-P[0][0])*e,P[0][1]+(P[1][1]-P[0][1])*e);
+        if(q<1)requestAnimationFrame(go);else{ring.animate([{strokeDashoffset:100},{strokeDashoffset:0}],{duration:400}).finished.then(()=>{beep();setTimeout(()=>{if(!tsv.matches(':hover'))tsv.classList.remove('aim')},500)})}};requestAnimationFrame(go)},900)};
+  }
   // conveyor: pause, speed, tap a parcel to sort it
   const cvA=()=>[...document.querySelectorAll('.cv-b')].flatMap(b=>b.getAnimations());let sorted=0,fast=false;
   if($('cvPause')){$('cvPause').addEventListener('click',e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',on);e.currentTarget.textContent=on?'Start belt':'Pause belt';
