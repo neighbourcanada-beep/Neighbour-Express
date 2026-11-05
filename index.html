@@ -732,6 +732,26 @@ body{padding-bottom:var(--gh)}
 .cv-b{cursor:pointer}
 .cv-bin{fill:var(--surface);stroke:var(--green);stroke-width:2}
 .ill .cv-t3{font-size:14px;fill:var(--green)}
+
+/* contact scene v2 */
+.cx-card{padding:14px 12px 10px}
+.ill .cx-s1{font:600 7px var(--f-body);fill:#c9d6f2;letter-spacing:.06em}
+.ill .cx-s2{font:800 8.5px var(--f-body);fill:#fff;letter-spacing:0}
+.ill .cx-s3{font:600 7px var(--f-mono);fill:#c9d6f2;letter-spacing:.02em}
+.ill .cx-s4{font:700 8px var(--f-body);fill:var(--muted);letter-spacing:.04em}
+.ill .cx-s5{font:700 7px var(--f-mono);fill:#3b8a3e}
+.ill .cx-t{font-size:9.5px}
+.cx-rowbg{fill:var(--green-soft);stroke:#3b8a3e;stroke-opacity:.35}
+.cx-ln1{fill:var(--ink);opacity:.75}.cx-ln2{fill:var(--muted);opacity:.45}
+.cx-new{animation:cxNew 3.6s ease-out infinite}
+@keyframes cxNew{0%,52%{opacity:0;transform:translateY(-6px)}60%,100%{opacity:1;transform:none}}
+.cx-av{transform-box:fill-box;transform-origin:center;animation:cxAv 1.6s ease-out infinite}
+@keyframes cxAv{0%{scale:1;opacity:.9}100%{scale:1.5;opacity:0}}
+.cx-ans{transform-box:fill-box;transform-origin:center;animation:cxAns 1.2s ease-in-out infinite}
+@keyframes cxAns{50%{scale:1.12}}
+.cx-trail{stroke:color-mix(in srgb,var(--muted) 45%,transparent);stroke-width:2;stroke-dasharray:3 7;animation:cxTrail 1s linear infinite}
+@keyframes cxTrail{to{stroke-dashoffset:-10}}
+.cx-env,.cx-env2{filter:drop-shadow(0 6px 8px rgba(15,26,51,.25))}
 /* ===== Smart Drop locker, 3D ===== */
 @media (min-width:901px){.ph-lk{grid-template-columns:minmax(0,1fr) minmax(0,520px)}}
 .lk3d{--lks:.86;position:relative;height:400px;perspective:1300px;perspective-origin:50% 30%;display:grid;place-items:center;touch-action:pan-y}
@@ -1414,19 +1434,42 @@ footer.ft .wrap{display:block}
       <div class="eyebrow">Contact</div>
       <h2>Talk to Neighbour Express</h2>
       <p>Questions about a delivery, a return or an account. Pick the team that fits and we&#39;ll take it from there.</p>
-    </div><div class="ph-ill"><svg class="ill ctx" viewBox="0 0 520 210" aria-hidden="true">
-  <g transform="translate(70 70)"><g class="cx-ph" id="cxPh"><path d="M0 8 a8 8 0 0 1 8 -8 h10 l8 20 -10 7 a46 46 0 0 0 22 22 l7 -10 20 8 v10 a8 8 0 0 1 -8 8 A68 68 0 0 1 0 8z" fill="var(--green)"/></g>
-    <path class="cx-w w1" d="M44 -6 a26 26 0 0 1 26 26"/><path class="cx-w w2" d="M48 -22 a42 42 0 0 1 42 42"/>
-    <text x="34" y="108" text-anchor="middle" class="cx-t">1-800-683-5708</text></g>
+    </div><div class="ph-ill"><div class="tk-card cx-card"><svg class="ill ctx" viewBox="0 0 520 230" aria-hidden="true">
+  <defs>
+    <linearGradient id="cxScr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f4f93"/><stop offset="1" stop-color="#1c2f5e"/></linearGradient>
+    <linearGradient id="cxWin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--surface)"/><stop offset="1" stop-color="var(--bg-2)"/></linearGradient>
+    <radialGradient id="cxSh"><stop offset="0" stop-color="#0f1a33" stop-opacity=".22"/><stop offset="1" stop-color="#0f1a33" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="88" cy="208" rx="62" ry="8" fill="url(#cxSh)"/><ellipse cx="428" cy="204" rx="86" ry="8" fill="url(#cxSh)"/>
+  <g transform="translate(42 22)">
+    <path class="cx-w w1" d="M98 22 a26 26 0 0 1 22 22"/><path class="cx-w w2" d="M104 4 a44 44 0 0 1 36 36"/>
+    <rect width="92" height="178" rx="18" fill="#141b24" stroke="#4a5663" stroke-width="1.2"/><rect x="5" y="5" width="82" height="168" rx="14" fill="url(#cxScr)"/>
+    <rect x="34" y="10" width="24" height="5" rx="2.5" fill="#141b24"/>
+    <text x="46" y="34" text-anchor="middle" class="cx-s1">Incoming call</text>
+    <circle cx="46" cy="66" r="19" fill="#fff"/><circle class="cx-av" cx="46" cy="66" r="19" fill="none" stroke="#6be36a" stroke-width="2"/>
+    <path d="M33 70 l7 -6 6 4 11 -9" fill="none" stroke="#2f4f93" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 74 h26" stroke="#3b8a3e" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="46" y="102" text-anchor="middle" class="cx-s2">Neighbour Express</text>
+    <text x="46" y="115" text-anchor="middle" class="cx-s3">1-800-683-5708</text>
+    <circle cx="24" cy="148" r="11" fill="#e5484d"/><path d="M18 150 q6 -6 12 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+    <circle class="cx-ans" cx="68" cy="148" r="11" fill="#3b8a3e"/>
+    <g transform="translate(62 142) scale(.42)"><g class="cx-ph" id="cxPh"><path d="M0 8 a8 8 0 0 1 8 -8 h6 l5 10 -5 4 a20 20 0 0 0 10 10 l4 -5 10 5 v6 a8 8 0 0 1 -8 8 A30 30 0 0 1 0 8z" fill="#fff"/></g></g>
+  </g>
   <path id="cxPath" d="M150 120 C 230 30, 330 30, 400 104" class="cx-trail"/>
-  <g class="cx-env"><rect x="-20" y="-14" width="40" height="28" rx="3" fill="#fff" stroke="var(--blue)" stroke-width="2"/><path d="M-20 -12 L0 4 L20 -12" fill="none" stroke="var(--blue)" stroke-width="2"/>
-    <animateMotion dur="3.6s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.55;1" calcMode="spline" keySplines=".5 0 .3 1;0 0 1 1" path="M150 120 C 230 30, 330 30, 400 104"/></g>
-  <g transform="translate(360 104)"><path d="M0 0 h90 l-10 46 h-70 z" class="cx-tray"/><path d="M0 0 h28 l6 12 h22 l6 -12 h28" fill="none" stroke="var(--line)" stroke-width="2"/>
-    <g class="cx-badge" id="cxBadge" transform="translate(86 -6)"><circle r="12" fill="#e5484d"/><text id="cxBadgeN" y="4.5" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">1</text></g>
-    <text x="45" y="76" text-anchor="middle" class="cx-t">service@neighbourexpress.com</text></g>
-  <g class="cx-env2" id="cxEnv" opacity="0"><rect x="-20" y="-14" width="40" height="28" rx="3" fill="#fff" stroke="var(--green)" stroke-width="2"/><path d="M-20 -12 L0 4 L20 -12" fill="none" stroke="var(--green)" stroke-width="2"/></g>
-  <g transform="translate(206 150)" class="cx-chat"><rect width="92" height="34" rx="17" class="cx-bub"/><circle class="cx-dt" cx="30" cy="17" r="4"/><circle class="cx-dt" style="animation-delay:.18s" cx="46" cy="17" r="4"/><circle class="cx-dt" style="animation-delay:.36s" cx="62" cy="17" r="4"/></g>
-</svg>
+  <g class="cx-env"><rect x="-20" y="-14" width="40" height="28" rx="4" fill="#fff" stroke="#c9d3e3" stroke-width="1.2"/><path d="M-20 -11 L0 3 L20 -11" fill="none" stroke="#3b8a3e" stroke-width="2.2" stroke-linejoin="round"/><rect x="9" y="3" width="8" height="8" rx="1.5" fill="#2f4f93"/><animateMotion dur="3.6s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.55;1" calcMode="spline" keySplines=".5 0 .3 1;0 0 1 1" path="M150 120 C 230 30, 330 30, 400 104"/></g>
+  <g transform="translate(350 62)">
+    <rect width="156" height="122" rx="12" fill="url(#cxWin)" stroke="var(--line)" stroke-width="1.5"/>
+    <path d="M0 12 a12 12 0 0 1 12 -12 h132 a12 12 0 0 1 12 12 v10 h-156 z" fill="var(--bg-2)"/>
+    <circle cx="13" cy="11" r="3" fill="#e5484d"/><circle cx="23" cy="11" r="3" fill="#f2c94c"/><circle cx="33" cy="11" r="3" fill="#3b8a3e"/>
+    <text x="78" y="14.5" text-anchor="middle" class="cx-s4">Inbox</text>
+    <g class="cx-row cx-new"><rect x="8" y="30" width="140" height="28" rx="7" class="cx-rowbg"/><circle cx="20" cy="44" r="3.5" fill="#3b8a3e"/><rect x="30" y="37" width="58" height="5" rx="2.5" class="cx-ln1"/><rect x="30" y="46" width="96" height="4" rx="2" class="cx-ln2"/><text x="140" y="42" text-anchor="end" class="cx-s5">now</text></g>
+    <g class="cx-row"><rect x="30" y="68" width="46" height="5" rx="2.5" class="cx-ln1"/><rect x="30" y="77" width="88" height="4" rx="2" class="cx-ln2"/></g>
+    <g class="cx-row"><rect x="30" y="94" width="52" height="5" rx="2.5" class="cx-ln1"/><rect x="30" y="103" width="80" height="4" rx="2" class="cx-ln2"/></g>
+    <g class="cx-badge" id="cxBadge" transform="translate(152 2)"><circle r="12" fill="#e5484d" stroke="var(--surface)" stroke-width="3"/><text id="cxBadgeN" y="4.5" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">1</text></g>
+    <text x="78" y="150" text-anchor="middle" class="cx-t">service@neighbourexpress.com</text>
+  </g>
+  <g class="cx-env2" id="cxEnv" opacity="0"><rect x="-20" y="-14" width="40" height="28" rx="4" fill="#fff" stroke="#c9d3e3" stroke-width="1.2"/><path d="M-20 -11 L0 3 L20 -11" fill="none" stroke="#3b8a3e" stroke-width="2.2" stroke-linejoin="round"/><rect x="9" y="3" width="8" height="8" rx="1.5" fill="#2f4f93"/></g>
+  <g transform="translate(206 160)" class="cx-chat"><path d="M17 0 h58 a17 17 0 0 1 0 34 h-48 l-10 8 v-9 a17 17 0 0 1 0 -33z" class="cx-bub"/><circle class="cx-dt" cx="32" cy="17" r="4"/><circle class="cx-dt" style="animation-delay:.18s" cx="46" cy="17" r="4"/><circle class="cx-dt" style="animation-delay:.36s" cx="60" cy="17" r="4"/></g>
+</svg></div>
 <div class="ill-ctl"><button type="button" class="ctl" id="cxSend">Send a message</button><a class="ctl ctl-g" href="tel:+18006835708">Call 1-800-683-5708</a></div></div></div>
     <div class="ct-grid">
       <div class="ct-teams">
