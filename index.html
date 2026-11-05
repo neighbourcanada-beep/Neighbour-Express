@@ -2335,14 +2335,16 @@ function countUp(el){
     const COLS=[['#e2b47f','#cf9a62','#a9773f'],['#d9a873','#c08a54','#9c6c3a'],['#e8bd8a','#d6a46c','#ad7c47']];
     const N=6,SP=48,boxes=[];
     for(let i=0;i<N;i++)boxes.push({x:L+40-i*SP,w:20+(i%3)*4,d:18+(i%2)*3,h:15+(i%3)*3,c:COLS[i%3],z:0,vz:0,boost:0,tag:false,g:el('g',{class:'cv-p3'},null)});
-    let speed=34,paused=false,fast=false,sorted=0,phase=0,last=performance.now(),scanT=0;
+    let fitted=false,speed=34,paused=false,fast=false,sorted=0,phase=0,last=performance.now(),scanT=0;
     function drawBox(b){const g=b.g;g.innerHTML='';const x0=b.x-b.w/2,x1=b.x+b.w/2,y0=-b.d/2,y1=b.d/2,z0=BZ+b.z,z1=z0+b.h;
       cube(g,x0,x1,y0,y1,z0,z1,b.c[2],b.c[1],b.c[0]);
       poly(g,[[x0,-2.5,z1],[x1,-2.5,z1],[x1,2.5,z1],[x0,2.5,z1]],'#ecd2a3');poly(g,[[x0,y1,z1-5],[x1,y1,z1-5],[x1,y1,z1],[x0,y1,z1]],'#ecd2a3',{opacity:.0});
       poly(g,[[b.x+1,y1+.1,z0+3],[b.x+8,y1+.1,z0+3],[b.x+8,y1+.1,z0+9],[b.x+1,y1+.1,z0+9]],'#fff');poly(g,[[b.x+1,y1+.15,z0+7.5],[b.x+8,y1+.15,z0+7.5],[b.x+8,y1+.15,z0+9],[b.x+1,y1+.15,z0+9]],'#3b8a3e');
       if(b.x<T.x1+b.w/2)g.setAttribute('clip-path',`url(#${clipId})`);else g.removeAttribute('clip-path');g.style.display=x0>W.x0-2?'none':''}
     function frame(t){const dt=Math.min(.05,(t-last)/1000);last=t;
-      if(!paused&&sv.parentElement.offsetParent){const v=speed*(fast?2:1);phase=(phase+v*dt)%12;
+      const vis=!!sv.parentElement.offsetParent;
+      if(vis&&!fitted){try{const bb=sv.getBBox();if(bb.width>50){sv.setAttribute('viewBox',`${(bb.x-10).toFixed(0)} ${(bb.y-6).toFixed(0)} ${(bb.width+20).toFixed(0)} ${(bb.height+12).toFixed(0)}`);fitted=true}}catch(_){}}
+      if(!paused&&vis){const v=speed*(fast?2:1);phase=(phase+v*dt)%12;
         boxes.forEach(b=>{b.x-=(v+b.boost)*dt;if(b.z>0||b.vz){b.vz-=260*dt;b.z=Math.max(0,b.z+b.vz*dt);if(b.z===0)b.vz=0}
           if(b.x<T.x1-26){if(b.tag){sorted++;cnt.textContent=sorted;$('cvN2').textContent=sorted;cnt.animate([{transform:'scale(1.6)'},{transform:'none'}],{duration:300});b.tag=false}
             b.boost=0;const mx=Math.max(...boxes.map(o=>o.x));b.x=Math.max(L+40,mx+SP)}
@@ -2355,7 +2357,7 @@ function countUp(el){
       boxes.forEach(drawBox);const items=boxes.map(b=>({k:b.x+0,n:b.g}));items.push({k:GX+BW+8+2,n:nearG});items.push({k:1e6,n:wh});
       items.sort((a,b)=>a.k-b.k);items.forEach(i=>DY.appendChild(i.n));
       requestAnimationFrame(frame)}
-    requestAnimationFrame(t=>{frame(t);try{const bb=sv.getBBox();sv.setAttribute('viewBox',`${(bb.x-10).toFixed(0)} ${(bb.y-6).toFixed(0)} ${(bb.width+20).toFixed(0)} ${(bb.height+12).toFixed(0)}`)}catch(_){}});
+    requestAnimationFrame(frame);
     DY.addEventListener('pointerdown',e=>{const g=e.target.closest('.cv-p3');if(!g)return;const b=boxes.find(o=>o.g===g);if(!b||b.tag||b.x>L)return;b.tag=true;b.vz=110;b.boost=170});
     $('cvPause').addEventListener('click',e=>{paused=!paused;e.currentTarget.setAttribute('aria-pressed',paused);e.currentTarget.textContent=paused?'Start belt':'Pause belt'});
     $('cvFast').addEventListener('click',e=>{fast=!fast;e.currentTarget.setAttribute('aria-pressed',fast)});
