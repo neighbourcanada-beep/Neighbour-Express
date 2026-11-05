@@ -1045,6 +1045,15 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 .ghost.swap b,.ghost.swap span,.ghost.swap i{animation:fadeUp .45s var(--ease) both}
 .ghost.mini span,.ghost.mini i{display:none}.ghost.off{display:none}
 
+
+/* conveyor 3D */
+.cv3{overflow:visible}
+.cv-floor polyline{stroke:color-mix(in srgb,var(--blue) 12%,transparent);stroke-width:.8;fill:none}
+.cv-p3{cursor:pointer}
+.ill .cv-tk3{font:900 italic 7.5px var(--f-display);fill:#2f4f93;letter-spacing:.02em}
+.ill .cv-sign3{font:800 5.6px var(--f-mono);fill:#fff;letter-spacing:.06em}
+.ill .cv-scr3{font:700 6px var(--f-mono);letter-spacing:.06em}
+.cv-laser3{stroke:#e5484d;stroke-width:1.6;fill:none;filter:drop-shadow(0 0 3px #e5484d)}
 </style>
 
 <header class="nav">
@@ -1462,58 +1471,12 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 
 <!-- ABOUT -->
 <section class="alt" id="about" data-view="about">
-  <div class="wrap ph-strip"><div class="tk-card cv-card"><svg class="ill cv" viewBox="0 0 520 226" aria-hidden="true">
-  <defs>
-    <linearGradient id="cvWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfcfd"/><stop offset="1" stop-color="#e3e8ef"/></linearGradient>
-    <linearGradient id="cvRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4a66"/><stop offset="1" stop-color="#22304a"/></linearGradient>
-    <linearGradient id="cvRail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c6ced8"/><stop offset=".5" stop-color="#9aa5b2"/><stop offset="1" stop-color="#7d8896"/></linearGradient>
-    <linearGradient id="cvPil" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e7ecf2"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#cdd5de"/></linearGradient>
-    <linearGradient id="cvIn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1622"/><stop offset="1" stop-color="#2a3546"/></linearGradient>
-    <radialGradient id="cvSh"><stop offset="0" stop-color="#0f1a33" stop-opacity=".22"/><stop offset="1" stop-color="#0f1a33" stop-opacity="0"/></radialGradient>
-    <pattern id="cvHz" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="8" fill="#f2c94c"/><rect x="4" width="4" height="8" fill="#1b232c"/></pattern>
-  </defs>
-  <ellipse cx="270" cy="190" rx="250" ry="12" fill="url(#cvSh)"/>
-  <rect x="172" y="92" width="48" height="46" fill="url(#cvIn)"/>
-  <g class="cv-belt-g">
-    <rect x="22" y="160" width="6" height="30" rx="2" fill="#7d8896"/><rect x="226" y="160" width="6" height="30" rx="2" fill="#7d8896"/><rect x="424" y="160" width="6" height="30" rx="2" fill="#7d8896"/>
-    <rect x="18" y="138" width="418" height="8" rx="4" class="cv-belt"/>
-    <path class="cv-tread" d="M22 142 H432"/>
-    <rect x="16" y="144" width="422" height="16" rx="6" fill="url(#cvRail)"/>
-    <g transform="translate(34 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(60 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(86 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(112 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(138 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(164 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(190 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(216 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(242 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(268 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(294 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(320 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(346 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(372 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(398 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(424 151)"><g class="cv-r"><circle r="5.5"/><path d="M-5.5 0H5.5M0 -5.5V5.5"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g>
-  </g>
-<g class="cv-gate-back" pointer-events="none"><rect x="294" y="40" width="10" height="122" rx="3" fill="url(#cvPil)" stroke="var(--line)"/><rect x="348" y="40" width="10" height="122" rx="3" fill="url(#cvPil)" stroke="var(--line)"/></g>
-  <g class="cv-truck-in" pointer-events="none"><rect x="440" y="62" width="34" height="92" fill="url(#cvIn)"/><path d="M440 150 h34 v4 h-34 z" fill="#3a4656"/><path d="M450 70 v78" stroke="#ffffff" stroke-opacity=".06" stroke-width="6"/></g>
-  <g class="cv-lane"><g class="cv-b" style="--d:0.0s"><g class="cv-bi"><path d="M24 -34 l6 -5 v34 l-6 5 z" fill="#a9773f"/><rect x="-22" y="-34" width="46" height="34" rx="1.5" fill="#cf9a62"/><path d="M-22 -34 l6 -5 h46 l-6 5 z" fill="#e2b47f"/><rect x="-3.0" y="-34" width="8" height="34" fill="#ecd2a3" opacity=".9"/><rect x="12" y="-26" width="9" height="7" rx="1" fill="#fff"/><rect x="12" y="-26" width="9" height="2" fill="#3b8a3e"/></g></g><g class="cv-b" style="--d:-1.6s"><g class="cv-bi"><path d="M16 -28 l6 -5 v28 l-6 5 z" fill="#9c6c3a"/><rect x="-22" y="-28" width="38" height="28" rx="1.5" fill="#c08a54"/><path d="M-22 -28 l6 -5 h38 l-6 5 z" fill="#d9a873"/><rect x="-7.0" y="-28" width="8" height="28" fill="#ecd2a3" opacity=".9"/><rect x="4" y="-20" width="9" height="7" rx="1" fill="#fff"/><rect x="4" y="-20" width="9" height="2" fill="#3b8a3e"/></g></g><g class="cv-b" style="--d:-3.2s"><g class="cv-bi"><path d="M22 -30 l6 -5 v30 l-6 5 z" fill="#ad7c47"/><rect x="-22" y="-30" width="44" height="30" rx="1.5" fill="#d6a46c"/><path d="M-22 -30 l6 -5 h44 l-6 5 z" fill="#e8bd8a"/><rect x="-4.0" y="-30" width="8" height="30" fill="#ecd2a3" opacity=".9"/><rect x="10" y="-22" width="9" height="7" rx="1" fill="#fff"/><rect x="10" y="-22" width="9" height="2" fill="#3b8a3e"/></g></g><g class="cv-b" style="--d:-4.800000000000001s"><g class="cv-bi"><path d="M18 -36 l6 -5 v36 l-6 5 z" fill="#a9773f"/><rect x="-22" y="-36" width="40" height="36" rx="1.5" fill="#cf9a62"/><path d="M-22 -36 l6 -5 h40 l-6 5 z" fill="#e2b47f"/><rect x="-6.0" y="-36" width="8" height="36" fill="#ecd2a3" opacity=".9"/><rect x="6" y="-28" width="9" height="7" rx="1" fill="#fff"/><rect x="6" y="-28" width="9" height="2" fill="#3b8a3e"/></g></g><g class="cv-b" style="--d:-6.4s"><g class="cv-bi"><path d="M26 -28 l6 -5 v28 l-6 5 z" fill="#9c6c3a"/><rect x="-22" y="-28" width="48" height="28" rx="1.5" fill="#c08a54"/><path d="M-22 -28 l6 -5 h48 l-6 5 z" fill="#d9a873"/><rect x="-2.0" y="-28" width="8" height="28" fill="#ecd2a3" opacity=".9"/><rect x="14" y="-20" width="9" height="7" rx="1" fill="#fff"/><rect x="14" y="-20" width="9" height="2" fill="#3b8a3e"/></g></g></g>
-  <g class="cv-wh-g" pointer-events="none">
-    <path d="M18 138 V64 H262 V138 H222 V90 H170 V138 Z" fill="url(#cvWall)" stroke="var(--line)" stroke-width="1.5"/>
-    <path d="M10 66 L140 22 L270 66 Z" fill="url(#cvRoof)"/><path d="M10 66 L140 22 L270 66" fill="none" stroke="#3b8a3e" stroke-width="4" stroke-linejoin="round"/>
-    <rect x="72" y="46" width="136" height="20" rx="5" fill="#3b8a3e"/><text x="140" y="60" text-anchor="middle" class="cv-sign">NB · WAREHOUSE</text>
-    <rect x="40" y="80" width="16" height="10" rx="1.5" class="cv-win"/><rect x="62" y="80" width="16" height="10" rx="1.5" class="cv-win"/><rect x="206" y="80" width="16" height="10" rx="1.5" class="cv-win"/><rect x="228" y="80" width="16" height="10" rx="1.5" class="cv-win"/>
-    <rect x="170" y="90" width="52" height="5" fill="#9aa5b2"/>
-    <g fill="#c6ced8"><rect x="171" y="84" width="50" height="1.6"/><rect x="171" y="87" width="50" height="1.6"/></g>
-    <rect x="164" y="90" width="6" height="48" fill="url(#cvHz)"/><rect x="222" y="90" width="6" height="48" fill="url(#cvHz)"/>
-  </g>
-  <g class="cv-gate-g" pointer-events="none">
-        <rect x="288" y="30" width="76" height="22" rx="6" fill="#22304a"/>
-    <rect x="296" y="36" width="34" height="10" rx="2" fill="#0c1218"/><text x="313" y="43.6" text-anchor="middle" class="cv-scr">SCAN OK</text>
-    <circle class="cv-light" cx="346" cy="41" r="4.5"/>
-    <rect x="304" y="54" width="44" height="3" class="cv-scan"/>
-  </g>
-  <g class="cv-truck" pointer-events="none">
-    
-    <path d="M474 58 H540 V164 H474 Z" fill="#fbfcfd" stroke="#c6ced8" stroke-width="1.2"/>
-    <path d="M474 120 C500 104 520 104 540 110 V164 H474 Z" fill="#3b8a3e"/><path d="M474 136 C498 120 520 118 540 124 V140 C520 134 500 136 474 150 Z" fill="#2f4f93"/>
-    <path d="M478 112 l8 -6 6 4 12 -10" fill="none" stroke="#2f4f93" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="507" y="92" text-anchor="middle" class="cv-tk">NB</text>
-    <rect x="442" y="56" width="34" height="6" rx="2" fill="#9aa5b2"/><rect x="470" y="58" width="6" height="106" fill="#9aa5b2"/><rect x="476" y="62" width="22" height="96" rx="1.5" fill="#e8edf3" stroke="#b9c3d0" stroke-width="1.2"/><path d="M481 70 v80" stroke="#c8d1dc" stroke-width="2"/><rect x="494" y="104" width="2.5" height="12" rx="1" fill="#9aa5b2"/>
-    <rect x="440" y="160" width="40" height="7" rx="2" fill="#2a3340"/><rect x="442" y="160" width="5" height="4" rx="1" fill="#e5484d"/>
-    <rect x="474" y="164" width="66" height="6" fill="#2a3340"/>
-    <g transform="translate(506 176)"><circle r="14" fill="#1b232c"/><circle r="6.5" fill="#c9d1dc"/><circle r="2" fill="#1b232c"/></g>
-    <g transform="translate(468 30)"><rect x="-17" y="-12" width="34" height="22" rx="11" fill="var(--surface)" stroke="#3b8a3e" stroke-width="2"/><text y="4" text-anchor="middle" class="cv-t3" id="cvN">0</text></g>
-  </g>
-  <text x="502" y="218" text-anchor="end" class="cv-t2">SORTING CENTRE · GTA &amp; GREATER VANCOUVER</text>
+  <div class="wrap ph-strip"><div class="tk-card cv-card"><svg class="ill cv cv3" id="cvSvg" viewBox="0 0 520 300" aria-hidden="true">
+  <defs><pattern id="cvHz3" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="6" fill="#f2c94c"/><rect x="3" width="3" height="6" fill="#1b232c"/></pattern>
+  <linearGradient id="cvInG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c121b"/><stop offset="1" stop-color="#26303e"/></linearGradient></defs>
+  <g id="cvStatic"></g><g id="cvDyn"></g><g id="cvTop"></g>
 </svg></div>
-<div class="ill-ctl"><button type="button" class="ctl" id="cvPause" aria-pressed="false">Pause belt</button><button type="button" class="ctl" id="cvFast" aria-pressed="false">Speed ×2</button><span class="ctl-n">Tap a parcel to sort it · Sorted: <b id="cvN2">0</b></span></div></div>
+<div class="ill-ctl"><button type="button" class="ctl" id="cvPause" aria-pressed="false">Pause belt</button><button type="button" class="ctl" id="cvFast" aria-pressed="false">Speed ×2</button><span class="ctl-n">Tap a parcel to load it · Loaded: <b id="cvN2">0</b></span></div></div>
   <div class="wrap about">
     <div class="about-copy">
       <div class="eyebrow">About us</div>
@@ -2310,16 +2273,93 @@ function countUp(el){
       setTimeout(()=>{tsv.classList.add('aim');const go=t=>{if(t0===null)t0=t;const q=Math.min(1,(t-t0)/900),e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;aim(P[0][0]+(P[1][0]-P[0][0])*e,P[0][1]+(P[1][1]-P[0][1])*e);
         if(q<1)requestAnimationFrame(go);else{ring.animate([{strokeDashoffset:100},{strokeDashoffset:0}],{duration:400}).finished.then(()=>{beep();setTimeout(()=>{if(!tsv.matches(':hover'))tsv.classList.remove('aim')},500)})}};requestAnimationFrame(go)},900)};
   }
-  // conveyor: pause, speed, tap a parcel to sort it
-  const cvA=()=>[...document.querySelectorAll('.cv-b')].flatMap(b=>b.getAnimations());let sorted=0,fast=false;
-  if($('cvPause')){$('cvPause').addEventListener('click',e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',on);e.currentTarget.textContent=on?'Start belt':'Pause belt';
-      document.querySelector('.ill.cv').classList.toggle('cv-paused',on);cvA().forEach(a=>on?a.pause():a.play());document.querySelectorAll('.cv-r').forEach(()=>{});const sv=document.querySelector('.ill.cv');on?sv.pauseAnimations():sv.unpauseAnimations()});
-    $('cvFast').addEventListener('click',e=>{fast=!fast;e.currentTarget.setAttribute('aria-pressed',fast);cvA().forEach(a=>a.updatePlaybackRate(fast?2:1))});
-    document.addEventListener('click',e=>{const b=e.target.closest('.cv-b');if(!b||b.dataset.gone)return;b.dataset.gone=1;const inner=b.querySelector('.cv-bi');
-      const m=new DOMMatrix(getComputedStyle(b).transform),bx=m.e,by=m.f,tx=460-bx,ty=150-by;
-      inner.animate([{transform:'translate(0,0)'},{transform:`translate(${tx*.5}px,${ty-60}px) rotate(-12deg)`,offset:.5},{transform:`translate(${tx}px,${ty}px) scale(.5)`,opacity:1,offset:.9},{transform:`translate(${tx}px,${ty}px) scale(.3)`,opacity:0}],{duration:650,easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'}).finished.then(()=>{
-        sorted++;$('cvN').textContent=sorted;$('cvN2').textContent=sorted;$('cvN').animate([{transform:'scale(1.6)'},{transform:'none'}],{duration:300});
-        setTimeout(()=>{inner.getAnimations().forEach(a=>a.cancel());delete b.dataset.gone},1800)})})}
+  // conveyor (isometric 3D): parcels leave the warehouse, pass the scan gate and load into the truck
+  (function(){const sv=$('cvSvg');if(!sv)return;const NS='http://www.w3.org/2000/svg',K=.78,C=Math.cos(Math.PI/6)*K,S=.5*K,OX=250,OY=120;
+    const P=(x,y,z)=>[OX+(x-y)*C,OY+(x+y)*S-z*K],pt=a=>a.map(p=>P(...p).map(v=>v.toFixed(1)).join(',')).join(' ');
+    const el=(tag,at,par)=>{const n=document.createElementNS(NS,tag);for(const k in at)n.setAttribute(k,at[k]);if(par)par.appendChild(n);return n};
+    const poly=(par,pts,fill,extra={})=>el('polygon',Object.assign({points:pt(pts),fill},extra),par);
+    // a box: x0..x1, y0..y1, z0..z1; visible faces +x, +y, +z
+    const cube=(par,x0,x1,y0,y1,z0,z1,cx,cy,cz,stroke)=>{const st=stroke?{stroke,'stroke-width':.8,'stroke-linejoin':'round'}:{};
+      poly(par,[[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[x1,y0,z1]],cx,st);poly(par,[[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]],cy,st);poly(par,[[x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1]],cz,st)};
+    const faceText=(par,txt,x,y,z,face,cls)=>{const [ex,ey]=P(x,y,z);const m=face==='y'?`matrix(${C},${S},0,${K},${ex},${ey})`:`matrix(${C},${-S},0,${K},${ex},${ey})`;const t=el('text',{transform:m,class:cls,'text-anchor':'middle'},par);t.textContent=txt;return t};
+    const ST=$('cvStatic'),DY=$('cvDyn'),TOP=$('cvTop');
+    const L=250,BW=16,BZ=30,GX=120,BELT=[0,L];
+    // floor grid
+    const fg=el('g',{class:'cv-floor'},ST);for(let i=-120;i<=360;i+=30)el('polyline',{points:pt([[i,-70,0],[i,70,0]])},fg);for(let j=-60;j<=60;j+=30)el('polyline',{points:pt([[-130,j,0],[360,j,0]])},fg);
+    // shadow
+    poly(ST,[[-110,-34,0],[345,-34,0],[345,50,0],[-110,50,0]],'rgba(15,26,51,.06)');
+    // truck (back-left): rear faces +x toward the belt, open
+    const T={x0:-110,x1:-2,y0:-26,y1:26,z0:12,z1:78},TO={y0:-19,y1:19,z0:BZ,z1:70};
+    const truck=el('g',{class:'cv-truck3'},ST);
+    [[-90,-26],[-30,-26]].forEach(([x])=>{const [wx,wy]=P(x,T.y1,12);el('ellipse',{cx:wx,cy:wy,rx:11,ry:12,fill:'#1b232c'},truck);el('ellipse',{cx:wx,cy:wy,rx:4.5,ry:5,fill:'#c9d1dc'},truck)});
+    cube(truck,T.x0,T.x1,T.y0,T.y1,T.z0,T.z1,'#e3e8ef','#fbfcfd','#eef2f6','#c6ced8');
+    // side livery on +y face
+    poly(truck,[[T.x0,T.y1,T.z0],[T.x1,T.y1,T.z0],[T.x1,T.y1,32],[-40,T.y1,46],[T.x0,T.y1,40]],'#3b8a3e');
+    poly(truck,[[T.x0,T.y1,40],[-40,T.y1,46],[T.x1,T.y1,32],[T.x1,T.y1,26],[-40,T.y1,38],[T.x0,T.y1,32]],'#2f4f93');
+    faceText(truck,'NEIGHBOUR EXPRESS',-56,T.y1,60,'y','cv-tk3');
+    // opening in the rear face
+    poly(truck,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1,TO.y1,TO.z1],[T.x1,TO.y0,TO.z1]],'url(#cvInG)');
+    poly(truck,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1-28,TO.y1,TO.z0],[T.x1-28,TO.y0,TO.z0]],'#3a4656',{opacity:.0});
+    // doors folded flat against the sides
+    poly(truck,[[T.x1-1,T.y1+.5,TO.z0],[T.x1-1,T.y1+.5,TO.z1],[T.x1-24,T.y1+.5,TO.z1],[T.x1-24,T.y1+.5,TO.z0]],'#e8edf3',{stroke:'#b9c3d0','stroke-width':.8});
+    // bumper + lights
+    cube(truck,T.x1-2,T.x1+3,T.y0,T.y1,8,13,'#2a3340','#323c4a','#3a4656');
+    [[T.y0+3],[T.y1-5]].forEach(([y])=>poly(truck,[[T.x1+.2,y,16],[T.x1+.2,y+2,16],[T.x1+.2,y+2,22],[T.x1+.2,y,22]],'#e5484d'));
+    const clipId='cvTruckOpen';const cp=el('clipPath',{id:clipId},sv.querySelector('defs'));poly(cp,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1,TO.y1,TO.z1],[T.x1,TO.y0,TO.z1]],'#000');
+    // counter bubble above the truck
+    const [bx,by]=P(-56,0,T.z1+26);const bub=el('g',{transform:`translate(${bx} ${by})`,class:'cv-bub3'},TOP);el('rect',{x:-19,y:-12,width:38,height:22,rx:11,fill:'var(--surface)',stroke:'#3b8a3e','stroke-width':2},bub);const cnt=el('text',{y:4,'text-anchor':'middle',class:'cv-t3',id:'cvN'},bub);cnt.textContent='0';
+    // far gate pillar
+    const pil=(y,par)=>cube(par,GX-4,GX+4,y-3,y+3,0,92,'#cdd5de','#f4f6f9','#ffffff','#b9c3d0');
+    pil(-BW-8,ST);
+    // belt: legs, frame, surface
+    const belt=el('g',{},ST);[[8],[L/2],[L-8]].forEach(([x])=>{cube(belt,x-2,x+2,BW-4,BW,0,BZ-6,'#7d8896','#8e99a7','#9aa5b2');cube(belt,x-2,x+2,-BW,-BW+4,0,BZ-6,'#7d8896','#8e99a7','#9aa5b2')});
+    cube(belt,0,L,-BW,BW,BZ-6,BZ,'#7d8896','#a9b3bf','#1f2733');
+    const tread=el('g',{class:'cv-tread3'},ST);
+    // near pillar and beam are drawn with the parcels (depth sorted) / on top
+    const near={x:GX,y:BW+8},nearG=el('g',{},null);pil(BW+8,nearG);
+    const beam=el('g',{},TOP);cube(beam,GX-5,GX+5,-BW-11,BW+11,92,104,'#22304a','#2a3a58','#33466a');
+    const [sx,sy]=P(GX+5,0,98);const scr=el('g',{transform:`matrix(${C},${-S},0,${K},${sx},${sy})`},beam);el('rect',{x:-17,y:-5,width:34,height:10,rx:1.5,fill:'#0c1218'},scr);const scT=el('text',{x:0,y:2.6,'text-anchor':'middle',class:'cv-scr3'},scr);scT.textContent='SCAN OK';
+    const laser=el('polyline',{class:'cv-laser3'},TOP);
+    // warehouse (front-right), boxes come out of its far side
+    const W={x0:L+6,x1:L+96,y0:-46,y1:46,z0:0,z1:88};const wh=el('g',{class:'cv-wh3'},null);
+    cube(wh,W.x0,W.x1,W.y0,W.y1,W.z0,W.z1,'#e6ebf1','#f8fafc','#3a4a66','#c6ced8');
+    poly(wh,[[W.x0,W.y1,W.z1-4],[W.x1,W.y1,W.z1-4],[W.x1,W.y1,W.z1],[W.x0,W.y1,W.z1]],'#3b8a3e');
+    poly(wh,[[W.x1,W.y0,W.z1-4],[W.x1,W.y1,W.z1-4],[W.x1,W.y1,W.z1],[W.x1,W.y0,W.z1]],'#3b8a3e');
+    poly(wh,[[W.x0+16,W.y1,46],[W.x1-16,W.y1,46],[W.x1-16,W.y1,62],[W.x0+16,W.y1,62]],'#3b8a3e');
+    faceText(wh,'NB · WAREHOUSE',(W.x0+W.x1)/2,W.y1,52,'y','cv-sign3');
+    for(let i=0;i<3;i++){const x=W.x0+14+i*24;poly(wh,[[x,W.y1,22],[x+14,W.y1,22],[x+14,W.y1,32],[x,W.y1,32]],'#cfe0f5',{stroke:'#9fb3cc','stroke-width':.6})}
+    // roll-up door on the +x face (for trucks at the front)
+    poly(wh,[[W.x1,-22,0],[W.x1,22,0],[W.x1,22,40],[W.x1,-22,40]],'#c6ced8');for(let z=4;z<40;z+=5)el('polyline',{points:pt([[W.x1+.2,-22,z],[W.x1+.2,22,z]]),stroke:'#aab4c0','stroke-width':.8,fill:'none'},wh);
+    poly(wh,[[W.x1+.3,-26,0],[W.x1+.3,-22,0],[W.x1+.3,-22,40],[W.x1+.3,-26,40]],'url(#cvHz3)');poly(wh,[[W.x1+.3,22,0],[W.x1+.3,26,0],[W.x1+.3,26,40],[W.x1+.3,22,40]],'url(#cvHz3)');
+    // parcels
+    const COLS=[['#e2b47f','#cf9a62','#a9773f'],['#d9a873','#c08a54','#9c6c3a'],['#e8bd8a','#d6a46c','#ad7c47']];
+    const N=6,SP=48,boxes=[];
+    for(let i=0;i<N;i++)boxes.push({x:L+40-i*SP,w:20+(i%3)*4,d:18+(i%2)*3,h:15+(i%3)*3,c:COLS[i%3],z:0,vz:0,boost:0,tag:false,g:el('g',{class:'cv-p3'},null)});
+    let speed=34,paused=false,fast=false,sorted=0,phase=0,last=performance.now(),scanT=0;
+    function drawBox(b){const g=b.g;g.innerHTML='';const x0=b.x-b.w/2,x1=b.x+b.w/2,y0=-b.d/2,y1=b.d/2,z0=BZ+b.z,z1=z0+b.h;
+      cube(g,x0,x1,y0,y1,z0,z1,b.c[2],b.c[1],b.c[0]);
+      poly(g,[[x0,-2.5,z1],[x1,-2.5,z1],[x1,2.5,z1],[x0,2.5,z1]],'#ecd2a3');poly(g,[[x0,y1,z1-5],[x1,y1,z1-5],[x1,y1,z1],[x0,y1,z1]],'#ecd2a3',{opacity:.0});
+      poly(g,[[b.x+1,y1+.1,z0+3],[b.x+8,y1+.1,z0+3],[b.x+8,y1+.1,z0+9],[b.x+1,y1+.1,z0+9]],'#fff');poly(g,[[b.x+1,y1+.15,z0+7.5],[b.x+8,y1+.15,z0+7.5],[b.x+8,y1+.15,z0+9],[b.x+1,y1+.15,z0+9]],'#3b8a3e');
+      if(b.x<T.x1+b.w/2)g.setAttribute('clip-path',`url(#${clipId})`);else g.removeAttribute('clip-path');g.style.display=x0>W.x0-2?'none':''}
+    function frame(t){const dt=Math.min(.05,(t-last)/1000);last=t;
+      if(!paused&&sv.parentElement.offsetParent){const v=speed*(fast?2:1);phase=(phase+v*dt)%12;
+        boxes.forEach(b=>{b.x-=(v+b.boost)*dt;if(b.z>0||b.vz){b.vz-=260*dt;b.z=Math.max(0,b.z+b.vz*dt);if(b.z===0)b.vz=0}
+          if(b.x<T.x1-26){if(b.tag){sorted++;cnt.textContent=sorted;$('cvN2').textContent=sorted;cnt.animate([{transform:'scale(1.6)'},{transform:'none'}],{duration:300});b.tag=false}
+            b.boost=0;const mx=Math.max(...boxes.map(o=>o.x));b.x=Math.max(L+40,mx+SP)}
+          if(Math.abs(b.x-GX)<3&&!b.scanned){b.scanned=1;scanT=t}if(b.x<GX-10)b.scanned=0})}
+      // tread lines
+      tread.innerHTML='';for(let x=-phase+12;x<L;x+=12)el('polyline',{points:pt([[x,-BW+1,BZ],[x,BW-1,BZ]]),stroke:'#3a4656','stroke-width':1.2},tread);
+      // laser sweeps; flashes when a parcel passes
+      const lz=BZ+4+((Math.sin(t/260)+1)/2)*56;laser.setAttribute('points',pt([[GX,-BW-8,lz],[GX,BW+8,lz]]));laser.style.opacity=t-scanT<400?1:.55;scT.style.fill=t-scanT<600?'#6be36a':'#4f8a55';
+      // depth-sort parcels, near pillar and warehouse
+      boxes.forEach(drawBox);const items=boxes.map(b=>({k:b.x+0,n:b.g}));items.push({k:GX+BW+8+2,n:nearG});items.push({k:1e6,n:wh});
+      items.sort((a,b)=>a.k-b.k);items.forEach(i=>DY.appendChild(i.n));
+      requestAnimationFrame(frame)}
+    requestAnimationFrame(t=>{frame(t);try{const bb=sv.getBBox();sv.setAttribute('viewBox',`${(bb.x-10).toFixed(0)} ${(bb.y-6).toFixed(0)} ${(bb.width+20).toFixed(0)} ${(bb.height+12).toFixed(0)}`)}catch(_){}});
+    DY.addEventListener('pointerdown',e=>{const g=e.target.closest('.cv-p3');if(!g)return;const b=boxes.find(o=>o.g===g);if(!b||b.tag||b.x>L)return;b.tag=true;b.vz=110;b.boost=170});
+    $('cvPause').addEventListener('click',e=>{paused=!paused;e.currentTarget.setAttribute('aria-pressed',paused);e.currentTarget.textContent=paused?'Start belt':'Pause belt'});
+    $('cvFast').addEventListener('click',e=>{fast=!fast;e.currentTarget.setAttribute('aria-pressed',fast)});
+  })();
   // contact: send a message into the inbox
   let unread=1;
   if($('cxSend'))$('cxSend').addEventListener('click',()=>{const env=$('cxEnv');const path='M150 120 C 230 30, 330 30, 400 104';env.style.offsetPath=`path('${path}')`;env.style.offsetRotate='0deg';
