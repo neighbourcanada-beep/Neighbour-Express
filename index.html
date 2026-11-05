@@ -576,7 +576,7 @@ body{padding-bottom:var(--gh)}
 .nw-n{opacity:0;animation:fadeIn .4s var(--d) forwards}
 .ill .nw-n text{fill:var(--ink)}
 @keyframes fadeIn{to{opacity:1}}
-.nw-truck{fill:var(--blue);stroke:#fff;stroke-width:2}
+.nw-van{pointer-events:none}
 /* tracking scan */
 .tk-no{font-size:8.5px!important;fill:#1b232c!important;letter-spacing:.04em}
 .tk-laser{fill:#e5484d;filter:drop-shadow(0 0 4px #e5484d);animation:tkScan 1.6s ease-in-out infinite alternate}
@@ -1055,7 +1055,16 @@ footer.ft .wrap{display:block}
   <rect width="520" height="210" rx="16" fill="url(#nwDots)"/>
   <path class="nw-land" d="M18 150 C40 96 90 70 150 52 C210 38 270 60 320 64 C370 68 420 70 470 84 C500 92 512 112 506 130 C480 170 430 186 380 184 C320 182 270 170 210 168 C150 166 80 176 18 150 Z"/>
   <path class="nw-l" style="--d:0.0s" d="M46 128 Q96 81 146 78"/><path class="nw-l" style="--d:0.25s" d="M46 128 Q92 104 138 120"/><path class="nw-l" style="--d:0.5s" d="M146 78 Q142 89 138 120"/><path class="nw-l" style="--d:0.75s" d="M138 120 Q265 83 392 158"/><path class="nw-l" style="--d:1.0s" d="M392 158 Q413 131 434 124"/><path class="nw-l" style="--d:1.25s" d="M434 124 Q454 108 474 112"/><path class="nw-l" style="--d:1.5s" d="M392 158 Q433 117 474 112"/>
-  <circle class="nw-truck" r="4.5"><animateMotion dur="5s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear" path="M46 128 Q92 104 138 120 Q265 60 392 158 Q413 130 434 124 Q454 108 474 112"/></circle>
+  <g class="nw-van"><g transform="translate(-13 -15)">
+    <ellipse cx="13" cy="15.5" rx="13" ry="2" fill="#0f1a33" opacity=".18"/>
+    <path d="M1 2.5 a1.5 1.5 0 0 1 1.5 -1.5 H17 V13 H1 Z" fill="#fff" stroke="#2f4f93" stroke-width="1.2"/>
+    <path d="M17 4 H21 L25 8.5 V13 H17 Z" fill="#fff" stroke="#2f4f93" stroke-width="1.2"/>
+    <path d="M18.5 5.3 H20.6 L23.2 8.4 H18.5 Z" fill="#2a3440"/>
+    <path d="M1.6 9 L9 5.5 L17 8.4 V11.2 L1.6 11.2 Z" fill="#3b8a3e"/>
+    <path d="M2 7.6 L9 4.2 L17 7" fill="none" stroke="#2f4f93" stroke-width="1.3"/>
+    <circle cx="5.5" cy="13.5" r="2.4" fill="#1b232c"/><circle cx="20.5" cy="13.5" r="2.4" fill="#1b232c"/>
+    <circle cx="5.5" cy="13.5" r=".9" fill="#c9d1dc"/><circle cx="20.5" cy="13.5" r=".9" fill="#c9d1dc"/></g>
+    <animateMotion dur="7s" repeatCount="indefinite" rotate="auto" calcMode="paced" path="M46 128 Q92 104 138 120 Q265 83 392 158 Q413 131 434 124 Q454 108 474 112"/></g>
   <g class="nw-n" data-city="yvr" style="--d:0.2s" transform="translate(46 128)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YVR</text></g><g class="nw-n" data-city="yyc" style="--d:0.38s" transform="translate(138 120)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="20" text-anchor="middle">YYC</text></g><g class="nw-n" data-city="yeg" style="--d:0.56s" transform="translate(146 78)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YEG</text></g><g class="nw-n" data-city="yyz" style="--d:0.74s" transform="translate(392 158)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YYZ</text></g><g class="nw-n" data-city="yow" style="--d:0.9199999999999999s" transform="translate(434 124)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YOW</text></g><g class="nw-n" data-city="yul" style="--d:1.0999999999999999s" transform="translate(474 112)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YUL</text></g>
 </svg><p class="ill-tip">Tap a city on the map to open it below.</p></div></div>
     <div class="filter" role="group" aria-label="Filter cities by service">
