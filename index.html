@@ -638,7 +638,7 @@ body{padding-bottom:var(--gh)}
 .tk-s{cursor:pointer}
 .tk-s.on rect{stroke:var(--green)}.tk-s.on .tk-sc{fill:var(--green)}.tk-s.on .tk-ck{stroke-dashoffset:0}
 .tk-s .tk-ck{transition:stroke-dashoffset .3s}.tk-s rect,.tk-s .tk-sc{transition:fill .25s,stroke .25s}
-.tk-box{cursor:pointer}
+.tk-box{cursor:pointer;transform-box:fill-box;transform-origin:50% 100%}
 .cv-b{cursor:pointer}
 .cv-bin{fill:var(--surface);stroke:var(--green);stroke-width:2}
 .ill .cv-t3{font-size:14px;fill:var(--green)}
@@ -1041,9 +1041,9 @@ footer.ft .wrap{display:block}
       <p>Each service has its own milestones, so choose the service first.</p>
     </div><div class="ph-ill"><svg class="ill tk" viewBox="0 0 520 210" aria-hidden="true">
   <g class="tk-box"><path d="M150 70 L260 42 L370 70 L370 150 L260 178 L150 150 Z" fill="#c8915a"/><path d="M150 70 L260 98 L370 70" fill="none" stroke="#a87443" stroke-width="2"/><path d="M260 98 V178" stroke="#a87443" stroke-width="2"/>
-    <rect x="160" y="84" width="92" height="48" rx="3" fill="#fff" transform="skewY(14) translate(0 -52)"/></g>
+    <rect x="160" y="84" width="92" height="48" rx="3" fill="#fff" transform="skewY(14) translate(0 -52)"/>
   <g transform="skewY(14) translate(0 -52)"><rect x="172" y="92" width="2" height="30" fill="#1b232c"/><rect x="176" y="92" width="1" height="30" fill="#1b232c"/><rect x="179" y="92" width="3" height="30" fill="#1b232c"/><rect x="184" y="92" width="1" height="30" fill="#1b232c"/><rect x="187" y="92" width="2" height="30" fill="#1b232c"/><rect x="191" y="92" width="1" height="30" fill="#1b232c"/><rect x="194" y="92" width="3" height="30" fill="#1b232c"/><rect x="199" y="92" width="2" height="30" fill="#1b232c"/><rect x="203" y="92" width="1" height="30" fill="#1b232c"/><rect x="206" y="92" width="3" height="30" fill="#1b232c"/><rect x="211" y="92" width="1" height="30" fill="#1b232c"/><rect x="214" y="92" width="2" height="30" fill="#1b232c"/><rect x="218" y="92" width="1" height="30" fill="#1b232c"/><rect x="221" y="92" width="3" height="30" fill="#1b232c"/><rect x="226" y="92" width="2" height="30" fill="#1b232c"/><rect x="230" y="92" width="1" height="30" fill="#1b232c"/><rect x="233" y="92" width="2" height="30" fill="#1b232c"/><text x="206" y="130" text-anchor="middle" class="tk-no">NB2610060188</text>
-    <rect class="tk-laser" x="164" y="88" width="84" height="3" rx="1.5"/></g>
+    <rect class="tk-laser" x="164" y="88" width="84" height="3" rx="1.5"/></g></g>
   <g class="tk-gun"><path d="M402 34 h70 a10 10 0 0 1 10 10 v14 a10 10 0 0 1 -10 10 h-30 l-10 34 h-16 l6 -34 h-20 a10 10 0 0 1 -10 -10 v-14 a10 10 0 0 1 10 -10 z" fill="#2a3440"/><rect x="394" y="46" width="8" height="10" fill="#e5484d"/>
     <path class="tk-beam" d="M394 51 L252 120 L252 150 Z" fill="#e5484d" opacity=".18"/></g>
   <g class="tk-s" data-tk="0" transform="translate(18 168)"><rect width="104" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Picked up</text></g><g class="tk-s" data-tk="1" transform="translate(132 168)"><rect width="84" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Sorted</text></g><g class="tk-s" data-tk="2" transform="translate(226 168)"><rect width="146" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Out for delivery</text></g><g class="tk-s" data-tk="3" transform="translate(382 168)"><rect width="100" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Delivered</text></g>
@@ -1919,7 +1919,7 @@ function countUp(el){
   const pills=[...document.querySelectorAll('.tk-s')];let stage=0;
   const setStage=k=>{stage=k;pills.forEach((p,i)=>p.classList.toggle('on',i<k))};
   const scan=()=>{const l=document.querySelector('.tk-laser');l&&l.animate([{fill:'#fff'},{fill:'#e5484d'}],{duration:300,iterations:2});
-    const b=document.querySelector('.tk-box');b&&b.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:300});setStage(stage>=pills.length?1:stage+1)};
+    const b=document.querySelector('.tk-box');b&&b.animate([{transform:'translateY(0)'},{transform:'translateY(-10px) rotate(-2deg)'},{transform:'translateY(2px)'},{transform:'translateY(0)'}],{duration:420,easing:'ease-out'});setStage(stage>=pills.length?1:stage+1)};
   window.__lkIn=()=>{const bx=$('lkBox');if(!bx||reduce)return;const st=$('lk3d');st.classList.add('lk-fade');bx.classList.remove('lk-enter');bx.classList.add('lk-pre');void bx.offsetWidth;
     requestAnimationFrame(()=>requestAnimationFrame(()=>{st.classList.remove('lk-fade');bx.classList.add('lk-enter');bx.classList.remove('lk-pre');setTimeout(()=>bx.classList.remove('lk-enter'),1400)}))};
   window.__tkAuto=()=>{setStage(0);[1,2,3,4].forEach(k=>setTimeout(()=>{if(stage===k-1)setStage(k)},600+k*800))};
