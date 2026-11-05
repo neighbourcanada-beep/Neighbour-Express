@@ -1054,7 +1054,8 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 .ill .cv-sign3{font:800 5.6px var(--f-mono);fill:#fff;letter-spacing:.06em}
 .ill .cv-scr3{font:700 6px var(--f-mono);letter-spacing:.06em}
 .cv-laser3{stroke:#e5484d;stroke-width:1.6;fill:none;filter:drop-shadow(0 0 3px #e5484d)}
-</style>
+.ill .cv-nb3{font:900 italic 7px var(--f-display);fill:#fff}
+.cv-card{max-width:980px!important}</style>
 
 <header class="nav">
   <div class="wrap">
@@ -2274,7 +2275,7 @@ function countUp(el){
         if(q<1)requestAnimationFrame(go);else{ring.animate([{strokeDashoffset:100},{strokeDashoffset:0}],{duration:400}).finished.then(()=>{beep();setTimeout(()=>{if(!tsv.matches(':hover'))tsv.classList.remove('aim')},500)})}};requestAnimationFrame(go)},900)};
   }
   // conveyor (isometric 3D): parcels leave the warehouse, pass the scan gate and load into the truck
-  (function(){const sv=$('cvSvg');if(!sv)return;const NS='http://www.w3.org/2000/svg',K=.78,C=Math.cos(Math.PI/6)*K,S=.5*K,OX=250,OY=120;
+  (function(){const sv=$('cvSvg');if(!sv)return;const NS='http://www.w3.org/2000/svg',K=.78,C=Math.cos(Math.PI/9)*K,S=Math.sin(Math.PI/9)*K,OX=250,OY=120;
     const P=(x,y,z)=>[OX+(x-y)*C,OY+(x+y)*S-z*K],pt=a=>a.map(p=>P(...p).map(v=>v.toFixed(1)).join(',')).join(' ');
     const el=(tag,at,par)=>{const n=document.createElementNS(NS,tag);for(const k in at)n.setAttribute(k,at[k]);if(par)par.appendChild(n);return n};
     const poly=(par,pts,fill,extra={})=>el('polygon',Object.assign({points:pt(pts),fill},extra),par);
@@ -2289,14 +2290,24 @@ function countUp(el){
     // shadow
     poly(ST,[[-110,-34,0],[345,-34,0],[345,50,0],[-110,50,0]],'rgba(15,26,51,.06)');
     // truck (back-left): rear faces +x toward the belt, open
-    const T={x0:-110,x1:-2,y0:-26,y1:26,z0:12,z1:78},TO={y0:-19,y1:19,z0:BZ,z1:70};
+    const T={x0:-100,x1:-2,y0:-26,y1:26,z0:12,z1:76},TO={y0:-19,y1:19,z0:BZ,z1:68};
     const truck=el('g',{class:'cv-truck3'},ST);
-    [[-90,-26],[-30,-26]].forEach(([x])=>{const [wx,wy]=P(x,T.y1,12);el('ellipse',{cx:wx,cy:wy,rx:11,ry:12,fill:'#1b232c'},truck);el('ellipse',{cx:wx,cy:wy,rx:4.5,ry:5,fill:'#c9d1dc'},truck)});
+    [[-134],[-82],[-30]].forEach(([x])=>{const [wx,wy]=P(x,T.y1,12);el('ellipse',{cx:wx,cy:wy,rx:11,ry:12,fill:'#1b232c'},truck);el('ellipse',{cx:wx,cy:wy,rx:4.5,ry:5,fill:'#c9d1dc'},truck)});
+    // cab
+    cube(truck,-146,T.x0,-24,24,14,58,'#e3e8ef','#ffffff','#eef2f6','#c6ced8');
+    poly(truck,[[-146,24.1,14],[T.x0,24.1,14],[T.x0,24.1,16.5],[-146,24.1,16.5]],'#7d8896');
+    poly(truck,[[-140,24.1,38],[-122,24.1,38],[-118,24.1,54],[-140,24.1,54]],'#2a3a52');
+    poly(truck,[[-139,24.2,39],[-124,24.2,39],[-121,24.2,46],[-139,24.2,46]],'rgba(255,255,255,.18)');
+    el('polyline',{points:pt([[-116,24.2,20],[-116,24.2,56]]),stroke:'#c6ced8','stroke-width':.8,fill:'none'},truck);
+    poly(truck,[[-146,24.2,26],[T.x0,24.2,26],[T.x0,24.2,31],[-146,24.2,31]],'#3b8a3e');
+    
+    cube(truck,-112,-108,22,26,46,50,'#2a3340','#2a3340','#3a4656');
+    poly(truck,[[-146,-24,16],[-146,24,16],[-146,24,22],[-146,-24,22]],'#2a3340');
     cube(truck,T.x0,T.x1,T.y0,T.y1,T.z0,T.z1,'#e3e8ef','#fbfcfd','#eef2f6','#c6ced8');
     // side livery on +y face
-    poly(truck,[[T.x0,T.y1,T.z0],[T.x1,T.y1,T.z0],[T.x1,T.y1,32],[-40,T.y1,46],[T.x0,T.y1,40]],'#3b8a3e');
-    poly(truck,[[T.x0,T.y1,40],[-40,T.y1,46],[T.x1,T.y1,32],[T.x1,T.y1,26],[-40,T.y1,38],[T.x0,T.y1,32]],'#2f4f93');
-    faceText(truck,'NEIGHBOUR EXPRESS',-56,T.y1,60,'y','cv-tk3');
+    poly(truck,[[T.x0,T.y1,T.z0],[T.x1,T.y1,T.z0],[T.x1,T.y1,30],[-40,T.y1,44],[T.x0,T.y1,38]],'#3b8a3e');
+    poly(truck,[[T.x0,T.y1,38],[-40,T.y1,44],[T.x1,T.y1,30],[T.x1,T.y1,24],[-40,T.y1,36],[T.x0,T.y1,30]],'#2f4f93');
+    faceText(truck,'NEIGHBOUR EXPRESS',-50,T.y1,60,'y','cv-tk3');
     // opening in the rear face
     poly(truck,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1,TO.y1,TO.z1],[T.x1,TO.y0,TO.z1]],'url(#cvInG)');
     poly(truck,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1-28,TO.y1,TO.z0],[T.x1-28,TO.y0,TO.z0]],'#3a4656',{opacity:.0});
@@ -2307,7 +2318,7 @@ function countUp(el){
     [[T.y0+3],[T.y1-5]].forEach(([y])=>poly(truck,[[T.x1+.2,y,16],[T.x1+.2,y+2,16],[T.x1+.2,y+2,22],[T.x1+.2,y,22]],'#e5484d'));
     const clipId='cvTruckOpen';const cp=el('clipPath',{id:clipId},sv.querySelector('defs'));poly(cp,[[T.x1,TO.y0,TO.z0],[T.x1,TO.y1,TO.z0],[T.x1,TO.y1,TO.z1],[T.x1,TO.y0,TO.z1]],'#000');
     // counter bubble above the truck
-    const [bx,by]=P(-56,0,T.z1+26);const bub=el('g',{transform:`translate(${bx} ${by})`,class:'cv-bub3'},TOP);el('rect',{x:-19,y:-12,width:38,height:22,rx:11,fill:'var(--surface)',stroke:'#3b8a3e','stroke-width':2},bub);const cnt=el('text',{y:4,'text-anchor':'middle',class:'cv-t3',id:'cvN'},bub);cnt.textContent='0';
+    const [bx,by]=P(-50,0,T.z1+24);const bub=el('g',{transform:`translate(${bx} ${by})`,class:'cv-bub3'},TOP);el('rect',{x:-19,y:-12,width:38,height:22,rx:11,fill:'var(--surface)',stroke:'#3b8a3e','stroke-width':2},bub);const cnt=el('text',{y:4,'text-anchor':'middle',class:'cv-t3',id:'cvN'},bub);cnt.textContent='0';
     // far gate pillar
     const pil=(y,par)=>cube(par,GX-4,GX+4,y-3,y+3,0,92,'#cdd5de','#f4f6f9','#ffffff','#b9c3d0');
     pil(-BW-8,ST);
@@ -2320,17 +2331,32 @@ function countUp(el){
     const beam=el('g',{},TOP);cube(beam,GX-5,GX+5,-BW-11,BW+11,92,104,'#22304a','#2a3a58','#33466a');
     const [sx,sy]=P(GX+5,0,98);const scr=el('g',{transform:`matrix(${C},${-S},0,${K},${sx},${sy})`},beam);el('rect',{x:-17,y:-5,width:34,height:10,rx:1.5,fill:'#0c1218'},scr);const scT=el('text',{x:0,y:2.6,'text-anchor':'middle',class:'cv-scr3'},scr);scT.textContent='SCAN OK';
     const laser=el('polyline',{class:'cv-laser3'},TOP);
-    // warehouse (front-right), boxes come out of its far side
-    const W={x0:L+6,x1:L+96,y0:-46,y1:46,z0:0,z1:88};const wh=el('g',{class:'cv-wh3'},null);
-    cube(wh,W.x0,W.x1,W.y0,W.y1,W.z0,W.z1,'#e6ebf1','#f8fafc','#3a4a66','#c6ced8');
-    poly(wh,[[W.x0,W.y1,W.z1-4],[W.x1,W.y1,W.z1-4],[W.x1,W.y1,W.z1],[W.x0,W.y1,W.z1]],'#3b8a3e');
-    poly(wh,[[W.x1,W.y0,W.z1-4],[W.x1,W.y1,W.z1-4],[W.x1,W.y1,W.z1],[W.x1,W.y0,W.z1]],'#3b8a3e');
-    poly(wh,[[W.x0+16,W.y1,46],[W.x1-16,W.y1,46],[W.x1-16,W.y1,62],[W.x0+16,W.y1,62]],'#3b8a3e');
-    faceText(wh,'NB · WAREHOUSE',(W.x0+W.x1)/2,W.y1,52,'y','cv-sign3');
-    for(let i=0;i<3;i++){const x=W.x0+14+i*24;poly(wh,[[x,W.y1,22],[x+14,W.y1,22],[x+14,W.y1,32],[x,W.y1,32]],'#cfe0f5',{stroke:'#9fb3cc','stroke-width':.6})}
-    // roll-up door on the +x face (for trucks at the front)
-    poly(wh,[[W.x1,-22,0],[W.x1,22,0],[W.x1,22,40],[W.x1,-22,40]],'#c6ced8');for(let z=4;z<40;z+=5)el('polyline',{points:pt([[W.x1+.2,-22,z],[W.x1+.2,22,z]]),stroke:'#aab4c0','stroke-width':.8,fill:'none'},wh);
-    poly(wh,[[W.x1+.3,-26,0],[W.x1+.3,-22,0],[W.x1+.3,-22,40],[W.x1+.3,-26,40]],'url(#cvHz3)');poly(wh,[[W.x1+.3,22,0],[W.x1+.3,26,0],[W.x1+.3,26,40],[W.x1+.3,22,40]],'url(#cvHz3)');
+    // warehouse (front-right): gabled roof, panelled walls, loading dock; boxes come out of its far side
+    const W={x0:L+6,x1:L+100,y0:-46,y1:46,z0:0,z1:58,zr:80};const wh=el('g',{class:'cv-wh3'},null);
+    // back roof slope (visible above the ridge), then walls, then front slope
+    poly(wh,[[W.x0-3,W.y0-4,W.z1-2],[W.x1,W.y0-4,W.z1-2],[W.x1,0,W.zr],[W.x0-3,0,W.zr]],'#2a3852');
+    poly(wh,[[W.x0,W.y1,0],[W.x1,W.y1,0],[W.x1,W.y1,W.z1],[W.x0,W.y1,W.z1]],'#f6f8fb',{stroke:'#c6ced8','stroke-width':.8});
+    for(let x=W.x0+8;x<W.x1;x+=8)el('polyline',{points:pt([[x,W.y1+.1,2],[x,W.y1+.1,W.z1-2]]),stroke:'#e2e7ee','stroke-width':.8,fill:'none'},wh);
+    poly(wh,[[W.x1,W.y0,0],[W.x1,W.y1,0],[W.x1,W.y1,W.z1],[W.x1,0,W.zr],[W.x1,W.y0,W.z1]],'#e7ecf2',{stroke:'#c6ced8','stroke-width':.8});
+    for(let y=W.y0+8;y<W.y1;y+=8)el('polyline',{points:pt([[W.x1+.1,y,2],[W.x1+.1,y,Math.min(W.z1,W.z1+(W.zr-W.z1)*(1-Math.abs(y)/W.y1))-2]]),stroke:'#d8dee7','stroke-width':.8,fill:'none'},wh);
+    // base stripe
+    poly(wh,[[W.x0,W.y1+.2,0],[W.x1,W.y1+.2,0],[W.x1,W.y1+.2,5],[W.x0,W.y1+.2,5]],'#2f4f93');poly(wh,[[W.x1+.2,W.y0,0],[W.x1+.2,W.y1,0],[W.x1+.2,W.y1,5],[W.x1+.2,W.y0,5]],'#2f4f93');
+    // front roof slope with overhang + green ridge
+    poly(wh,[[W.x0-3,W.y1+5,W.z1-2],[W.x1+3,W.y1+5,W.z1-2],[W.x1+3,0,W.zr],[W.x0-3,0,W.zr]],'#3a4c6e',{stroke:'#2a3852','stroke-width':.8});
+    for(let x=W.x0+4;x<W.x1;x+=7)el('polyline',{points:pt([[x,W.y1+4,W.z1-1],[x,1,W.zr-.5]]),stroke:'rgba(255,255,255,.08)','stroke-width':1.2,fill:'none'},wh);
+    poly(wh,[[W.x1+3,W.y1+5,W.z1-2],[W.x1+3,W.y1+5,W.z1+1],[W.x1+3,0,W.zr+3],[W.x1+3,0,W.zr]],'#3b8a3e');
+    poly(wh,[[W.x0-3,-1.5,W.zr],[W.x1+3,-1.5,W.zr],[W.x1+3,1.5,W.zr+1.5],[W.x0-3,1.5,W.zr+1.5]],'#3b8a3e');
+    // roof vents
+    [W.x0+22,W.x0+50,W.x0+78].forEach(x=>{const y=W.y1*.45,z=W.z1+(W.zr-W.z1)*(1-.45);cube(wh,x-3,x+3,y-3,y+3,z,z+5,'#9aa5b2','#b9c3d0','#d8dee7')});
+    // sign + windows on the long side
+    poly(wh,[[W.x0+12,W.y1+.3,38],[W.x1-12,W.y1+.3,38],[W.x1-12,W.y1+.3,50],[W.x0+12,W.y1+.3,50]],'#3b8a3e');
+    faceText(wh,'NB · WAREHOUSE',(W.x0+W.x1)/2,W.y1+.4,46.2,'y','cv-sign3');
+    for(let i=0;i<4;i++){const x=W.x0+10+i*20;poly(wh,[[x,W.y1+.3,16],[x+13,W.y1+.3,16],[x+13,W.y1+.3,28],[x,W.y1+.3,28]],'#bcd3ef',{stroke:'#8fa6c3','stroke-width':.7});el('polyline',{points:pt([[x+6.5,W.y1+.4,16],[x+6.5,W.y1+.4,28]]),stroke:'#8fa6c3','stroke-width':.6,fill:'none'},wh)}
+    // loading dock on the gable end: canopy, roll-up door, hazard posts, NB roundel
+    poly(wh,[[W.x1,-22,0],[W.x1,22,0],[W.x1,22,36],[W.x1,-22,36]],'#c6ced8');for(let z=4;z<36;z+=4.5)el('polyline',{points:pt([[W.x1+.2,-22,z],[W.x1+.2,22,z]]),stroke:'#aab4c0','stroke-width':.8,fill:'none'},wh);
+    poly(wh,[[W.x1+.3,-26,0],[W.x1+.3,-22,0],[W.x1+.3,-22,36],[W.x1+.3,-26,36]],'url(#cvHz3)');poly(wh,[[W.x1+.3,22,0],[W.x1+.3,26,0],[W.x1+.3,26,36],[W.x1+.3,22,36]],'url(#cvHz3)');
+    cube(wh,W.x1,W.x1+12,-30,30,38,41,'#2a3852','#33466a','#3a4c6e');
+    {const [cx,cy]=P(W.x1+.3,0,66);el('ellipse',{cx,cy,rx:8*C/K*K,ry:8*K,fill:'#3b8a3e',transform:`rotate(${(-Math.atan2(S,C)*180/Math.PI).toFixed(1)} ${cx} ${cy})`},wh);faceText(wh,'NB',W.x1+.4,0,63.3,'x','cv-nb3')}
     // parcels
     const COLS=[['#e2b47f','#cf9a62','#a9773f'],['#d9a873','#c08a54','#9c6c3a'],['#e8bd8a','#d6a46c','#ad7c47']];
     const N=6,SP=48,boxes=[];
