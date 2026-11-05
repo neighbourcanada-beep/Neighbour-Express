@@ -585,9 +585,9 @@ body{padding-bottom:var(--gh)}
 @keyframes tkGun{0%,100%{transform:translate(0,0)}50%{transform:translate(-6px,4px)}}
 .tk-beam{animation:tkBeam 1.6s ease-in-out infinite alternate}
 @keyframes tkBeam{from{opacity:.08}to{opacity:.24}}
-.tk-s rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5;animation:tkOn .01s var(--d) forwards}
-.tk-s .tk-sc{fill:var(--bg-2);animation:tkDot .3s var(--d) forwards}
-.tk-s .tk-ck{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:12;stroke-dashoffset:12;animation:tkCk .3s calc(var(--d) + .15s) forwards}
+.tk-s rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.tk-s .tk-sc{fill:var(--bg-2)}
+.tk-s .tk-ck{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:12;stroke-dashoffset:12}
 .ill .tk-s text{font-family:var(--f-body);font-size:12px;fill:var(--muted)}
 @keyframes tkOn{to{stroke:var(--green)}}
 @keyframes tkDot{to{fill:var(--green)}}
@@ -619,10 +619,33 @@ body{padding-bottom:var(--gh)}
 .cx-dt{fill:var(--muted);animation:cxDot 1s ease-in-out infinite}
 @keyframes cxDot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
 .ill .cx-t{font-size:11px}
+
+/* ===== interactive bits ===== */
+.ill-ctl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-top:12px}
+.ctl{font:700 14px var(--f-body);padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none;transition:border-color .2s,transform .15s,background .2s}
+.ctl:hover{border-color:var(--green)}.ctl:active{transform:scale(.96)}
+.ctl[aria-pressed="true"]{background:var(--green-soft);border-color:var(--green)}
+.ctl-g{background:var(--green);border-color:var(--green);color:var(--on-accent)}
+.ctl-n{font-size:14px;color:var(--muted)}.ctl-n b{color:var(--ink);font-family:var(--f-mono)}
+.ill-tip{text-align:center;font-size:13px;color:var(--muted);margin-top:8px}
+.lk-hit{cursor:pointer}.lk3d{cursor:grab}.lk3d:active{cursor:grabbing}
+.lk-manual .lk-parcel.pa,.lk-manual .lk-parcel.pb,.lk-manual #lkMouthA,.lk-manual #lkMouthB,.lk-manual .lk-ok,.lk-manual .lk-idle,.lk-manual .lk-led{animation:none}
+.lk-manual .lk-ok{opacity:0}
+.nw-n{cursor:pointer}.nw-hit{fill:transparent}
+.nw-n .nw-c{transition:r .2s,stroke-width .2s}
+.nw-n:hover .nw-c,.nw-n.sel .nw-c{stroke:var(--green);stroke-width:4}
+.nw-n.sel .nw-c{fill:var(--green)}
+.tk-s{cursor:pointer}
+.tk-s.on rect{stroke:var(--green)}.tk-s.on .tk-sc{fill:var(--green)}.tk-s.on .tk-ck{stroke-dashoffset:0}
+.tk-s .tk-ck{transition:stroke-dashoffset .3s}.tk-s rect,.tk-s .tk-sc{transition:fill .25s,stroke .25s}
+.tk-box{cursor:pointer}
+.cv-b{cursor:pointer}
+.cv-bin{fill:var(--surface);stroke:var(--green);stroke-width:2}
+.ill .cv-t3{font-size:14px;fill:var(--green)}
 /* ===== Smart Drop locker, 3D ===== */
 @media (min-width:901px){.ph-lk{grid-template-columns:minmax(0,1fr) minmax(0,520px)}}
 .lk3d{--lks:.86;position:relative;height:400px;perspective:1300px;perspective-origin:50% 30%;display:grid;place-items:center;touch-action:pan-y}
-.lk-box{--lks:inherit;--rx:-10deg;--ry:-30deg;position:relative;width:360px;height:300px;transform-style:preserve-3d;transform:scale(var(--lks,1)) translateY(0) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .5s cubic-bezier(.2,.7,.2,1);animation:lkIn 1.4s cubic-bezier(.2,.7,.2,1) backwards}
+.lk-box{--lks:inherit;--rx:-14deg;--ry:-32deg;position:relative;width:360px;height:300px;transform-style:preserve-3d;transform:scale(var(--lks,1)) translateY(0) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 @keyframes lkIn{from{transform:scale(var(--lks,1)) translateY(40px) rotateX(-4deg) rotateY(-80deg);opacity:0}to{transform:scale(var(--lks,1)) translateY(0) rotateX(var(--rx)) rotateY(var(--ry));opacity:1}}
 .lk-face{position:absolute;left:0;top:0;backface-visibility:hidden}
 .lk-face svg{display:block;width:100%;height:100%}
@@ -639,6 +662,18 @@ body{padding-bottom:var(--gh)}
 .lk-cap{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:14px;white-space:nowrap;box-shadow:0 10px 24px -18px rgba(15,26,51,.5)}
 .lk-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(59,138,62,.5);animation:lkDot 1.8s ease-out infinite}
 @keyframes lkDot{to{box-shadow:0 0 0 10px rgba(59,138,62,0)}}
+
+.cap-front{left:-6px;top:-18px;width:372px;height:18px;transform:translateZ(51px);background:linear-gradient(180deg,#5cc06b 0,#2f8a3e 22%,#22702f 70%,#185a24 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.25);border-radius:3px 3px 0 0}
+.cap-top{left:-6px;top:-51px;width:372px;height:102px;transform:rotateX(90deg) translateZ(18px)}
+.cap-side{top:-18px;width:102px;height:18px;left:129px;background:linear-gradient(180deg,#3e9a4c,#1d6428)}
+.cap-r{transform:rotateY(90deg) translateZ(186px);filter:none}
+.cap-l{transform:rotateY(-90deg) translateZ(186px)}
+.cap-side::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.18)}
+.lk-floor,.lk-cap{pointer-events:none}
+.ill-ctl{position:relative;z-index:2}
+.lk-box.lk-pre{transform:scale(var(--lks,1)) translateY(40px) rotateX(-4deg) rotateY(-80deg);transition:none}
+.lk3d.lk-fade{opacity:0}.lk3d{transition:opacity .5s}
+.lk-box.lk-enter{transition:transform 1.3s cubic-bezier(.2,.7,.2,1)}
 /* drop cycle: 6s, parcel A into the left cabinet, parcel B into the right one */
 .lk-parcel{opacity:0}
 .lk-parcel.pa{animation:lkPA 7s 1.2s cubic-bezier(.45,0,.3,1) infinite}
@@ -985,8 +1020,8 @@ footer.ft .wrap{display:block}
   <path class="nw-land" d="M18 150 C40 96 90 70 150 52 C210 38 270 60 320 64 C370 68 420 70 470 84 C500 92 512 112 506 130 C480 170 430 186 380 184 C320 182 270 170 210 168 C150 166 80 176 18 150 Z"/>
   <path class="nw-l" style="--d:0.0s" d="M46 128 Q96 81 146 78"/><path class="nw-l" style="--d:0.25s" d="M46 128 Q92 104 138 120"/><path class="nw-l" style="--d:0.5s" d="M146 78 Q142 89 138 120"/><path class="nw-l" style="--d:0.75s" d="M138 120 Q265 83 392 158"/><path class="nw-l" style="--d:1.0s" d="M392 158 Q413 131 434 124"/><path class="nw-l" style="--d:1.25s" d="M434 124 Q454 108 474 112"/><path class="nw-l" style="--d:1.5s" d="M392 158 Q433 117 474 112"/>
   <circle class="nw-truck" r="4.5"><animateMotion dur="5s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear" path="M46 128 Q92 104 138 120 Q265 60 392 158 Q413 130 434 124 Q454 108 474 112"/></circle>
-  <g class="nw-n" style="--d:0.2s" transform="translate(46 128)"><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YVR</text></g><g class="nw-n" style="--d:0.38s" transform="translate(138 120)"><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="20" text-anchor="middle">YYC</text></g><g class="nw-n" style="--d:0.56s" transform="translate(146 78)"><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YEG</text></g><g class="nw-n" style="--d:0.74s" transform="translate(392 158)"><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YYZ</text></g><g class="nw-n" style="--d:0.9199999999999999s" transform="translate(434 124)"><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YOW</text></g><g class="nw-n" style="--d:1.0999999999999999s" transform="translate(474 112)"><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YUL</text></g>
-</svg></div></div>
+  <g class="nw-n" data-city="yvr" style="--d:0.2s" transform="translate(46 128)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YVR</text></g><g class="nw-n" data-city="yyc" style="--d:0.38s" transform="translate(138 120)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="20" text-anchor="middle">YYC</text></g><g class="nw-n" data-city="yeg" style="--d:0.56s" transform="translate(146 78)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YEG</text></g><g class="nw-n" data-city="yyz" style="--d:0.74s" transform="translate(392 158)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YYZ</text></g><g class="nw-n" data-city="yow" style="--d:0.9199999999999999s" transform="translate(434 124)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YOW</text></g><g class="nw-n" data-city="yul" style="--d:1.0999999999999999s" transform="translate(474 112)"><circle class="nw-hit" r="18"/><circle class="nw-p" r="6"/><circle r="5.5" class="nw-c"/><text y="-12" text-anchor="middle">YUL</text></g>
+</svg><p class="ill-tip">Tap a city on the map to open it below.</p></div></div>
     <div class="filter" role="group" aria-label="Filter cities by service">
       <span>Show cities with</span>
       <button class="chip" data-filter="all" aria-pressed="true">All services</button>
@@ -1016,8 +1051,9 @@ footer.ft .wrap{display:block}
     <rect class="tk-laser" x="164" y="88" width="84" height="3" rx="1.5"/></g>
   <g class="tk-gun"><path d="M402 34 h70 a10 10 0 0 1 10 10 v14 a10 10 0 0 1 -10 10 h-30 l-10 34 h-16 l6 -34 h-20 a10 10 0 0 1 -10 -10 v-14 a10 10 0 0 1 10 -10 z" fill="#2a3440"/><rect x="394" y="46" width="8" height="10" fill="#e5484d"/>
     <path class="tk-beam" d="M394 51 L252 120 L252 150 Z" fill="#e5484d" opacity=".18"/></g>
-  <g class="tk-s" style="--d:1.2s" transform="translate(18 168)"><rect width="104" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Picked up</text></g><g class="tk-s" style="--d:2.1s" transform="translate(132 168)"><rect width="84" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Sorted</text></g><g class="tk-s" style="--d:3.0s" transform="translate(226 168)"><rect width="146" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Out for delivery</text></g><g class="tk-s" style="--d:3.9000000000000004s" transform="translate(382 168)"><rect width="100" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Delivered</text></g>
-</svg></div></div>
+  <g class="tk-s" data-tk="0" transform="translate(18 168)"><rect width="104" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Picked up</text></g><g class="tk-s" data-tk="1" transform="translate(132 168)"><rect width="84" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Sorted</text></g><g class="tk-s" data-tk="2" transform="translate(226 168)"><rect width="146" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Out for delivery</text></g><g class="tk-s" data-tk="3" transform="translate(382 168)"><rect width="100" height="30" rx="15"/><circle class="tk-sc" cx="16" cy="15" r="7"/><path class="tk-ck" d="M12.6 15.2l2.4 2.4 4.4-4.6"/><text x="28" y="19.5">Delivered</text></g>
+</svg>
+<div class="ill-ctl"><button type="button" class="ctl" id="tkScan">Scan the parcel</button><button type="button" class="ctl ctl-g" id="tkTry">Track NB2610060188</button></div></div></div>
     <div class="track">
       <form class="qt" id="trackForm" novalidate>
         <div class="seg" role="radiogroup" aria-label="Service">
@@ -1055,6 +1091,7 @@ footer.ft .wrap{display:block}
   <rect x="9" y="48" width="102" height="60" rx="3" fill="#fff" stroke="#dfe4dc"/>
   <rect x="20" y="60" width="80" height="4" rx="2" fill="#8d959c"/>
   <circle cx="20" cy="62" r="2.6" fill="#8d959c"/><circle cx="100" cy="62" r="2.6" fill="#8d959c"/>
+  <rect class="lk-hit" data-lk="0" x="9" y="48" width="102" height="60" fill="transparent"/>
   <rect class="lk-mouth" id="lkMouthA" x="22" y="64" width="76" height="0" fill="#1b232c"/>
   <text x="60" y="90" text-anchor="middle" font-family="Archivo,sans-serif" font-size="6.4" font-weight="800" fill="#2f8a3e">DROP PARCEL HERE ≫</text>
   <rect y="114" width="120" height="22" fill="#2f8a3e"/>
@@ -1095,6 +1132,7 @@ footer.ft .wrap{display:block}
   <rect x="9" y="48" width="102" height="60" rx="3" fill="#fff" stroke="#dfe4dc"/>
   <rect x="20" y="60" width="80" height="4" rx="2" fill="#8d959c"/>
   <circle cx="20" cy="62" r="2.6" fill="#8d959c"/><circle cx="100" cy="62" r="2.6" fill="#8d959c"/>
+  <rect class="lk-hit" data-lk="1" x="9" y="48" width="102" height="60" fill="transparent"/>
   <rect class="lk-mouth" id="lkMouthB" x="22" y="64" width="76" height="0" fill="#1b232c"/>
   <text x="60" y="90" text-anchor="middle" font-family="Archivo,sans-serif" font-size="6.4" font-weight="800" fill="#2f8a3e">DROP PARCEL HERE ≫</text>
   <rect y="114" width="120" height="22" fill="#2f8a3e"/>
@@ -1109,6 +1147,7 @@ footer.ft .wrap{display:block}
   <rect width="120" height="300" fill="none" stroke="#2f8a3e" stroke-width="2"/>
 </g>
   <rect width="360" height="300" fill="none" stroke="#24702f" stroke-width="2.5"/>
+  <defs><linearGradient id="lkSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs><rect width="360" height="10" fill="url(#lkSh)"/>
   <g class="lk-parcel pa"><rect x="-15" y="-11" width="30" height="22" rx="2" fill="#c8915a"/><path d="M-15 -3 H15" stroke="#a87443" stroke-width="1.2"/><rect x="-4" y="-11" width="8" height="22" fill="#e2c08f"/><rect x="5" y="2" width="8" height="6" fill="#fff"/></g><g class="lk-parcel pb"><rect x="-15" y="-11" width="30" height="22" rx="2" fill="#c8915a"/><path d="M-15 -3 H15" stroke="#a87443" stroke-width="1.2"/><rect x="-4" y="-11" width="8" height="22" fill="#e2c08f"/><rect x="5" y="2" width="8" height="6" fill="#fff"/></g>
 </svg></div>
     <div class="lk-face lk-back"></div>
@@ -1116,9 +1155,18 @@ footer.ft .wrap{display:block}
     <div class="lk-face lk-left"><svg viewBox="0 0 90 300" preserveAspectRatio="none"><rect width="90" height="300" fill="#e3e8e1"/><rect width="90" height="40" fill="#2f8a3e"/><rect y="114" width="90" height="22" fill="#2f8a3e"/><path d="M0 222 L90 184 L90 204 L0 246 Z" fill="#1d2f6b"/><path d="M0 246 L90 204 L90 300 L0 300 Z" fill="#2f8a3e"/><rect width="90" height="300" fill="none" stroke="#24702f" stroke-width="2"/></svg></div>
     <div class="lk-face lk-top"></div>
     <div class="lk-face lk-bottom"></div>
+    <div class="lk-face cap-front"></div>
+    <div class="lk-face cap-top"><svg viewBox="0 0 372 102" preserveAspectRatio="none"><defs><linearGradient id="lkTopG" x1="0" x2="1"><stop offset="0" stop-color="#c9d1c6"/><stop offset=".35" stop-color="#f6f8f5"/><stop offset=".6" stop-color="#e3e8e0"/><stop offset="1" stop-color="#bfc8bc"/></linearGradient><pattern id="lkBrush" width="372" height="3" patternUnits="userSpaceOnUse"><rect width="372" height="1" fill="#fff" opacity=".35"/></pattern></defs><rect width="372" height="102" fill="url(#lkTopG)"/><rect width="372" height="102" fill="url(#lkBrush)"/>
+<rect x="3" y="3" width="366" height="96" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="2"/><rect x="0.5" y="0.5" width="371" height="101" fill="none" stroke="#9aa59a"/>
+<g fill="#7d887d"><rect x="150" y="34" width="8" height="34" rx="4"/><rect x="164" y="34" width="8" height="34" rx="4"/><rect x="178" y="34" width="8" height="34" rx="4"/><rect x="192" y="34" width="8" height="34" rx="4"/><rect x="206" y="34" width="8" height="34" rx="4"/><rect x="220" y="34" width="8" height="34" rx="4"/></g><g fill="#fff" opacity=".6"><rect x="150" y="34" width="8" height="3" rx="1.5"/><rect x="164" y="34" width="8" height="3" rx="1.5"/><rect x="178" y="34" width="8" height="3" rx="1.5"/><rect x="192" y="34" width="8" height="3" rx="1.5"/><rect x="206" y="34" width="8" height="3" rx="1.5"/><rect x="220" y="34" width="8" height="3" rx="1.5"/></g>
+<g fill="#8e998e"><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="90" r="2.2"/><circle cx="360" cy="12" r="2.2"/><circle cx="360" cy="90" r="2.2"/></g><rect x="20" y="44" width="70" height="14" rx="3" fill="#2f8a3e"/><text x="55" y="54.5" text-anchor="middle" font-family="Archivo,sans-serif" font-size="8" font-weight="900" fill="#fff">SMART DROP</text></svg></div>
+    <div class="lk-face cap-side cap-r"></div>
+    <div class="lk-face cap-side cap-l"></div>
   </div>
   <div class="lk-cap"><span class="lk-dot"></span><span id="lkMsg">Smart Drop · open 24/7</span></div>
-</div></div></div>
+</div>
+<div class="ill-ctl"><button type="button" class="ctl" data-lk="0">Drop in left cabinet</button><button type="button" class="ctl" data-lk="1">Drop in right cabinet</button><span class="ctl-n">Dropped: <b id="lkN">0</b></span></div>
+<p class="ill-tip">Drag the locker to turn it, or tap a slot.</p></div></div>
     <div class="loc-grid">
       <div>
         <form class="loc-search" id="locForm" role="search" novalidate>
@@ -1157,10 +1205,12 @@ footer.ft .wrap{display:block}
   <rect x="300" y="44" width="52" height="4" class="cv-scan"/>
   <rect x="20" y="138" width="480" height="24" rx="12" class="cv-belt"/>
   <g transform="translate(40 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(80 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(120 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(160 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(200 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(240 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(280 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(320 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(360 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(400 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(440 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g><g transform="translate(480 150)"><g class="cv-r"><circle r="9"/><path d="M-9 0H9M0 -9V9"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/></g></g>
-  <g class="cv-lane"><g class="cv-b" style="--d:0.0s"><rect x="-22" y="-34" width="48" height="36" rx="2" fill="#c8915a"/><rect x="-6" y="-34" width="8" height="36" fill="#e2c08f"/></g><g class="cv-b" style="--d:-1.6s"><rect x="-22" y="-34" width="40" height="30" rx="2" fill="#b9824e"/><rect x="-6" y="-34" width="8" height="30" fill="#e2c08f"/></g><g class="cv-b" style="--d:-3.2s"><rect x="-22" y="-34" width="48" height="30" rx="2" fill="#d3a06a"/><rect x="-6" y="-34" width="8" height="30" fill="#e2c08f"/></g><g class="cv-b" style="--d:-4.800000000000001s"><rect x="-22" y="-34" width="40" height="36" rx="2" fill="#c8915a"/><rect x="-6" y="-34" width="8" height="36" fill="#e2c08f"/></g><g class="cv-b" style="--d:-6.4s"><rect x="-22" y="-34" width="48" height="30" rx="2" fill="#b9824e"/><rect x="-6" y="-34" width="8" height="30" fill="#e2c08f"/></g></g>
+  <g class="cv-lane"><g class="cv-b" style="--d:0.0s"><g class="cv-bi"><rect x="-22" y="-34" width="48" height="36" rx="2" fill="#c8915a"/><rect x="-6" y="-34" width="8" height="36" fill="#e2c08f"/></g></g><g class="cv-b" style="--d:-1.6s"><g class="cv-bi"><rect x="-22" y="-34" width="40" height="30" rx="2" fill="#b9824e"/><rect x="-6" y="-34" width="8" height="30" fill="#e2c08f"/></g></g><g class="cv-b" style="--d:-3.2s"><g class="cv-bi"><rect x="-22" y="-34" width="48" height="30" rx="2" fill="#d3a06a"/><rect x="-6" y="-34" width="8" height="30" fill="#e2c08f"/></g></g><g class="cv-b" style="--d:-4.800000000000001s"><g class="cv-bi"><rect x="-22" y="-34" width="40" height="36" rx="2" fill="#c8915a"/><rect x="-6" y="-34" width="8" height="36" fill="#e2c08f"/></g></g><g class="cv-b" style="--d:-6.4s"><g class="cv-bi"><rect x="-22" y="-34" width="48" height="30" rx="2" fill="#b9824e"/><rect x="-6" y="-34" width="8" height="30" fill="#e2c08f"/></g></g></g>
   <path class="cv-wh" d="M20 138 V62 L140 24 L260 62 V138 H216 V96 H176 V138 Z"/><text x="140" y="84" text-anchor="middle" class="cv-t">NB · MARKHAM</text>
+  <g transform="translate(470 104)"><path d="M0 0 h44 l-6 34 h-32 z" class="cv-bin"/><text x="22" y="24" text-anchor="middle" class="cv-t3" id="cvN">0</text></g>
   <text x="498" y="196" text-anchor="end" class="cv-t2">SORTING CENTRE · GTA &amp; GREATER VANCOUVER</text>
-</svg></div>
+</svg>
+<div class="ill-ctl"><button type="button" class="ctl" id="cvPause" aria-pressed="false">Pause belt</button><button type="button" class="ctl" id="cvFast" aria-pressed="false">Speed ×2</button><span class="ctl-n">Tap a parcel to sort it · Sorted: <b id="cvN2">0</b></span></div></div>
   <div class="wrap about">
     <div class="about-copy">
       <div class="eyebrow">About us</div>
@@ -1226,17 +1276,19 @@ footer.ft .wrap{display:block}
       <h2>Talk to Neighbour Express</h2>
       <p>Questions about a delivery, a return or an account. Pick the team that fits and we&#39;ll take it from there.</p>
     </div><div class="ph-ill"><svg class="ill ctx" viewBox="0 0 520 210" aria-hidden="true">
-  <g transform="translate(70 70)"><g class="cx-ph"><path d="M0 8 a8 8 0 0 1 8 -8 h10 l8 20 -10 7 a46 46 0 0 0 22 22 l7 -10 20 8 v10 a8 8 0 0 1 -8 8 A68 68 0 0 1 0 8z" fill="var(--green)"/></g>
+  <g transform="translate(70 70)"><g class="cx-ph" id="cxPh"><path d="M0 8 a8 8 0 0 1 8 -8 h10 l8 20 -10 7 a46 46 0 0 0 22 22 l7 -10 20 8 v10 a8 8 0 0 1 -8 8 A68 68 0 0 1 0 8z" fill="var(--green)"/></g>
     <path class="cx-w w1" d="M44 -6 a26 26 0 0 1 26 26"/><path class="cx-w w2" d="M48 -22 a42 42 0 0 1 42 42"/>
     <text x="34" y="108" text-anchor="middle" class="cx-t">1-800-683-5708</text></g>
   <path id="cxPath" d="M150 120 C 230 30, 330 30, 400 104" class="cx-trail"/>
   <g class="cx-env"><rect x="-20" y="-14" width="40" height="28" rx="3" fill="#fff" stroke="var(--blue)" stroke-width="2"/><path d="M-20 -12 L0 4 L20 -12" fill="none" stroke="var(--blue)" stroke-width="2"/>
     <animateMotion dur="3.6s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.55;1" calcMode="spline" keySplines=".5 0 .3 1;0 0 1 1" path="M150 120 C 230 30, 330 30, 400 104"/></g>
   <g transform="translate(360 104)"><path d="M0 0 h90 l-10 46 h-70 z" class="cx-tray"/><path d="M0 0 h28 l6 12 h22 l6 -12 h28" fill="none" stroke="var(--line)" stroke-width="2"/>
-    <g class="cx-badge" transform="translate(86 -6)"><circle r="12" fill="#e5484d"/><text y="4.5" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">1</text></g>
+    <g class="cx-badge" id="cxBadge" transform="translate(86 -6)"><circle r="12" fill="#e5484d"/><text id="cxBadgeN" y="4.5" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">1</text></g>
     <text x="45" y="76" text-anchor="middle" class="cx-t">service@neighbourexpress.com</text></g>
+  <g class="cx-env2" id="cxEnv" opacity="0"><rect x="-20" y="-14" width="40" height="28" rx="3" fill="#fff" stroke="var(--green)" stroke-width="2"/><path d="M-20 -12 L0 4 L20 -12" fill="none" stroke="var(--green)" stroke-width="2"/></g>
   <g transform="translate(206 150)" class="cx-chat"><rect width="92" height="34" rx="17" class="cx-bub"/><circle class="cx-dt" cx="30" cy="17" r="4"/><circle class="cx-dt" style="animation-delay:.18s" cx="46" cy="17" r="4"/><circle class="cx-dt" style="animation-delay:.36s" cx="62" cy="17" r="4"/></g>
-</svg></div></div>
+</svg>
+<div class="ill-ctl"><button type="button" class="ctl" id="cxSend">Send a message</button><a class="ctl ctl-g" href="tel:+18006835708">Call 1-800-683-5708</a></div></div></div>
     <div class="ct-grid">
       <div class="ct-teams">
         <article class="team">
@@ -1846,14 +1898,61 @@ function countUp(el){
 })();
 
 
+
+/* ===== interactive illustrations ===== */
+(function(){
+  if(!document.body.animate)return;
+  // locker: drop a parcel on demand
+  const lk=$('lk3d');
+  if(lk){const front=lk.querySelector('.lk-front-svg'),tpl=lk.querySelector('.lk-parcel.pa'),ok=lk.querySelector('.lk-ok'),idle=lk.querySelector('.lk-idle'),led=lk.querySelector('.lk-led'),msg=$('lkMsg');let n=0,busy=0;
+    const drop=side=>{lk.classList.add('lk-manual');const x=side?300:60,p=tpl.cloneNode(true);p.classList.remove('pa');p.style.animation='none';front.appendChild(p);
+      p.animate([{opacity:0,transform:`translate(${side?360:0}px,330px) scale(2.2) rotate(${side?14:-14}deg)`},{opacity:1,offset:.15},{opacity:1,transform:`translate(${x}px,48px) scale(1.25) rotate(0)`,offset:.65},{opacity:1,transform:`translate(${x}px,62px) scale(1)`,offset:.85},{opacity:0,transform:`translate(${x}px,70px) scale(.7)`}],{duration:1200,easing:'cubic-bezier(.45,0,.3,1)'}).finished.then(()=>p.remove());
+      const m=$(side?'lkMouthB':'lkMouthA');m.animate([{height:'0px'},{height:'9px',offset:.15},{height:'9px',offset:.7},{height:'0px'}],{duration:800,delay:600});
+      busy++;setTimeout(()=>{n++;$('lkN').textContent=n;msg.textContent='Parcel received · receipt sent';
+        ok.animate([{opacity:0,scale:.4},{opacity:1,scale:1.15,offset:.2},{opacity:1,scale:1,offset:.3},{opacity:1,scale:1,offset:.85},{opacity:0}],{duration:1800,fill:'none'});
+        idle.animate([{opacity:0},{opacity:0,offset:.9},{opacity:1}],{duration:1800});led.animate([{opacity:1},{opacity:0}],{duration:900});
+        setTimeout(()=>{if(--busy===0)msg.textContent='Smart Drop · open 24/7'},1800)},1150)};
+    document.addEventListener('click',e=>{const t=e.target.closest('[data-lk]');if(t&&lk.closest('section').contains(t)||t&&t.closest('.ill-ctl'))drop(+t.dataset.lk)});
+    lk.querySelectorAll('.lk-hit').forEach(h=>h.addEventListener('pointerdown',e=>e.stopPropagation()));}
+  // cities: the selected city lights up on the map
+  const mark=()=>{const c=document.querySelector('.tab[aria-selected="true"]');document.querySelectorAll('.nw-n').forEach(n=>n.classList.toggle('sel',!!c&&n.dataset.city===c.dataset.c))};
+  document.addEventListener('click',e=>{if(e.target.closest('.nw-n')){setTimeout(mark,0);const cc=document.querySelector('.city-card');if(cc)setTimeout(()=>cc.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}),120)}else if(e.target.closest('.tab'))setTimeout(mark,0)});
+  mark();
+  // tracking: each scan moves the parcel one step on
+  const pills=[...document.querySelectorAll('.tk-s')];let stage=0;
+  const setStage=k=>{stage=k;pills.forEach((p,i)=>p.classList.toggle('on',i<k))};
+  const scan=()=>{const l=document.querySelector('.tk-laser');l&&l.animate([{fill:'#fff'},{fill:'#e5484d'}],{duration:300,iterations:2});
+    const b=document.querySelector('.tk-box');b&&b.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:300});setStage(stage>=pills.length?1:stage+1)};
+  window.__lkIn=()=>{const bx=$('lkBox');if(!bx||reduce)return;const st=$('lk3d');st.classList.add('lk-fade');bx.classList.remove('lk-enter');bx.classList.add('lk-pre');void bx.offsetWidth;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{st.classList.remove('lk-fade');bx.classList.add('lk-enter');bx.classList.remove('lk-pre');setTimeout(()=>bx.classList.remove('lk-enter'),1400)}))};
+  window.__tkAuto=()=>{setStage(0);[1,2,3,4].forEach(k=>setTimeout(()=>{if(stage===k-1)setStage(k)},600+k*800))};
+  if($('tkScan')){$('tkScan').addEventListener('click',scan);document.querySelector('.tk-box').addEventListener('click',scan);
+    pills.forEach((p,i)=>p.addEventListener('click',()=>setStage(i+1)));
+    $('tkTry').addEventListener('click',()=>{$('t-delivery').checked=true;$('trackNo').value='NB2610060188';$('trackForm').requestSubmit();setTimeout(()=>{const r=document.querySelector('.troad,#trackOut,.tres');(r||$('trackForm')).scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})},150)})}
+  // conveyor: pause, speed, tap a parcel to sort it
+  const cvA=()=>[...document.querySelectorAll('.cv-b')].flatMap(b=>b.getAnimations());let sorted=0,fast=false;
+  if($('cvPause')){$('cvPause').addEventListener('click',e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',on);e.currentTarget.textContent=on?'Start belt':'Pause belt';
+      document.querySelector('.ill.cv').classList.toggle('cv-paused',on);cvA().forEach(a=>on?a.pause():a.play());document.querySelectorAll('.cv-r').forEach(()=>{});const sv=document.querySelector('.ill.cv');on?sv.pauseAnimations():sv.unpauseAnimations()});
+    $('cvFast').addEventListener('click',e=>{fast=!fast;e.currentTarget.setAttribute('aria-pressed',fast);cvA().forEach(a=>a.updatePlaybackRate(fast?2:1))});
+    document.addEventListener('click',e=>{const b=e.target.closest('.cv-b');if(!b||b.dataset.gone)return;b.dataset.gone=1;const inner=b.querySelector('.cv-bi');
+      const m=new DOMMatrix(getComputedStyle(b).transform),bx=m.e,by=m.f,tx=492-bx,ty=118-by;
+      inner.animate([{transform:'translate(0,0)'},{transform:`translate(${tx*.5}px,${ty-60}px) rotate(-12deg)`,offset:.5},{transform:`translate(${tx}px,${ty}px) scale(.5)`,opacity:1,offset:.9},{transform:`translate(${tx}px,${ty}px) scale(.3)`,opacity:0}],{duration:650,easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'}).finished.then(()=>{
+        sorted++;$('cvN').textContent=sorted;$('cvN2').textContent=sorted;$('cvN').animate([{transform:'scale(1.6)'},{transform:'none'}],{duration:300});
+        setTimeout(()=>{inner.getAnimations().forEach(a=>a.cancel());delete b.dataset.gone},1800)})})}
+  // contact: send a message into the inbox
+  let unread=1;
+  if($('cxSend'))$('cxSend').addEventListener('click',()=>{const env=$('cxEnv');const path='M150 120 C 230 30, 330 30, 400 104';env.style.offsetPath=`path('${path}')`;env.style.offsetRotate='0deg';
+    env.animate([{offsetDistance:'0%',opacity:1},{offsetDistance:'100%',opacity:1,offset:.9},{offsetDistance:'100%',opacity:0}],{duration:1100,easing:'cubic-bezier(.5,0,.3,1)'}).finished.then(()=>{unread++;$('cxBadgeN').textContent=unread;const bd=$('cxBadge');bd.style.animation='none';bd.animate([{scale:.4},{scale:1.35},{scale:1}],{duration:380})});
+    $('cxPh').animate([{rotate:'0deg'},{rotate:'-14deg'},{rotate:'14deg'},{rotate:'0deg'}],{duration:400})});
+})();
 /* Smart Drop locker: drag or move the pointer to turn it; the screen message follows the drops */
 (function(){const st=$('lk3d'),bx=$('lkBox');if(!st||!bx)return;
-  let base=-30,drag=null;
+  let base=-32,drag=null;
   const set=(ry,rx)=>{bx.style.setProperty('--ry',ry+'deg');bx.style.setProperty('--rx',rx+'deg')};
-  st.addEventListener('pointermove',e=>{if(drag!==null)return;if(e.pointerType!=='mouse')return;const r=st.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;set(base+x*30,-10-y*10)});
-  st.addEventListener('pointerleave',()=>{if(drag===null)set(base,-10)});
+  st.addEventListener('pointermove',e=>{if(drag!==null)return;if(e.pointerType!=='mouse')return;const r=st.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;set(base+x*30,-14-y*10)});
+  st.addEventListener('pointerleave',()=>{if(drag===null)set(base,-14)});
   st.addEventListener('pointerdown',e=>{drag={x:e.clientX,b:base};st.setPointerCapture(e.pointerId);bx.style.transition='none'});
-  st.addEventListener('pointermove',e=>{if(drag===null)return;base=Math.max(-70,Math.min(40,drag.b+(e.clientX-drag.x)*.35));set(base,-10)});
+  st.addEventListener('pointermove',e=>{if(drag===null)return;base=Math.max(-70,Math.min(40,drag.b+(e.clientX-drag.x)*.35));set(base,-14)});
   const up=()=>{if(drag===null)return;drag=null;bx.style.transition=''};st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
   const msg=$('lkMsg'),M=['Smart Drop · open 24/7','Parcel received · receipt sent'];let k=0;
   // matches the 3.5s screen cycle (first drop lands about 1.2s + 1.6s in)
@@ -1897,6 +1996,8 @@ function applyView(v){
    if(i>0){pv.href='#'+VIEWS[i-1];pv.innerHTML='<small>Previous page</small>'+VNAME[VIEWS[i-1]]}
    if(i<VIEWS.length-1){nx.href='#'+VIEWS[i+1];nx.innerHTML='<small>Next page</small>'+VNAME[VIEWS[i+1]]}}
   document.querySelectorAll('.shuttle .house,.shuttle .tag').forEach(e=>e.remove());
+  if(v==='track'&&window.__tkAuto)window.__tkAuto();
+  if(v==='locations'&&window.__lkIn)setTimeout(window.__lkIn,prev!==null?650:0);
   enterView(v,prev!==null&&window.__ptSweep?720:0);
   if(window.__guideTo)window.__guideTo(v,prev===null);
 }
