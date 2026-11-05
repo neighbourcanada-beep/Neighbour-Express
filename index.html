@@ -672,11 +672,11 @@ body{padding-bottom:var(--gh)}
 .lk-parcel{opacity:0}
 .lk-parcel.pa{animation:lkPA 7s 1.2s cubic-bezier(.45,0,.3,1) infinite}
 .lk-parcel.pb{animation:lkPB 7s 4.7s cubic-bezier(.45,0,.3,1) infinite}
-@keyframes lkPA{0%{opacity:0;transform:translate(10px,330px) scale(2.2) rotate(-14deg)}8%{opacity:1}30%{transform:translate(60px,70px) scale(1.4) rotate(0)}40%{opacity:1;transform:translate(60px,80px) scale(1.05)}46%{opacity:0;transform:translate(60px,82px) scale(.75)}100%{opacity:0;transform:translate(60px,82px) scale(.75)}}
-@keyframes lkPB{0%{opacity:0;transform:translate(350px,330px) scale(2.2) rotate(14deg)}8%{opacity:1}30%{transform:translate(300px,70px) scale(1.4) rotate(0)}40%{opacity:1;transform:translate(300px,80px) scale(1.05)}46%{opacity:0;transform:translate(300px,82px) scale(.75)}100%{opacity:0;transform:translate(300px,82px) scale(.75)}}
-.lk-door{transform-box:fill-box;transform-origin:50% 0}
+@keyframes lkPA{0%{opacity:0;transform:translate(20px,-120px) scale(2.2) rotate(-14deg)}8%{opacity:1}30%{transform:translate(60px,40px) scale(1.4) rotate(0)}40%{opacity:1;transform:translate(60px,80px) scale(1.05)}46%{opacity:0;transform:translate(60px,82px) scale(.75)}100%{opacity:0;transform:translate(60px,82px) scale(.75)}}
+@keyframes lkPB{0%{opacity:0;transform:translate(340px,-120px) scale(2.2) rotate(14deg)}8%{opacity:1}30%{transform:translate(300px,40px) scale(1.4) rotate(0)}40%{opacity:1;transform:translate(300px,80px) scale(1.05)}46%{opacity:0;transform:translate(300px,82px) scale(.75)}100%{opacity:0;transform:translate(300px,82px) scale(.75)}}
+.lk-door{transform-box:fill-box;transform-origin:50% 100%}
 #lkMouthA{animation:lkDoor 7s 1.2s infinite}#lkMouthB{animation:lkDoor 7s 4.7s infinite}
-@keyframes lkDoor{0%,20%{transform:scaleY(1)}28%,46%{transform:scaleY(.06)}54%,100%{transform:scaleY(1)}}
+@keyframes lkDoor{0%,20%{transform:scaleY(1);filter:none}28%,46%{transform:scaleY(.16);filter:brightness(.78)}54%,100%{transform:scaleY(1);filter:none}}
 .lk-ok{opacity:0;transform-box:fill-box;transform-origin:center;animation:lkOk 3.5s 1.2s infinite}
 @keyframes lkOk{0%,44%{opacity:0;scale:.4}50%{opacity:1;scale:1.15}56%,88%{opacity:1;scale:1}96%,100%{opacity:0;scale:1}}
 .lk-idle{animation:lkIdle 3.5s 1.2s infinite}
@@ -1903,8 +1903,8 @@ function countUp(el){
   const lk=$('lk3d');
   if(lk){const front=lk.querySelector('.lk-front-svg'),tpl=lk.querySelector('.lk-parcel.pa'),ok=lk.querySelector('.lk-ok'),idle=lk.querySelector('.lk-idle'),led=lk.querySelector('.lk-led'),msg=$('lkMsg');let n=0,busy=0;
     const drop=side=>{lk.classList.add('lk-manual');const x=side?300:60,p=tpl.cloneNode(true);p.classList.remove('pa');p.style.animation='none';front.appendChild(p);
-      p.animate([{opacity:0,transform:`translate(${side?360:0}px,330px) scale(2.2) rotate(${side?14:-14}deg)`},{opacity:1,offset:.15},{opacity:1,transform:`translate(${x}px,70px) scale(1.4) rotate(0)`,offset:.65},{opacity:1,transform:`translate(${x}px,80px) scale(1.05)`,offset:.85},{opacity:0,transform:`translate(${x}px,82px) scale(.75)`}],{duration:1200,easing:'cubic-bezier(.45,0,.3,1)'}).finished.then(()=>p.remove());
-      const m=$(side?'lkMouthB':'lkMouthA');m.getAnimations().forEach(a=>a.cancel());m.animate([{transform:'scaleY(1)'},{transform:'scaleY(.06)',offset:.25},{transform:'scaleY(.06)',offset:.75},{transform:'scaleY(1)'}],{duration:1500,delay:150,easing:'ease-in-out'});
+      p.animate([{opacity:0,transform:`translate(${side?340:20}px,-120px) scale(2.2) rotate(${side?14:-14}deg)`},{opacity:1,offset:.15},{opacity:1,transform:`translate(${x}px,40px) scale(1.4) rotate(0)`,offset:.65},{opacity:1,transform:`translate(${x}px,80px) scale(1.05)`,offset:.85},{opacity:0,transform:`translate(${x}px,82px) scale(.75)`}],{duration:1200,easing:'cubic-bezier(.45,0,.3,1)'}).finished.then(()=>p.remove());
+      const m=$(side?'lkMouthB':'lkMouthA');m.getAnimations().forEach(a=>a.cancel());m.animate([{transform:'scaleY(1)',filter:'none'},{transform:'scaleY(.16)',filter:'brightness(.78)',offset:.25},{transform:'scaleY(.16)',filter:'brightness(.78)',offset:.75},{transform:'scaleY(1)',filter:'none'}],{duration:1500,delay:150,easing:'ease-in-out'});
       busy++;setTimeout(()=>{n++;$('lkN').textContent=n;msg.textContent='Parcel received · receipt sent';
         ok.animate([{opacity:0,scale:.4},{opacity:1,scale:1.15,offset:.2},{opacity:1,scale:1,offset:.3},{opacity:1,scale:1,offset:.85},{opacity:0}],{duration:1800,fill:'none'});
         idle.animate([{opacity:0},{opacity:0,offset:.9},{opacity:1}],{duration:1800});led.animate([{opacity:1},{opacity:0}],{duration:900});
