@@ -136,8 +136,14 @@ section{padding-block:96px}
 .tn:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
 .tn::placeholder{text-transform:none;font-family:var(--f-body);font-weight:500;letter-spacing:0;color:var(--muted)}
 .qt .btn{width:100%;margin-top:14px}
-.err{color:#c2410c;font-size:14px;min-height:1.3em;margin-top:6px}
+.err{color:#c2410c;font-size:14px;margin-top:6px}.err:empty{margin:0}
 .samples{font-size:13px;color:var(--muted);margin-top:4px}
+.qt-facts{list-style:none;margin:18px 0 0;padding:16px 0 0;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.qt-facts li{display:grid;gap:2px;padding:10px 4px;border-radius:12px;background:var(--bg-2)}
+.qt-facts b{font:900 22px/1 var(--f-display);color:var(--green)}
+.qt-facts span{font-size:12.5px;color:var(--muted);font-weight:600}
+.qt-help{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:14px;color:var(--muted);text-decoration:none}
+.qt-help svg{color:var(--green)}.qt-help b{color:var(--ink)}.qt-help:hover b{color:var(--blue)}
 .samples button{appearance:none;background:none;border:0;padding:0;color:var(--blue);font:600 13px var(--f-mono);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 
 /* benefits */
@@ -1039,6 +1045,12 @@ footer.ft .wrap{display:block}
       <p class="err" id="heroErr" role="alert"></p>
       <button class="btn btn-blue" type="submit">Track <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
       <p class="samples" style="margin-top:12px">Demo number: <button type="button" data-sample="NB2610060188">NB2610060188</button></p>
+      <ul class="qt-facts">
+        <li><b>6</b><span>cities served</span></li>
+        <li><b>4</b><span>tracking steps</span></li>
+        <li><b>300+</b><span>return points</span></li>
+      </ul>
+      <a class="qt-help" href="tel:+18006835708"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Questions? Call <b>1-800-683-5708</b></a>
     </form>
     <ul class="trust">
         <li><b data-count="100" data-suf="K">100K</b><span>parcels a day at peak</span></li>
