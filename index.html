@@ -2084,11 +2084,11 @@ function countUp(el){
     $('ptN').textContent=String(order.indexOf(id)).padStart(2,'0');$('ptT').textContent=NAMES[id];
     pt.classList.add('show');
     await Promise.all([sweep(G,130,-20,420,0),sweep(B,130,-20,420,70)]);
-    L.animate([{opacity:0,transform:'translateX(30px)'},{opacity:1,transform:'none'}],{duration:220,fill:'forwards'});L.querySelectorAll('.pt-bar i,#ptN,.pt-log div').forEach(n=>{n.style.animation='none';void n.offsetWidth;n.style.animation=''});
+    L.animate([{opacity:0,transform:'translateY(12px)',filter:'blur(4px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:320,easing:'cubic-bezier(.2,.7,.2,1)',fill:'forwards'});L.querySelectorAll('.pt-bar i,#ptN,.pt-log div').forEach(n=>{n.style.animation='none';void n.offsetWidth;n.style.animation=''});
     {const T=$('ptT'),full=NAMES[id];T.dataset.t=full;let k=0;T.textContent='';clearInterval(T._i);T._i=setInterval(()=>{k++;T.textContent=full.slice(0,k)+(k<full.length?'_':'');T.dataset.t=T.textContent;if(k>=full.length)clearInterval(T._i)},28);}
     swap();
     await new Promise(r=>setTimeout(r,420));
-    L.animate([{opacity:1},{opacity:0,transform:'translateX(-30px)'}],{duration:200,fill:'forwards'});
+    L.animate([{opacity:1,transform:'none',filter:'blur(0)'},{opacity:0,transform:'translateY(-14px) scale(.97)',filter:'blur(4px)'}],{duration:420,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});await new Promise(r=>setTimeout(r,200));
     await Promise.all([sweep(B,-20,-175,480,60),sweep(G,-20,-175,480,120)]);
     pt.classList.remove('show');G.style.transform=B.style.transform='';busy=false;
     if(window.__ptDone)window.__ptDone();
