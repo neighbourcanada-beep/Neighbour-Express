@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Neighbour Express</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1139,6 +1144,18 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 @media (max-width:700px){.pt-stream,.pt-log{display:none}.pt-coord{right:20px;top:20px;font-size:9px}}
 
 .pt .label b{filter:none!important;text-shadow:none!important;-webkit-text-stroke:0!important;color:#fff!important;font:900 clamp(56px,9vw,120px)/.9 var(--f-display)!important;letter-spacing:-.01em!important}
+
+/* phones: keep the hero cheap to scroll */
+@media (hover:none),(max-width:900px){
+  #zigEdge{filter:none!important;opacity:.6}
+  #zigComet,#zigComet2,#zigHalo{display:none!important}
+  #zigLane{animation:fadeIn .5s 1.6s forwards!important}
+  #zigHead{filter:none!important;animation:headIn .5s 1.7s var(--ease) forwards!important}
+  #heroVan{will-change:transform}
+  .hero::after{display:none}
+}
+
+html,body{margin:0}
 </style>
 
 <header class="nav">
@@ -1946,18 +1963,20 @@ $('locForm').addEventListener('submit',e=>{e.preventDefault();const q=$('locQ').
   }
   function at(dist){const s=segs.find(s=>dist<=s.s+s.l)||segs[segs.length-1],t=Math.max(0,Math.min(1,(dist-s.s)/s.l));return {x:s.a[0]+(s.b[0]-s.a[0])*t,y:s.a[1]+(s.b[1]-s.a[1])*t,ang:Math.atan2(s.b[1]-s.a[1],s.b[0]-s.a[0])*180/Math.PI}}
   function place(){
-    if(!segs.length||!hero.offsetHeight||!hv.offsetWidth)return;
-    const p=Math.max(0,Math.min(1,scrollY/Math.max(1,hero.offsetHeight*.8)));
+    if(!segs.length)return;const HH=hero._h||(hero._h=hero.offsetHeight);if(!HH)return;if(scrollY>HH*1.2&&place._done)return;place._done=scrollY>HH*1.2;
+    const p=Math.max(0,Math.min(1,scrollY/Math.max(1,HH*.8)));
     const dist=Math.min(total+260,drive+p*(total+260-parked));
-    const w=hv.offsetWidth,hh=hv.offsetHeight,o=at(Math.min(total,dist)),extra=Math.max(0,dist-total);
+    const w=hv._w||(hv._w=hv.offsetWidth),hh=hv._hh||(hv._hh=hv.offsetHeight),o=at(Math.min(total,dist)),extra=Math.max(0,dist-total);
     const x=o.x+extra*Math.cos(o.ang*Math.PI/180),y=o.y+extra*Math.sin(o.ang*Math.PI/180);
     hv.style.transform=`translate(${(x-w/2).toFixed(1)}px,${(y-hh+hh*.1).toFixed(1)}px) rotate(${o.ang.toFixed(1)}deg)`;
     const rot=(dist/(2*Math.PI*16*(w/300)))*360;
     $('hw1').setAttribute('transform',`translate(70 106) rotate(${rot.toFixed(1)})`);$('hw2').setAttribute('transform',`translate(236 106) rotate(${rot.toFixed(1)})`);
-    if(!reduce){$('heroLayer').style.transform=`translate3d(0,${(scrollY*.25).toFixed(1)}px,0)`;inner.style.transform=`translate3d(0,${(scrollY*.1).toFixed(1)}px,0)`}
-    $('heroHint').style.opacity=scrollY<20?1:0;
+    if(!reduce&&!TOUCH){$('heroLayer').style.transform=`translate3d(0,${(scrollY*.25).toFixed(1)}px,0)`;inner.style.transform=`translate3d(0,${(scrollY*.1).toFixed(1)}px,0)`}
+    {const o=scrollY<20?'1':'0';if(place._o!==o){place._o=o;$('heroHint').style.opacity=o}}
   }
-  layout();addEventListener('resize',layout);document.fonts&&document.fonts.ready.then(layout);
+  const TOUCH=matchMedia('(hover: none)').matches;let lastW=innerWidth;
+  const relayout=()=>{hero._h=0;hv._w=0;hv._hh=0;place._done=false;layout()};
+  relayout();addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;relayout()});document.fonts&&document.fonts.ready.then(relayout);
   if(reduce){drive=parked;hv.classList.add('go');place();addEventListener('scroll',place,{passive:true});return}
   // entrance: wait for the arrow to draw, then drive up the first climb and park
   onReady(()=>setTimeout(()=>{hv.classList.add('go');const t0=performance.now(),d=2400;
