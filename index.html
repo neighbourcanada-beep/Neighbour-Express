@@ -1122,6 +1122,22 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 @keyframes ptLoad{to{width:100%}}
 @keyframes ptScan{to{transform:translateY(calc(100vh + 120px))}}
 @keyframes ptGlitch{0%{transform:none}50%{transform:translateX(3px) skewX(-6deg);filter:hue-rotate(40deg)}100%{transform:none}}
+
+.pt-radar{position:absolute;left:50%;top:50%;width:min(460px,80vw);opacity:.7;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(107,227,106,.22);background:repeating-radial-gradient(circle,transparent 0 59px,rgba(107,227,106,.14) 60px 61px);pointer-events:none}
+.pt-radar::before,.pt-radar::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(107,227,106,.18)}.pt-radar::after{transform:rotate(90deg)}
+.pt-radar i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(107,227,106,.35),transparent 60deg);animation:ptSpin 1.1s linear infinite}
+@keyframes ptSpin{to{transform:rotate(360deg)}}
+.pt-stream{position:absolute;top:0;bottom:0;width:70px;white-space:pre;font:700 11px/1.5 var(--f-mono);color:rgba(107,227,106,.45);overflow:hidden;animation:ptRain 1.4s linear infinite;-webkit-mask-image:linear-gradient(180deg,transparent,#000 20%,#000 80%,transparent);mask-image:linear-gradient(180deg,transparent,#000 20%,#000 80%,transparent)}
+.pt-stream.l{left:7%}.pt-stream.r{right:7%;color:rgba(127,178,255,.45);animation-direction:reverse}
+@keyframes ptRain{from{transform:translateY(-30%)}to{transform:translateY(0)}}
+.pt-log{position:absolute;left:52px;bottom:52px;text-align:left;font:700 12px/1.7 var(--f-mono);color:#9fe39d}
+.pt-log div{opacity:0;animation:ptLine .2s forwards}
+@keyframes ptLine{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.pt-coord{position:absolute;right:52px;top:52px;font:700 11px var(--f-mono);letter-spacing:.12em;color:#7fb2ff}
+.pt .label b,.pt .label span,.pt .label small,.pt-bar{position:relative;z-index:1}
+.pt .label b{animation:ptGlitch .25s steps(2) 4!important}
+.pt-bar i{animation-duration:.85s!important}
+@media (max-width:700px){.pt-stream,.pt-log{display:none}.pt-coord{right:20px;top:20px;font-size:9px}}
 </style>
 
 <header class="nav">
@@ -1746,7 +1762,7 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
     <div class="g-van" id="gVan"><div class="g-bubble" id="gBubble"></div><div class="flip" id="gFlip"></div></div>
   </div>
 </nav>
-<div class="pt" id="pt" aria-hidden="true"><div class="band g" id="ptG"></div><div class="band b" id="ptB"></div><div class="label" id="ptL"><i class="pt-hud tl"></i><i class="pt-hud tr"></i><i class="pt-hud bl"></i><i class="pt-hud br"></i><small class="pt-k">// ROUTING TO</small><b id="ptN">01</b><span id="ptT">Services</span><div class="pt-bar"><i></i></div><small class="pt-s">NB·NETWORK <em>ONLINE</em> · SIGNAL OK</small></div></div>
+<div class="pt" id="pt" aria-hidden="true"><div class="band g" id="ptG"></div><div class="band b" id="ptB"></div><div class="label" id="ptL"><i class="pt-hud tl"></i><i class="pt-hud tr"></i><i class="pt-hud bl"></i><i class="pt-hud br"></i><div class="pt-radar"><i></i></div><div class="pt-coord" id="ptCo"></div><small class="pt-k">// ROUTING TO</small><b id="ptN">01</b><span id="ptT">Services</span><div class="pt-bar"><i></i></div><small class="pt-s">NB·NETWORK <em>ONLINE</em> · SIGNAL OK</small></div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -2067,9 +2083,10 @@ function countUp(el){
     $('ptN').textContent=String(order.indexOf(id)).padStart(2,'0');$('ptT').textContent=NAMES[id];
     pt.classList.add('show');
     await Promise.all([sweep(G,130,-20,420,0),sweep(B,130,-20,420,70)]);
-    L.animate([{opacity:0,transform:'translateX(30px)'},{opacity:1,transform:'none'}],{duration:220,fill:'forwards'});L.querySelectorAll('.pt-bar i,#ptN').forEach(n=>{n.style.animation='none';void n.offsetWidth;n.style.animation=''});
+    L.animate([{opacity:0,transform:'translateX(30px)'},{opacity:1,transform:'none'}],{duration:220,fill:'forwards'});L.querySelectorAll('.pt-bar i,#ptN,.pt-log div').forEach(n=>{n.style.animation='none';void n.offsetWidth;n.style.animation=''});
+    {$('ptCo').textContent=`LAT ${(43+Math.random()*7).toFixed(4)}°N · LON ${(79+Math.random()*44).toFixed(4)}°W · NODE ${String(order.indexOf(id)).padStart(2,'0')}/07`;}
     swap();
-    await new Promise(r=>setTimeout(r,260));
+    await new Promise(r=>setTimeout(r,420));
     L.animate([{opacity:1},{opacity:0,transform:'translateX(-30px)'}],{duration:200,fill:'forwards'});
     await Promise.all([sweep(B,-20,-175,480,60),sweep(G,-20,-175,480,120)]);
     pt.classList.remove('show');G.style.transform=B.style.transform='';busy=false;
