@@ -586,7 +586,7 @@ body{padding-bottom:var(--gh)}
 .ill{display:block;width:100%;height:auto;overflow:visible}
 .ill text{font-family:var(--f-mono);font-size:11px;font-weight:700;fill:var(--muted);letter-spacing:.06em}
 .ph-strip{margin-bottom:28px}.ph-strip .ill{max-width:760px;margin-inline:auto}
-@media (max-width:900px){.ph{grid-template-columns:minmax(0,1fr);gap:24px}.ph-ill{max-width:460px}}
+@media (max-width:900px){.ph{grid-template-columns:minmax(0,1fr);gap:24px}.ph-ill{max-width:460px;width:100%;margin-inline:auto;justify-self:center}.ph-ill>*{margin-inline:auto}}
 /* cities network */
 .nw-g{fill:var(--line)}
 .nw-land{fill:var(--blue-soft);opacity:.7}
@@ -2023,14 +2023,14 @@ $('locForm').addEventListener('submit',e=>{e.preventDefault();const q=$('locQ').
     // size the cards to the room between the progress bar and the van
     const sc=scene.getBoundingClientRect(),vh=van.getBoundingClientRect().height,road=parseFloat(getComputedStyle(scene).getPropertyValue('--road'))||88;
     const vanTop=sc.height-road*.38-vh, room=(vanTop-12-10-14)/1.05;
-    const maxW=Math.min(340,sc.width*(innerWidth<700?.7:.34));
+    const maxW=Math.min(340,sc.width*(innerWidth<480?.7:innerWidth<700?.48:.34));
     let compact=false,w=Math.min(maxW,(room-132)/.5625);
     if(w<240){compact=true;w=Math.min(maxW,(room-92)/.5625)}
     scene.classList.toggle('compact',compact);scene.style.setProperty('--card',Math.max(130,w).toFixed(0)+'px');
   }
   function layout(){
     fitCards();
-    const W=scene.clientWidth;stopW=Math.max(300,Math.min(520,W*.42));
+    const W=scene.clientWidth,cw=parseFloat(scene.style.getPropertyValue('--card'))||300;stopW=Math.max(300,Math.min(520,W*.42),cw*1.32);
     const vanX=W*parseFloat(getComputedStyle(scene).getPropertyValue('--vanx'))/100||W*.24;
     startX=vanX+stopW*.62;   // first card sits just ahead of the van
     STOPS.forEach((s,i)=>{s.x=startX+i*stopW;s.el.style.left=s.x+'px'});
