@@ -1109,7 +1109,7 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 .pt .b{background:linear-gradient(135deg,#0e2147,#0a1530 60%,#08263a)!important;box-shadow:-30px 0 80px rgba(107,227,106,.25)!important}
 .pt .b::before{background:#6be36a!important;width:4px!important;box-shadow:0 0 30px 8px rgba(107,227,106,.6),0 0 90px 20px rgba(107,227,106,.25)!important}
 .pt .label{gap:10px!important}
-.pt .label b{font:800 clamp(64px,11vw,150px)/.85 var(--f-mono)!important;font-style:normal!important;color:transparent;-webkit-text-stroke:2px #6be36a;text-shadow:0 0 30px rgba(107,227,106,.35);letter-spacing:.04em;animation:ptGlitch .5s steps(2) 2}
+.pt .label b{font:800 clamp(64px,11vw,150px)/.85 var(--f-mono)!important;font-style:normal!important;color:transparent;-webkit-text-stroke:2px #6be36a;text-shadow:0 0 30px rgba(107,227,106,.35);letter-spacing:.04em;}
 .pt .label span{font:900 clamp(22px,3vw,36px)/1.2 var(--f-display);letter-spacing:.02em}
 .pt .label small{font:700 12px var(--f-mono);letter-spacing:.24em;color:#9fb0c8}
 .pt .label small em{font-style:normal;color:#6be36a}
@@ -1118,7 +1118,7 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 .pt-hud{position:absolute;width:22px;height:22px;border:2px solid rgba(107,227,106,.75)}
 .pt-hud.tl{left:24px;top:24px;border-right:0;border-bottom:0}.pt-hud.tr{right:24px;top:24px;border-left:0;border-bottom:0}
 .pt-hud.bl{left:24px;bottom:24px;border-right:0;border-top:0}.pt-hud.br{right:24px;bottom:24px;border-left:0;border-top:0}
-.pt.show .label::after{content:'';position:absolute;left:0;right:0;height:120px;top:-120px;background:linear-gradient(180deg,transparent,rgba(107,227,106,.10),transparent);animation:ptScan .7s linear}
+.pt.show .label::after{display:none;content:'';position:absolute;left:0;right:0;height:120px;top:-120px;background:linear-gradient(180deg,transparent,rgba(107,227,106,.10),transparent);animation:ptScan .7s linear}
 @keyframes ptLoad{to{width:100%}}
 @keyframes ptScan{to{transform:translateY(calc(100vh + 120px))}}
 @keyframes ptGlitch{0%{transform:none}50%{transform:translateX(3px) skewX(-6deg);filter:hue-rotate(40deg)}100%{transform:none}}
@@ -1135,7 +1135,6 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 @keyframes ptLine{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
 .pt-coord{position:absolute;right:52px;top:52px;font:700 11px var(--f-mono);letter-spacing:.12em;color:#7fb2ff}
 .pt .label b,.pt .label span,.pt .label small,.pt-bar{position:relative;z-index:1}
-.pt .label b{animation:ptGlitch .25s steps(2) 4!important}
 .pt-bar i{animation-duration:.85s!important}
 @media (max-width:700px){.pt-stream,.pt-log{display:none}.pt-coord{right:20px;top:20px;font-size:9px}}
 
@@ -1764,7 +1763,7 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
     <div class="g-van" id="gVan"><div class="g-bubble" id="gBubble"></div><div class="flip" id="gFlip"></div></div>
   </div>
 </nav>
-<div class="pt" id="pt" aria-hidden="true"><div class="band g" id="ptG"></div><div class="band b" id="ptB"></div><div class="label" id="ptL"><i class="pt-hud tl"></i><i class="pt-hud tr"></i><i class="pt-hud bl"></i><i class="pt-hud br"></i><div class="pt-radar"><i></i></div><div class="pt-coord" id="ptCo"></div><small class="pt-k">// ROUTING TO</small><b id="ptN">01</b><span id="ptT">Services</span><div class="pt-bar"><i></i></div><small class="pt-s">NB·NETWORK <em>ONLINE</em> · SIGNAL OK</small></div></div>
+<div class="pt" id="pt" aria-hidden="true"><div class="band g" id="ptG"></div><div class="band b" id="ptB"></div><div class="label" id="ptL"><small class="pt-k">// ROUTING TO</small><b id="ptN">01</b><span id="ptT">Services</span><div class="pt-bar"><i></i></div></div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -2086,7 +2085,7 @@ function countUp(el){
     pt.classList.add('show');
     await Promise.all([sweep(G,130,-20,420,0),sweep(B,130,-20,420,70)]);
     L.animate([{opacity:0,transform:'translateX(30px)'},{opacity:1,transform:'none'}],{duration:220,fill:'forwards'});L.querySelectorAll('.pt-bar i,#ptN,.pt-log div').forEach(n=>{n.style.animation='none';void n.offsetWidth;n.style.animation=''});
-    {const T=$('ptT'),full=NAMES[id];T.dataset.t=full;let k=0;T.textContent='';clearInterval(T._i);T._i=setInterval(()=>{k++;T.textContent=full.slice(0,k)+(k<full.length?'_':'');T.dataset.t=T.textContent;if(k>=full.length)clearInterval(T._i)},28);$('ptCo').textContent=`LAT ${(43+Math.random()*7).toFixed(4)}°N · LON ${(79+Math.random()*44).toFixed(4)}°W · NODE ${String(order.indexOf(id)).padStart(2,'0')}/07`;}
+    {const T=$('ptT'),full=NAMES[id];T.dataset.t=full;let k=0;T.textContent='';clearInterval(T._i);T._i=setInterval(()=>{k++;T.textContent=full.slice(0,k)+(k<full.length?'_':'');T.dataset.t=T.textContent;if(k>=full.length)clearInterval(T._i)},28);}
     swap();
     await new Promise(r=>setTimeout(r,420));
     L.animate([{opacity:1},{opacity:0,transform:'translateX(-30px)'}],{duration:200,fill:'forwards'});
