@@ -1064,6 +1064,12 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 .cv3-count small{font:700 9.5px var(--f-mono);letter-spacing:.14em;color:var(--muted)}
 .cv3-count b{font:800 20px var(--f-mono);color:#3b8a3e;line-height:1.1}
 @media (max-width:600px){.cv3d{aspect-ratio:4/3}}
+
+.cv-card{background:radial-gradient(60% 55% at 50% 55%,rgba(59,138,62,.28),transparent 70%),radial-gradient(80% 70% at 85% 0%,rgba(47,79,147,.6),transparent 70%),linear-gradient(180deg,#0a1530,#0e2147 60%,#0a1530)!important;border-color:rgba(120,170,255,.2)!important}
+.cv-card::before{background-image:none!important}
+.cv-card .cv3-count{background:rgba(10,21,48,.85);color:#e8eef9}
+.cv-card .cv3-count small{color:#9fb0c8}
+.cv-card .cv3-count b{color:#6be36a}
 </style>
 
 <header class="nav">
@@ -2377,8 +2383,8 @@ function conv(){const g=new T.Group(),W=2.3;
     sc.add(new T.HemisphereLight(0xffffff,0x9aa7bf,.75));
     const d=new T.DirectionalLight(0xffffff,.95);d.position.set(-8,16,12);d.castShadow=true;d.shadow.mapSize.set(2048,2048);Object.assign(d.shadow.camera,{left:-18,right:18,top:12,bottom:-12,far:60});sc.add(d);
     const fl=new T.DirectionalLight(0xdfe8ff,.35);fl.position.set(10,6,-8);sc.add(fl);
-    const ground=new T.Mesh(new T.PlaneGeometry(60,30),new T.ShadowMaterial({opacity:.16}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;sc.add(ground);
-    const grid=new T.GridHelper(44,44,0x9fb0c8,0xc7d2e2);grid.material.transparent=true;grid.material.opacity=.3;sc.add(grid);
+    const ground=new T.Mesh(new T.PlaneGeometry(60,30),new T.ShadowMaterial({opacity:.38}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;sc.add(ground);
+    const grid=new T.GridHelper(44,44,0x6be36a,0x3d6fb0);grid.material.transparent=true;grid.material.opacity=.28;sc.add(grid);
     const world=new T.Group();world.position.x=-4.2;sc.add(world);
     const truck=conv();truck.position.x=-4.75;world.add(truck);
     const BX0=-.2,BX1=11.2,BY=1.0,BW=1.2,BL=BX1-BX0;
