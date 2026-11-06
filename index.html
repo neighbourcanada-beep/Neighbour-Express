@@ -2357,9 +2357,12 @@ function conv(){const g=new T.Group(),W=2.3;
   prof([[-4.3,.62],[-1.55,.62],[-1.55,3.05],[-2.05,3.05],[-2.45,2.0],[-4.05,1.78],[-4.3,1.55]],W,M.white,g,.1);
   // windshield
   const ws=new T.Mesh(new T.PlaneGeometry(1.12,W-.4),M.glass);ws.position.set(-2.27,2.53,0);ws.rotation.set(0,-Math.PI/2,0);ws.rotateX(0);ws.rotation.z=0;
-  const wsg=new T.Group();wsg.position.set(-2.25-.94*.13,2.525+.357*.13,0);wsg.rotation.z=-Math.atan2(.4,1.05);const wp=new T.Mesh(new T.PlaneGeometry(W-.36,1.0),M.glass);wp.rotation.y=-Math.PI/2;wsg.add(wp);g.add(wsg);
+  const wsg=new T.Group();wsg.position.set(-2.25-.94*.13,2.525+.357*.13,0);wsg.rotation.z=-Math.atan2(.4,1.05);const wsh=new T.Shape(),ww=(W-.36)/2,wh2=.5,rr=.08;wsh.moveTo(-ww+rr,-wh2);wsh.lineTo(ww-rr,-wh2);wsh.quadraticCurveTo(ww,-wh2,ww,-wh2+rr);wsh.lineTo(ww-.04,wh2-rr);wsh.quadraticCurveTo(ww-.04,wh2,ww-.04-rr,wh2);wsh.lineTo(-ww+.04+rr,wh2);wsh.quadraticCurveTo(-ww+.04,wh2,-ww+.04,wh2-rr);wsh.lineTo(-ww,-wh2+rr);wsh.quadraticCurveTo(-ww,-wh2,-ww+rr,-wh2);const wp=new T.Mesh(new T.ShapeGeometry(wsh,8),M.glass);wp.rotation.y=-Math.PI/2;wsg.add(wp);g.add(wsg);
   // side windows
-  [1,-1].forEach(s=>{const sw=new T.Mesh(new T.PlaneGeometry(.95,.78),M.glass);sw.position.set(-1.95,2.48,s*(W/2+.012+.1));if(s<0)sw.rotation.y=Math.PI;g.add(sw);
+  const winShape=(()=>{const sh=new T.Shape(),r=.05;sh.moveTo(-2.27,2.07);sh.lineTo(-1.98,2.84);sh.quadraticCurveTo(-1.965,2.88,-1.92,2.88);sh.lineTo(-1.72,2.88);sh.quadraticCurveTo(-1.67,2.88,-1.67,2.83);sh.lineTo(-1.67,2.1);sh.quadraticCurveTo(-1.67,2.05,-1.72,2.05);sh.lineTo(-2.22,2.05);sh.quadraticCurveTo(-2.28,2.05,-2.27,2.07);return sh})();
+  [1,-1].forEach(s=>{const sw=new T.Mesh(new T.ShapeGeometry(winShape,8),M.glass);sw.position.set(0,0,s*(W/2+.012+.1));g.add(sw);
+    const fr=new T.Mesh(new T.ShapeGeometry(winShape,8),new T.MeshStandardMaterial({color:0x1d2430,side:T.DoubleSide}));fr.scale.set(1,1,1);fr.position.set(0,0,s*(W/2+.105));g.add(fr);
+
     box(.5,.05,.03,M.dark,-1.95,1.7,s*(W/2+.02),g);
     const mr=box(.06,.42,.18,M.dark,-2.42,2.3,s*(W/2+.22),g);box(.04,.04,.24,M.dark,-2.42,2.5,s*(W/2+.1),g);
     box(.5,.18,.06,M.amber,-3.9,1.45,s*(W/2-.15),g).scale.set(.4,1,1);});
