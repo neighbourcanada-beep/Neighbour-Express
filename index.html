@@ -2316,7 +2316,7 @@ const M={
   rim:new T.MeshStandardMaterial({color:0xe9edf2,roughness:.3,metalness:.4}),
   chrome:new T.MeshStandardMaterial({color:0xd5dbe3,roughness:.25,metalness:.35}),
   trim:new T.MeshStandardMaterial({color:0xc9d1dc,roughness:.45}),
-  glass:new T.MeshStandardMaterial({color:0x1d2c45,roughness:.08,metalness:.6}),
+  glass:new T.MeshStandardMaterial({color:0x1d2c45,roughness:.08,metalness:.6,side:T.DoubleSide}),
   grey:new T.MeshStandardMaterial({color:0x8e99a7,roughness:.5}),
   amber:new T.MeshStandardMaterial({color:0xf2a43a,emissive:0x8a4a00,roughness:.4}),
   red:new T.MeshStandardMaterial({color:0xe5484d,emissive:0x5a0a0a,roughness:.4}),
@@ -2357,16 +2357,16 @@ function conv(){const g=new T.Group(),W=2.3;
   prof([[-4.3,.62],[-1.55,.62],[-1.55,3.05],[-2.05,3.05],[-2.45,2.0],[-4.05,1.78],[-4.3,1.55]],W,M.white,g,.1);
   // windshield
   const ws=new T.Mesh(new T.PlaneGeometry(1.12,W-.4),M.glass);ws.position.set(-2.27,2.53,0);ws.rotation.set(0,-Math.PI/2,0);ws.rotateX(0);ws.rotation.z=0;
-  const wsg=new T.Group();wsg.position.set(-2.25,2.52,0);wsg.rotation.z=Math.atan2(1.05,.4);const wp=new T.Mesh(new T.PlaneGeometry(1.12,W-.42),M.glass);wp.rotation.y=-Math.PI/2;wsg.add(wp);g.add(wsg);
+  const wsg=new T.Group();wsg.position.set(-2.25-.94*.13,2.525+.357*.13,0);wsg.rotation.z=-Math.atan2(.4,1.05);const wp=new T.Mesh(new T.PlaneGeometry(W-.36,1.0),M.glass);wp.rotation.y=-Math.PI/2;wsg.add(wp);g.add(wsg);
   // side windows
-  [1,-1].forEach(s=>{const sw=new T.Mesh(new T.PlaneGeometry(.95,.78),M.glass);sw.position.set(-1.95,2.48,s*(W/2+.012));if(s<0)sw.rotation.y=Math.PI;g.add(sw);
+  [1,-1].forEach(s=>{const sw=new T.Mesh(new T.PlaneGeometry(.95,.78),M.glass);sw.position.set(-1.95,2.48,s*(W/2+.012+.1));if(s<0)sw.rotation.y=Math.PI;g.add(sw);
     box(.5,.05,.03,M.dark,-1.95,1.7,s*(W/2+.02),g);
     const mr=box(.06,.42,.18,M.dark,-2.42,2.3,s*(W/2+.22),g);box(.04,.04,.24,M.dark,-2.42,2.5,s*(W/2+.1),g);
     box(.5,.18,.06,M.amber,-3.9,1.45,s*(W/2-.15),g).scale.set(.4,1,1);});
   // grille + headlights + bumper
-  box(.08,.86,1.1,M.chrome,-4.3,1.15,0,g);for(let i=0;i<6;i++)box(.1,.04,1.0,M.dark,-4.31,.8+i*.13,0,g);
-  [.82,-.82].forEach(z=>box(.06,.24,.4,M.head,-4.28,1.3,z,g));
-  box(.3,.32,W+.1,M.grey,-4.35,.66,0,g);
+  box(.08,.86,1.1,M.chrome,-4.43,1.15,0,g);for(let i=0;i<6;i++)box(.04,.04,1.0,M.dark,-4.48,.8+i*.13,0,g);
+  [.82,-.82].forEach(z=>box(.06,.24,.4,M.head,-4.42,1.3,z,g));
+  box(.3,.32,W+.1,M.grey,-4.5,.66,0,g);
   // fenders
   [1,-1].forEach(s=>{const f=new T.Mesh(new T.TorusGeometry(.62,.07,8,24,Math.PI),M.dark);f.position.set(-3.25,.66,s*(W/2+.02));g.add(f)});
   // amber cab lights
