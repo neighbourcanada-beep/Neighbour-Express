@@ -2309,8 +2309,8 @@ function livery(flip){const c=document.createElement('canvas');c.width=1200;c.he
   const t=new T.CanvasTexture(c);t.anisotropy=8;t.encoding=T.sRGBEncoding;return t}
 
 const M={
-  white:new T.MeshStandardMaterial({color:0xffffff,roughness:.45,metalness:.05}),
-  body:new T.MeshStandardMaterial({color:0xf3f6f9,roughness:.5}),
+  white:new T.MeshStandardMaterial({color:0xe9edf2,roughness:.45,metalness:.05}),
+  body:new T.MeshStandardMaterial({color:0xe4e9ef,roughness:.5}),
   dark:new T.MeshStandardMaterial({color:0x1d2430,roughness:.6}),
   tire:new T.MeshStandardMaterial({color:0x15191f,roughness:.9}),
   rim:new T.MeshStandardMaterial({color:0xe9edf2,roughness:.3,metalness:.4}),
@@ -2378,11 +2378,11 @@ function conv(){const g=new T.Group(),W=2.3;
   [3.0].forEach(x=>{wheel(x,.95,.56,g,true);wheel(x,-.95,.56,g,true)});
   return g}
 
-    const r=new T.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(2,devicePixelRatio));r.shadowMap.enabled=true;r.shadowMap.type=T.PCFSoftShadowMap;r.outputEncoding=T.sRGBEncoding;st.appendChild(r.domElement);
+    const r=new T.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(2,devicePixelRatio));r.shadowMap.enabled=true;r.shadowMap.type=T.PCFSoftShadowMap;r.outputEncoding=T.sRGBEncoding;r.toneMapping=T.ACESFilmicToneMapping;r.toneMappingExposure=.78;st.appendChild(r.domElement);
     const sc=new T.Scene(),cam=new T.PerspectiveCamera(15,16/7,.1,300);
-    sc.add(new T.HemisphereLight(0xffffff,0x9aa7bf,.75));
-    const d=new T.DirectionalLight(0xffffff,.95);d.position.set(-8,16,12);d.castShadow=true;d.shadow.mapSize.set(2048,2048);Object.assign(d.shadow.camera,{left:-18,right:18,top:12,bottom:-12,far:60});sc.add(d);
-    const fl=new T.DirectionalLight(0xdfe8ff,.35);fl.position.set(10,6,-8);sc.add(fl);
+    sc.add(new T.HemisphereLight(0xcfdcff,0x1a2a4a,.55));
+    const d=new T.DirectionalLight(0xfff4e6,1.0);d.position.set(-8,16,12);d.castShadow=true;d.shadow.mapSize.set(2048,2048);Object.assign(d.shadow.camera,{left:-18,right:18,top:12,bottom:-12,far:60});sc.add(d);
+    const fl=new T.DirectionalLight(0x6b8cff,.35);fl.position.set(10,6,-8);sc.add(fl);
     const ground=new T.Mesh(new T.PlaneGeometry(60,30),new T.ShadowMaterial({opacity:.38}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;sc.add(ground);
     const grid=new T.GridHelper(44,44,0x6be36a,0x3d6fb0);grid.material.transparent=true;grid.material.opacity=.28;sc.add(grid);
     const world=new T.Group();world.position.x=-4.2;sc.add(world);
@@ -2398,7 +2398,7 @@ function conv(){const g=new T.Group(),W=2.3;
     {const c=document.createElement('canvas');c.width=256;c.height=56;const g=c.getContext('2d');g.fillStyle='#0c1218';g.fillRect(0,0,256,56);g.fillStyle='#6be36a';g.font='700 34px "JetBrains Mono", monospace';g.textAlign='center';g.fillText('SCAN OK',128,40);const tx=new T.CanvasTexture(c);scrM.map=tx;scrM.emissiveMap=tx;scrM.needsUpdate=true}
     const laserM=new T.MeshBasicMaterial({color:0xff4d55,transparent:true,opacity:.8});const laser=new T.Mesh(new T.BoxGeometry(.02,.02,BW+.6),laserM);laser.position.set(GX,1.4,0);world.add(laser);
     const wh=new T.Group();wh.position.set(14.2,0,0);world.add(wh);
-    const WL=5.6,WW=5.2,WH=3.0,wallM=new T.MeshStandardMaterial({color:0xf3f6f9,roughness:.6});
+    const WL=5.6,WW=5.2,WH=3.0,wallM=new T.MeshStandardMaterial({color:0xdfe5ec,roughness:.6});
     box(WL,WH,WW,wallM,0,WH/2,0,wh);
     {const s=new T.Shape();s.moveTo(-WW/2,0);s.lineTo(WW/2,0);s.lineTo(0,1.3);s.closePath();const g=new T.ExtrudeGeometry(s,{depth:WL,bevelEnabled:false});g.translate(0,0,-WL/2);const gab=new T.Mesh(g,wallM);gab.rotation.y=Math.PI/2;gab.position.y=WH;gab.castShadow=true;wh.add(gab)}
     const roofM=new T.MeshStandardMaterial({color:0x34466a,roughness:.55}),rl=Math.hypot(WW/2+.3,1.3+.15);
