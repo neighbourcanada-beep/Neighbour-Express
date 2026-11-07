@@ -1221,36 +1221,46 @@ const mainReady=f=>mainOk?f():q.push(f);
   if(reduce||seen||!ov.animate){ov.remove();mainReady(markReady);return}
   try{sessionStorage.setItem('ne-intro','1')}catch(e){}
   document.documentElement.style.overflow='hidden';
-  const anims=[],A=(el,k,o)=>{const a=el.animate(k,{fill:'both',...o});anims.push(a);return a};
-  let done=false;
-  function finish(){if(done)return;done=true;anims.forEach(a=>{try{a.finish()}catch(e){}});
+  // One requestAnimationFrame timeline drives everything with SVG transform attributes,
+  // so the order (parcels -> door -> departure) is the same in every browser, Safari included.
+  let done=false,phase=0,t0=0,tDoor=0,lastBox=-1,ready=false,prep=false,raf=0;
+  const boxes=[...ov.querySelectorAll('.ib')],wheels=[...ov.querySelectorAll('.iw')],big=$('ilBig'),small=$('ilSmall');
+  const pnl=$('iPanel'),mv=$('ivMove'),glow=$('iGlow'),speed=$('iSpeed');
+  const cl=v=>v<0?0:v>1?1:v,eIn=t=>t*t*t,eOut=t=>1-Math.pow(1-t,3),eInOut=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  const D0=350,STEP=230,DUR=560,BOX_END=D0+(boxes.length-1)*STEP+DUR;
+  const setBox=(b,p)=>{let y,o;if(p<=0){y=-320;o=0}else if(p<.75){const k=p/.75;y=-320+324*eIn(k);o=Math.min(1,k*1.6)}else if(p<.88){y=4-7*((p-.75)/.13);o=1}else{y=-3+3*((p-.88)/.12);o=1}
+    b.setAttribute('transform',`translate(0 ${y.toFixed(1)})`);b.style.opacity=o};
+  const setDoor=s=>pnl.setAttribute('transform',`translate(0 12) scale(1 ${Math.max(.001,s).toFixed(4)}) translate(0 -12)`);
+  boxes.forEach(b=>setBox(b,0));
+  function frame(now){if(done)return;if(!t0)t0=now;const t=now-t0;
+    // 1) parcels drop in one by one
+    boxes.forEach((b,i)=>setBox(b,cl((t-D0-i*STEP)/DUR)));
+    const landed=boxes.filter((b,i)=>t>=D0+i*STEP+DUR*.75).length;
+    if(landed!==lastBox&&landed>0&&phase===0){lastBox=landed;big.textContent=`${landed} of ${boxes.length} parcels loaded`}
+    // 2) all parcels in + page ready -> door rolls down
+    if(phase===0&&t>=BOX_END+350){
+      if(ready){phase=1;tDoor=t}
+      else if(!prep){prep=true;small.textContent='Preparing today\'s route';big.textContent='Almost ready…'}
+    }
+    if(phase>=1){const d=t-tDoor;setDoor(eOut(cl(d/480)));
+      if(d>=380&&phase===1){phase=2;small.textContent='Doors closed · next stop: YVR';big.textContent='Departing'}
+      // 3) van departs, then the curtain wipes away
+      const g=d-700,m=cl(g/1100);
+      glow.setAttribute('opacity',(.35*cl((d-450)/200)).toFixed(2));
+      const x=m<.08?-6*(m/.08):-6+766*eIn((m-.08)/.92);mv.setAttribute('transform',`translate(${x.toFixed(1)} 0)`);
+      speed.setAttribute('opacity',g>0?Math.min(1,m/.3).toFixed(2):0);
+      wheels.forEach(w=>w.setAttribute('transform',`rotate(${(1080*eIn(m)).toFixed(1)})`));
+      if(g>=700&&phase===2){phase=3;document.documentElement.style.overflow='';markReady()}
+      const wp=eInOut(cl((g-600)/650))*100;if(g>600)ov.style.clipPath=`polygon(${wp}% 0,100% 0,100% 100%,${wp}% 100%)`;
+      if(g>=1250){done=true;ov.remove();return}
+    }
+    raf=requestAnimationFrame(frame)}
+  raf=requestAnimationFrame(frame);
+  mainReady(()=>{ready=true});
+  setTimeout(()=>{ready=true},10000);
+  function finish(){if(done)return;done=true;cancelAnimationFrame(raf);boxes.forEach(b=>setBox(b,1));setDoor(1);
     document.documentElement.style.overflow='';markReady();
-    ov.animate([{opacity:1},{opacity:0}],{duration:250,fill:'forwards'}).finished.then(()=>ov.remove());}
-  const boxes=[...ov.querySelectorAll('.ib')],big=$('ilBig'),small=$('ilSmall');
-  const boxAnims=boxes.map((b,i)=>A(b,[{transform:'translateY(-320px)',opacity:0},{transform:'translateY(4px)',opacity:1,offset:.75},{transform:'translateY(-3px)',offset:.88},{transform:'none',opacity:1}],{duration:560,delay:350+i*230,easing:'cubic-bezier(.5,0,.75,0)'}));
-  // the door follows the parcels' own animations (on phones they can start late while the page is still loading)
-  boxAnims.forEach((a,i)=>a.finished.then(()=>{if(!done&&!started)big.textContent=`${i+1} of ${boxes.length} parcels loaded`}).catch(()=>{}));
-  let started=false,loaded=false,ready=false;
-  const go=()=>{if(started||done||!loaded||!ready)return;started=true;setTimeout(depart,450)};
-  Promise.all(boxAnims.map(a=>a.finished)).then(()=>{loaded=true;
-    setTimeout(()=>{if(!started&&!done){small.textContent='Preparing today\'s route';big.textContent='Almost ready…'}},300);go()}).catch(()=>{});
-  mainReady(()=>{ready=true;go()});
-  setTimeout(()=>{ready=true;go()},10000);
-  function depart(){
-  // roll the door down via the SVG transform attribute (Safari mis-places CSS transforms on SVG groups)
-  const pnl=$('iPanel'),setP=s=>pnl.setAttribute('transform',`translate(0 12) scale(1 ${Math.max(.001,s).toFixed(4)}) translate(0 -12)`);
-  const tp0=performance.now(),ease=t=>1-Math.pow(1-t,3);
-  (function roll(now){const t=Math.min(1,(now-tp0)/480);setP(done?1:ease(t));if(t<1&&!done)requestAnimationFrame(roll)})(tp0);
-  setTimeout(()=>{if(!done){small.textContent='Doors closed · next stop: YVR';big.textContent='Departing'}},380);
-  const tGo=700;
-  A($('iGlow'),[{opacity:0},{opacity:.35}],{duration:200,delay:tGo-250});
-  A($('ivMove'),[{transform:'translateX(0)'},{transform:'translateX(-6px)',offset:.08},{transform:'translateX(760px)'}],{duration:1100,delay:tGo,easing:'cubic-bezier(.55,0,.8,.4)'});
-  A($('iSpeed'),[{opacity:0},{opacity:1,offset:.3},{opacity:1}],{duration:1100,delay:tGo});
-  ov.querySelectorAll('.iw').forEach(w=>A(w,[{transform:'rotate(0)'},{transform:'rotate(1080deg)'}],{duration:1100,delay:tGo,easing:'cubic-bezier(.55,0,.8,.4)'}));
-  const wipe=A(ov,[{clipPath:'polygon(0 0,100% 0,100% 100%,0 100%)'},{clipPath:'polygon(100% 0,100% 0,100% 100%,100% 100%)'}],{duration:650,delay:tGo+600,easing:'cubic-bezier(.7,0,.3,1)'});
-  setTimeout(()=>{if(!done){document.documentElement.style.overflow='';markReady()}},tGo+700);
-  wipe.finished.then(()=>{done=true;ov.remove()});
-  }
+    ov.style.transition='opacity .25s';ov.style.opacity='0';setTimeout(()=>ov.remove(),300)}
   $('ilSkip').addEventListener('click',finish);
   ['wheel','touchstart','keydown'].forEach(ev=>addEventListener(ev,finish,{once:true,passive:true}));
 })();
