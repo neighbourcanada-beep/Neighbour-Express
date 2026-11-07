@@ -490,6 +490,7 @@ main{overflow-x:clip}
 
 
 /* ===== opening: load the van, close the door, depart ===== */
+.intro .ib{opacity:0}
 .intro{position:fixed;inset:0;z-index:90;background:linear-gradient(160deg,var(--hb1),var(--hb2));display:grid;place-items:center;overflow:hidden;color:#fff}
 .intro svg{width:min(860px,96vw);height:auto;overflow:visible;display:block}
 .intro .il-logo{position:absolute;left:24px;top:calc(18px + env(safe-area-inset-top,0px));height:44px;width:auto}
@@ -1226,14 +1227,15 @@ const mainReady=f=>mainOk?f():q.push(f);
     document.documentElement.style.overflow='';markReady();
     ov.animate([{opacity:1},{opacity:0}],{duration:250,fill:'forwards'}).finished.then(()=>ov.remove());}
   const boxes=[...ov.querySelectorAll('.ib')],big=$('ilBig'),small=$('ilSmall');
-  boxes.forEach((b,i)=>A(b,[{transform:'translateY(-320px)',opacity:0},{transform:'translateY(4px)',opacity:1,offset:.75},{transform:'translateY(-3px)',offset:.88},{transform:'none',opacity:1}],{duration:560,delay:350+i*230,easing:'cubic-bezier(.5,0,.75,0)'}));
-  boxes.forEach((b,i)=>setTimeout(()=>{if(!done)big.textContent=`${i+1} of ${boxes.length} parcels loaded`},350+i*230+430));
-  const tBoxes=350+boxes.length*230+500,t0=performance.now();
-  // depart only once the rest of the page has arrived (slow mobile networks), max ~10 s
-  let started=false;
-  const go=()=>{if(started||done)return;started=true;const lag=Math.max(0,tBoxes-(performance.now()-t0));setTimeout(()=>depart(lag>0?0:0),lag)};
-  setTimeout(()=>{if(!started&&!done&&!mainOk){small.textContent='Preparing today\'s route';big.textContent='Almost ready…'}},tBoxes+200);
-  mainReady(go);setTimeout(go,10000);
+  const boxAnims=boxes.map((b,i)=>A(b,[{transform:'translateY(-320px)',opacity:0},{transform:'translateY(4px)',opacity:1,offset:.75},{transform:'translateY(-3px)',offset:.88},{transform:'none',opacity:1}],{duration:560,delay:350+i*230,easing:'cubic-bezier(.5,0,.75,0)'}));
+  // the door follows the parcels' own animations (on phones they can start late while the page is still loading)
+  boxAnims.forEach((a,i)=>a.finished.then(()=>{if(!done&&!started)big.textContent=`${i+1} of ${boxes.length} parcels loaded`}).catch(()=>{}));
+  let started=false,loaded=false,ready=false;
+  const go=()=>{if(started||done||!loaded||!ready)return;started=true;setTimeout(depart,450)};
+  Promise.all(boxAnims.map(a=>a.finished)).then(()=>{loaded=true;
+    setTimeout(()=>{if(!started&&!done){small.textContent='Preparing today\'s route';big.textContent='Almost ready…'}},300);go()}).catch(()=>{});
+  mainReady(()=>{ready=true;go()});
+  setTimeout(()=>{ready=true;go()},10000);
   function depart(){
   // roll the door down via the SVG transform attribute (Safari mis-places CSS transforms on SVG groups)
   const pnl=$('iPanel'),setP=s=>pnl.setAttribute('transform',`translate(0 12) scale(1 ${Math.max(.001,s).toFixed(4)}) translate(0 -12)`);
