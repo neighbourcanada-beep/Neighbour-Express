@@ -1096,7 +1096,7 @@ main > section[data-view]:not([data-view="home"]):not(#route)::before,main > sec
 #nbj .scrub button.done{color:#6be36a}#nbj .scrub button.done::before{background:#6be36a;border-color:#6be36a}
 .l4 .yc #nbj .y{color:#6be36a;font-size:20px}.l4 .yc h4{margin:2px 0 4px;font-size:14.5px;font-weight:900;min-height:2.6em}
 #nbj svg{display:block;width:100%;height:auto;user-select:none}#nbj .mono{font-family:var(--f-mono)!important}
-@media (max-width:700px){#nbj .big{position:relative;left:auto;top:auto;padding:18px 18px 0}#nbj .big b{font-size:64px}}
+@media (max-width:700px){#nbj .big{position:relative;left:auto;top:auto;padding:20px 20px 0}#nbj .big b{font-size:clamp(60px,15vw,96px)}#nbj .big>span{font-size:clamp(19px,4.6vw,26px)}#nbj .big p{max-width:none;font-size:clamp(14.5px,3.4vw,17px);line-height:1.5}#nbj .big .chips{max-width:none}#nbj .chip{font-size:clamp(10.5px,2.4vw,12.5px);padding:3px 10px}#nbj svg{margin-top:4px}#nbj .scrub{margin:14px 34px 24px}}
 
 #nbj.nbj-light{background:linear-gradient(180deg,#f7f9fc,#eaf1fb)!important;border-color:#d6deea!important;color:#0f1a33}
 #nbj.nbj-light::before{background-image:linear-gradient(rgba(47,79,147,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(47,79,147,.07) 1px,transparent 1px)}
@@ -2708,7 +2708,7 @@ const loops=[];let last=performance.now();(function L(t){const dt=Math.min(.05,(
 function buildC(){loops.length=0;const R=document.getElementById('nbj');R.querySelector('svg').innerHTML='';R.querySelectorAll('.scrub button').forEach(b=>b.remove());
 /* ---------- C ---------- */
 (()=>{const root=document.getElementById('nbj'),sv=root.querySelector('svg'),big=root.querySelector('.big'),scrub=root.querySelector('.scrub'),bar=scrub.querySelector('.rail i'),sv2=scrub.querySelector('.svan');
-  const map=makeMap(sv,330,50,650,320);
+  const rw=root.clientWidth||innerWidth,map=makeMap(sv,330,50,650,320,{scale:rw<520?1.4:rw<720?1.3:1});
   const btns=Y.map((d,i)=>{const b=document.createElement('button');b.textContent=d.y;b.style.left=(i/3*100)+'%';b.onclick=()=>pl.jump(i);scrub.appendChild(b);return b});
   const show=i=>{const d=Y[i];big.querySelector('b').textContent=d.y;big.querySelector('span').textContent=d.t;big.querySelector('p').textContent=d.s;big.querySelector('.chips').innerHTML=chipsHTML(d.svc);big.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:450});
     btns.forEach((b,k)=>b.classList.toggle('done',k<=i));map.set(i)};
@@ -2718,6 +2718,10 @@ function buildC(){loops.length=0;const R=document.getElementById('nbj');R.queryS
 
 }
 buildC();
+/* narrow screens: the big text sits above the map, so crop the empty left side of the map */
+let nbjB=-1;const fitNbj=()=>{const R=document.getElementById('nbj'),sv=R.querySelector('svg'),w=R.clientWidth;if(!w)return;const bk=w<520?2:w<720?1:0;if(bk!==nbjB){if(nbjB>=0)buildC();nbjB=bk}sv.setAttribute('viewBox',bk?'326 52 660 328':'0 0 1000 400')};
+fitNbj();addEventListener('resize',fitNbj);new MutationObserver(fitNbj).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(window.ResizeObserver)new ResizeObserver(fitNbj).observe(document.getElementById('nbj'));
 let lastDark=isDark();const re=()=>{if(isDark()!==lastDark){lastDark=isDark();setPal();buildC()}};new MutationObserver(re).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});matchMedia('(prefers-color-scheme: dark)').addEventListener('change',re);
 })();
 </script>
