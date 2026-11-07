@@ -1177,7 +1177,7 @@ html,body{margin:0}
         <g transform="translate(46 26)"><g class="ib"><rect width="62" height="40" rx="3" fill="#d6a468"/><path d="M31 0v40" stroke="#efcf98" stroke-width="6"/><text x="8" y="32" font-family="Archivo,sans-serif" font-weight="900" font-style="italic" font-size="11" fill="#34418f">NB</text></g></g>
         <g transform="translate(118 30)"><g class="ib"><rect width="52" height="36" rx="3" fill="#b9864d"/><path d="M26 0v36" stroke="#e8c28a" stroke-width="6"/><path d="M8 8l6 6M14 8l-6 6" stroke="#fff" stroke-width="2"/></g></g>
       </g>
-      <g id="iPanel" style="transform-box:fill-box;transform-origin:50% 0;transform:scaleY(0)">
+      <g id="iPanel" transform="translate(0 12) scale(1 0.001) translate(0 -12)">
         <clipPath id="iClip"><path d="M16 22 Q16 12 26 12 H218 V106 H22 Q16 106 16 100 Z"/></clipPath>
         <g clip-path="url(#iClip)">
           <rect x="16" y="12" width="204" height="94" fill="#fff"/>
@@ -1235,7 +1235,10 @@ const mainReady=f=>mainOk?f():q.push(f);
   setTimeout(()=>{if(!started&&!done&&!mainOk){small.textContent='Preparing today\'s route';big.textContent='Almost ready…'}},tBoxes+200);
   mainReady(go);setTimeout(go,10000);
   function depart(){
-  A($('iPanel'),[{transform:'scaleY(0)'},{transform:'scaleY(1)'}],{duration:480,easing:'cubic-bezier(.3,.7,.3,1)'});
+  // roll the door down via the SVG transform attribute (Safari mis-places CSS transforms on SVG groups)
+  const pnl=$('iPanel'),setP=s=>pnl.setAttribute('transform',`translate(0 12) scale(1 ${Math.max(.001,s).toFixed(4)}) translate(0 -12)`);
+  const tp0=performance.now(),ease=t=>1-Math.pow(1-t,3);
+  (function roll(now){const t=Math.min(1,(now-tp0)/480);setP(done?1:ease(t));if(t<1&&!done)requestAnimationFrame(roll)})(tp0);
   setTimeout(()=>{if(!done){small.textContent='Doors closed · next stop: YVR';big.textContent='Departing'}},380);
   const tGo=700;
   A($('iGlow'),[{opacity:0},{opacity:.35}],{duration:200,delay:tGo-250});
